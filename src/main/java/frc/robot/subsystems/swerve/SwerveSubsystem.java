@@ -21,10 +21,12 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.StateMachine;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModule;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModuleIO;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModuleIOSimTalonFx;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModuleIOTalonFx;
+import frc.robot.subsystems.vision.VisionMeasurement;
 import frc.robot.util.Util;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -252,6 +254,11 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void updatePose() {
+        VisionMeasurement measurement = StateMachine.getVisionLatestMeasurement();
+        for (var position : measurement.getPositions()) {
+            m_poseEstimator.addVisionMeasurement(position.position(), position.timestamp());
+        }
+
         m_poseEstimator.update(m_gyro.getYaw(), getModulePositions());
     }
 

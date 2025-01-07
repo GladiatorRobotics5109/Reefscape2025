@@ -25,8 +25,8 @@ public class RobotContainer {
     // private final CommandGenericHID m_keyboard;
 
     public RobotContainer() {
-        m_vision = new VisionSubsystem();
         m_swerve = new SwerveSubsystem();
+        m_vision = new VisionSubsystem();
         if (Constants.kCurrentMode == Mode.REAL) {
             powerDistribution = new PowerDistribution(Constants.kPDPPort, ModuleType.kCTRE);
         }
