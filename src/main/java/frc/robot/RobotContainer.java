@@ -12,9 +12,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.swerve.SwerveCommandFactory;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.subsystems.vision.VisionSubsystem;
 
 public class RobotContainer {
     public static PowerDistribution powerDistribution;
+
+    private final VisionSubsystem m_vision;
     private final SwerveSubsystem m_swerve;
 
     private final CommandXboxController m_driverController;
@@ -22,6 +25,7 @@ public class RobotContainer {
     // private final CommandGenericHID m_keyboard;
 
     public RobotContainer() {
+        m_vision = new VisionSubsystem();
         m_swerve = new SwerveSubsystem();
         if (Constants.kCurrentMode == Mode.REAL) {
             powerDistribution = new PowerDistribution(Constants.kPDPPort, ModuleType.kCTRE);

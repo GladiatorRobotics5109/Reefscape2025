@@ -6,6 +6,8 @@ import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.lo
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.loggedgyro.LoggedGyroIO;
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.loggedgyro.LoggedGyroIOPigeon;
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.loggedgyro.LoggedGyroIOSim;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -151,6 +153,17 @@ public class SwerveSubsystem extends SubsystemBase {
             getModulePositions(),
             new Pose2d()
         );
+
+        AutoBuilder.configure(
+            this::getPose,
+            (Pose2d pose) -> m_poseEstimator.resetPose(pose),
+            this::getChassisSpeeds,
+            (speeds, feedForward) -> drive(speeds, false),
+            new PPHolonomicDriveController(SwerveConstants.kPPTranslationPID, SwerveConstants.kPPRotaitonPID),
+            SwerveConstants.kPPConfig,
+            () -> false,
+            this
+        );
     }
 
     /**
@@ -180,6 +193,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
         Logger.recordOutput(SwerveConstants.kLogPath + "/desiredSpeeds", desiredSpeeds);
         Logger.recordOutput(SwerveConstants.kLogPath + "/desiredModuleStates", optimizedStates);
+    }
+
+    public void drive(ChassisSpeeds speeds, boolean fieldRelative) {
+        drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false);
     }
 
     public Pose2d getPose() {
@@ -220,6 +237,10 @@ public class SwerveSubsystem extends SubsystemBase {
             m_moduleBL,
             m_moduleBR
         };
+    }
+
+    public ChassisSpeeds getChassisSpeeds() {
+        return m_kinematics.toChassisSpeeds(getModuleStates());
     }
 
     public void setController(Command controller) {

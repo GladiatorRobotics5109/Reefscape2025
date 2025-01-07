@@ -54,12 +54,11 @@ public class SwerveModule {
     }
 
     public SwerveModuleState setDesiredState(SwerveModuleState desiredState, boolean optimize) {
-        SwerveModuleState optimizedState = optimize
-            ? SwerveModuleState.optimize(desiredState, getTurnAngle())
-            : desiredState;
+        if (optimize)
+            desiredState.optimize(getTurnAngle());
 
-        m_desiredState = optimizedState;
-        return optimizedState;
+        m_desiredState = desiredState;
+        return desiredState;
     }
 
     public SwerveModuleState setDesiredState(SwerveModuleState desiredState) {

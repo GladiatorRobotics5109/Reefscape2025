@@ -4,10 +4,13 @@ import com.github.gladiatorrobotics5109.gladiatorroboticslib.constants.swerveMod
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.constants.swerveModuleConstants.SwerveDriveSpecialtiesConstants.MK4Constants.MK4GearRatio;
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.math.controller.FeedforwardConstants;
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.math.controller.PIDConstants;
+import com.pathplanner.lib.config.ModuleConfig;
+import com.pathplanner.lib.config.RobotConfig;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
@@ -110,6 +113,34 @@ public final class SwerveConstants {
     public static final double kOdometryFrequencyHz = 50;
     public static final Pose2d kStartingPose = new Pose2d();
     public static final String kLogPath = "Subsystems/Swerve";
+
+    public static final com.pathplanner.lib.config.PIDConstants kPPTranslationPID = new com.pathplanner.lib.config.PIDConstants(
+        1,
+        0,
+        0
+    );
+    public static final com.pathplanner.lib.config.PIDConstants kPPRotaitonPID = new com.pathplanner.lib.config.PIDConstants(
+        1,
+        0,
+        0
+    );
+
+    public static final RobotConfig kPPConfig = new RobotConfig(
+        52.0,
+        5,
+        new ModuleConfig(
+            SwerveModuleConstants.kWheelRadiusMeters,
+            SwerveModuleConstants.kDriveMaxFreeSpeed.in(Units.MetersPerSecond),
+            5,
+            SwerveModuleConstants.kUseFOC ? DCMotor.getKrakenX60Foc(1) : DCMotor.getKrakenX60(1),
+            SwerveModuleConstants.kDriveSupplyCurrentLimit,
+            1
+        ),
+        SwerveModuleConstants.kModulePosFL,
+        SwerveModuleConstants.kModulePosFR,
+        SwerveModuleConstants.kModulePosBL,
+        SwerveModuleConstants.kModulePosBR
+    );
 
     public static final SwerveDriveConfiguration kTeleopConfig = new SwerveDriveConfiguration(
         // Units.MetersPerSecond.of(0.5),
