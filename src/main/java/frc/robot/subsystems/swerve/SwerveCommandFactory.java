@@ -12,7 +12,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
-import frc.robot.subsystems.swerve.SwerveConstants.SwerveDriveConfiguration;
+import frc.robot.Constants.SwerveConstants;
+import frc.robot.Constants.SwerveConstants.SwerveDriveConfiguration;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModule;
 
 public final class SwerveCommandFactory {

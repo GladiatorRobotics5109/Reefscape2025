@@ -3,7 +3,7 @@ package frc.robot.util;
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.math.ConversionsBase;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.subsystems.swerve.SwerveConstants;
+import frc.robot.Constants.SwerveConstants;
 
 public class Conversions extends ConversionsBase {
     public static final double driveWheelMetersToDriveMotorRadians(double m) {
