@@ -14,8 +14,8 @@ public class StateMachine {
         s_vision = vision;
     }
 
-    public static VisionMeasurement getVisionLatestMeasurement() {
-        return s_vision.getLatestMeasurement();
+    public static VisionMeasurement[] getVisionMeasurements() {
+        return s_vision.getMeasurements();
     }
 
     public static Pose2d getPose() {

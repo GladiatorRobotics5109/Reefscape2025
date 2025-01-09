@@ -8,9 +8,11 @@ import com.github.gladiatorrobotics5109.gladiatorroboticslib.math.controller.PID
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.RobotConfig;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.Units;
@@ -185,12 +187,19 @@ public final class Constants {
     }
 
     public class VisionConstants {
-        public static record PhotonCameraConfiguration(String cameraName, Pose3d position) {}
+        public static record PhotonCameraConfiguration(String cameraName, Transform3d robotToCamera) {}
 
         public static final PhotonCameraConfiguration[] kCameras = new PhotonCameraConfiguration[] {
-            new PhotonCameraConfiguration("Camera1", new Pose3d()),
-            new PhotonCameraConfiguration("Camera2", new Pose3d()),
-            new PhotonCameraConfiguration("Camera3", new Pose3d())
+            new PhotonCameraConfiguration("Camera1", new Transform3d()),
+            new PhotonCameraConfiguration("Camera2", new Transform3d()),
+            new PhotonCameraConfiguration("Camera3", new Transform3d())
         };
+
+        public static final String kLogPath = "Subsystems/Vision";
+
+        // TODO: update this
+        public static final AprilTagFieldLayout kAprilTagFieldLayout = AprilTagFieldLayout.loadField(
+            AprilTagFields.kDefaultField
+        );;
     }
 }

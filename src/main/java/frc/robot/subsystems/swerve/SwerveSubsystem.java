@@ -255,9 +255,9 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void updatePose() {
-        VisionMeasurement measurement = StateMachine.getVisionLatestMeasurement();
-        for (var position : measurement.getPositions()) {
-            m_poseEstimator.addVisionMeasurement(position.position(), position.timestamp());
+        VisionMeasurement[] measurements = StateMachine.getVisionMeasurements();
+        for (var measurement : measurements) {
+            m_poseEstimator.addVisionMeasurement(measurement.estimatedPose().toPose2d(), measurement.timestmap());
         }
 
         m_poseEstimator.update(m_gyro.getYaw(), getModulePositions());

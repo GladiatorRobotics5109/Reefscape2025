@@ -1,17 +1,19 @@
 package frc.robot.subsystems.vision;
 
-import edu.wpi.first.math.geometry.Pose2d;
+import java.util.ArrayList;
+import java.util.List;
 
-public class VisionMeasurement {
-    public static record VisionPosition(Pose2d position, String cameraName, double timestamp) {}
+import edu.wpi.first.math.geometry.Pose3d;
+import frc.robot.subsystems.vision.VisionIO.VisionIOInputs;
 
-    public VisionPosition[] m_positions;
+public record VisionMeasurement(Pose3d estimatedPose, double timestmap, Pose3d[] targetsUsed) {
+    public static List<VisionMeasurement> fromInputs(VisionIOInputs inputs) {
+        List<VisionMeasurement> measurements = new ArrayList<>(inputs.posees.size());
 
-    public VisionMeasurement(VisionPosition[] positions) {
-        m_positions = positions;
-    }
+        for (int i = 0; i < inputs.posees.size(); i++) {
+            measurements.add(new VisionMeasurement(inputs.posees.get(i), inputs.timestamps.get(i), inputs.targetsUsed.toArray(new Pose3d[0])));
+        }
 
-    public VisionPosition[] getPositions() {
-        return m_positions;
+        return measurements;
     }
 }

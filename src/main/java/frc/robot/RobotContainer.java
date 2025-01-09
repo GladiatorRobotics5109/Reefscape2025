@@ -27,6 +27,7 @@ public class RobotContainer {
     public RobotContainer() {
         m_swerve = new SwerveSubsystem();
         m_vision = new VisionSubsystem();
+        StateMachine.init(m_swerve, m_vision);
         if (Constants.kCurrentMode == Mode.REAL) {
             powerDistribution = new PowerDistribution(Constants.kPDPPort, ModuleType.kCTRE);
         }
