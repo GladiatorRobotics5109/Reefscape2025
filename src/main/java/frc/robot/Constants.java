@@ -186,7 +186,7 @@ public final class Constants {
         }
     }
 
-    public class VisionConstants {
+    public static final class VisionConstants {
         public static record PhotonCameraConfiguration(String cameraName, Transform3d robotToCamera) {}
 
         public static final PhotonCameraConfiguration[] kCameras = new PhotonCameraConfiguration[] {
@@ -201,5 +201,22 @@ public final class Constants {
         public static final AprilTagFieldLayout kAprilTagFieldLayout = AprilTagFieldLayout.loadField(
             AprilTagFields.kDefaultField
         );;
+    }
+
+    public static final class ElevatorConstants {
+        public static final String kLogPath = "Subsystems/Elevator";
+
+        public static final int kMotorPort = 20;
+        public static final boolean kUseFOC = true;
+
+        public static final double kSupplyCurrentLimit = 40.0;
+        public static final double kStatorCurrentLimit = 1.75 * kSupplyCurrentLimit;
+
+        public static final double kGearRatio = 1.0;
+
+        public static final PIDConstants kPID = new PIDConstants(1, 0.0, 0.0);
+        public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(0.0, 0.0, 0.0, 0.0);
+
+        public static final double kSproketRadiusMeters = Conversions.inchesToMeters(1.0);
     }
 }

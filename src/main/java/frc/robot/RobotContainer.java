@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swerve.SwerveCommandFactory;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
@@ -19,6 +20,7 @@ public class RobotContainer {
 
     private final VisionSubsystem m_vision;
     private final SwerveSubsystem m_swerve;
+    private final ElevatorSubsystem m_elevator;
 
     private final CommandXboxController m_driverController;
     // private final CommandPS5Controller m_driverController;
@@ -27,7 +29,8 @@ public class RobotContainer {
     public RobotContainer() {
         m_swerve = new SwerveSubsystem();
         m_vision = new VisionSubsystem();
-        StateMachine.init(m_swerve, m_vision);
+        m_elevator = new ElevatorSubsystem();
+        StateMachine.init(m_swerve, m_vision, m_elevator);
         if (Constants.kCurrentMode == Mode.REAL) {
             powerDistribution = new PowerDistribution(Constants.kPDPPort, ModuleType.kCTRE);
         }

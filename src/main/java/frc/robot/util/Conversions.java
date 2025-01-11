@@ -3,6 +3,7 @@ package frc.robot.util;
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.math.ConversionsBase;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.SwerveConstants;
 
 public class Conversions extends ConversionsBase {
@@ -54,6 +55,20 @@ public class Conversions extends ConversionsBase {
         return ConversionsBase.driveWheelRotationsToDriveMotorRadians(
             rot,
             SwerveConstants.SwerveModuleConstants.kDriveGearRatio
+        );
+    }
+
+    // TODO: check this
+    public static final double elevatorPositionToRotations(double m) {
+        return ConversionsBase.radiansToRotations(
+            ConversionsBase.metersToRadians(m, ElevatorConstants.kSproketRadiusMeters, 1.0)
+        );
+    }
+
+    public static final double elevatorRotationsToElevatorPosition(double rot) {
+        return ConversionsBase.radiansToMeters(
+            ConversionsBase.rotationsToRadians(rot),
+            ElevatorConstants.kSproketRadiusMeters
         );
     }
 }
