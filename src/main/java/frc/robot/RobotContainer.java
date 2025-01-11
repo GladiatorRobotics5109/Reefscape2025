@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
-import frc.robot.util.FieldUtil.ReefBranch;
+import frc.robot.util.FieldConstants.ReefBranch;
 
 public class RobotContainer {
     private final SwerveSubsystem m_swerve;

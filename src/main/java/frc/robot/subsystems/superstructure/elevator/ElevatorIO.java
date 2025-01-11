@@ -18,7 +18,7 @@ public interface ElevatorIO {
 
     default void updateInputs(ElevatorIOInputs inputs) {}
 
-    default void setPosition(double motorPositionRad) {}
+    default void setPosition(double positionMeters) {}
 
     default void setVoltage(double volts) {}
 

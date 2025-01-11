@@ -3,11 +3,11 @@
     {
       "x": 0,
       "y": 38,
-      "width": 1512,
+      "width": 1133,
       "height": 944,
       "state": {
         "sidebar": {
-          "width": 351,
+          "width": 327,
           "expanded": [
             "/AdvantageKit",
             "/AdvantageKit/RealOutputs/Subsystems",
@@ -16,7 +16,7 @@
             "/AdvantageKit/RealOutputs/Subsystems/Swerve/SwerveModule0/currentState",
             "/AdvantageKit/Subsystems/Elevator",
             "/AdvantageKit/RealOutputs",
-            "/AdvantageKit/RealOutputs/Subsystems/Vision"
+            "/AdvantageKit/RealOutputs/Subsystems/Swerve"
           ]
         },
         "tabs": {
@@ -41,7 +41,66 @@
                     "logType": "Pose2d",
                     "visible": true,
                     "options": {
-                      "model": "2024 KitBot"
+                      "model": "2025 KitBot"
+                    }
+                  },
+                  {
+                    "type": "swerveStates",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Swerve/currentModuleStates",
+                    "logType": "SwerveModuleState[]",
+                    "visible": true,
+                    "options": {
+                      "color": "#ff0000",
+                      "arrangement": "0,1,2,3"
+                    }
+                  },
+                  {
+                    "type": "swerveStates",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Swerve/desiredModuleStates",
+                    "logType": "SwerveModuleState[]",
+                    "visible": true,
+                    "options": {
+                      "color": "#0000ff",
+                      "arrangement": "0,1,2,3"
+                    }
+                  },
+                  {
+                    "type": "trajectory",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Swerve/ActivePath",
+                    "logType": "Pose2d[]",
+                    "visible": true,
+                    "options": {
+                      "color": "#00ff00",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "ghost",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Swerve/PathPlannerDesiredPose",
+                    "logType": "Pose2d",
+                    "visible": true,
+                    "options": {
+                      "model": "2025 KitBot",
+                      "color": "#00ff00"
+                    }
+                  },
+                  {
+                    "type": "ghost",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Swerve/PathPlannerCurrentPose",
+                    "logType": "Pose2d",
+                    "visible": true,
+                    "options": {
+                      "model": "2025 KitBot",
+                      "color": "#ff0000"
+                    }
+                  },
+                  {
+                    "type": "gamePiece",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/TestPose",
+                    "logType": "Translation3d",
+                    "visible": true,
+                    "options": {
+                      "variant": "Coral"
                     }
                   }
                 ],
@@ -53,9 +112,9 @@
                 "cameraIndex": -2,
                 "orbitFov": 50,
                 "cameraPosition": [
-                  1.243085042708912,
-                  1.9720673622502252,
-                  -1.2400634086977353
+                  6.290677258246052,
+                  10.577106561821976,
+                  -5.925738376966029
                 ],
                 "cameraTarget": [
                   0,

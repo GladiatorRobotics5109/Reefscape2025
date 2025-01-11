@@ -7,6 +7,7 @@ import com.github.gladiatorrobotics5109.gladiatorroboticslib.PeriodicUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
@@ -38,20 +39,24 @@ public class RobotState {
         return s_swerve.getModuleStates();
     }
 
-    public static double getElevatorCurrentPosition() {
+    public static double getElevatorCurrentPositionMeters() {
         return s_elevator.getCurrentPosition();
     }
 
-    public static double getElevatorDesiredPosition() {
-        return s_elevator.getDesiredPosition();
+    public static double getElevatorDesiredPositionMeters() {
+        return s_elevator.getDesiredPositionMeters();
+    }
+
+    public static boolean getElevatorAtDesiredPosition() {
+        return s_elevator.atDesiredPositionMeters();
     }
 
     public static void log() {
         Logger.recordOutput(SwerveConstants.kLogPath + "/currentPose", getSwervePose());
         Logger.recordOutput(SwerveConstants.kLogPath + "/currentModuleStates", getSwerveModuleStates());
 
-        Logger.recordOutput(SwerveConstants.kLogPath + "/currentPosition", getElevatorCurrentPosition());
-        Logger.recordOutput(SwerveConstants.kLogPath + "/desiredPosition", getElevatorDesiredPosition());
+        Logger.recordOutput(ElevatorConstants.kLogPath + "/currentPositionMeters", getElevatorCurrentPositionMeters());
+        Logger.recordOutput(ElevatorConstants.kLogPath + "/desiredPositionMeters", getElevatorDesiredPositionMeters());
     }
 
     public static record SwerveSetpoint(Pose2d position, Rotation2d heading) {}

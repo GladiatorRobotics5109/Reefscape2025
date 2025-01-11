@@ -19,6 +19,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
+import frc.robot.Constants.SwerveConstants.SwerveModuleConstants;
 import frc.robot.util.Conversions;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -113,7 +114,7 @@ public final class Constants {
             // 0.013805 * kTurnGearRatio
             // );
 
-            public static final int kDriveStatorCurrentLimit = 70;
+            public static final int kDriveStatorCurrentLimit = 92;
             public static final int kDriveSupplyCurrentLimit = 40;
 
             public static final int kTurnSupplyCurrentLimit = 30;
@@ -143,9 +144,15 @@ public final class Constants {
             0
         );
 
+        // TODO: replace with correct values
         public static final RobotConfig kPPConfig = new RobotConfig(
             52.0,
-            5,
+            5.0,
+            // Conversions.poundsToKilograms(112),
+            // // Fix rough esimate
+            // (1 / 12) * Conversions.poundsToKilograms(112)
+            // * (Math.pow(SwerveModuleConstants.kModulePosFL.getX(), 2)
+            // + Math.pow(SwerveModuleConstants.kModulePosFL.getY(), 2)),
             new ModuleConfig(
                 SwerveModuleConstants.kWheelRadiusMeters,
                 SwerveModuleConstants.kDriveMaxFreeSpeed.in(Units.MetersPerSecond),
@@ -226,5 +233,11 @@ public final class Constants {
         public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(0.0, 0.0, 0.0, 0.0);
 
         public static final double kSproketRadiusMeters = Conversions.inchesToMeters(1.0);
+
+        // Height of the base of elevator from the floor
+        public static final double kElevatorBaseHeightMeters = SwerveModuleConstants.kWheelRadiusMeters
+            + Conversions.inchesToMeters(2);
+
+        public static final double kAutoElevatorReefRadiusMeters = 5.0;
     }
 }

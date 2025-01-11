@@ -23,7 +23,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.SwerveConstants.SwerveDriveConfiguration;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModule;
-import frc.robot.util.FieldUtil.ReefBranch;
+import frc.robot.util.FieldConstants.ReefBranch;
 
 public final class SwerveCommandFactory {
     private SwerveCommandFactory() {
@@ -140,17 +140,31 @@ public final class SwerveCommandFactory {
     }
 
     public static Command driveToPose(Pose2d pose, PathConstraints constraints, LinearVelocity endVelocity) {
-        return AutoBuilder.pathfindToPose(pose, constraints, endVelocity);
+        return AutoBuilder.pathfindToPoseFlipped(pose, constraints, endVelocity);
+    }
+
+    public static Command driveToPoseThenFollowPath(PathConstraints constraints, PathPlannerPath path) {
+        return AutoBuilder.pathfindThenFollowPath(path, constraints);
     }
 
     public static Command driveToReefScore(SwerveSubsystem swerve, ReefBranch branch) {
+        // return Commands.sequence(
+        // Commands.print("Started!"),
+        // driveToPoseThenFollowPath(SwerveConstants.kPPPathFindConstraints, branch.getInnerPath()),
+        // Commands.print("Done!")
+        // );
         return Commands.sequence(
+            Commands.print("STARTED!"),
             driveToPose(
-                branch.getFieldPoseOuter(),
+                branch.getSwerveTargetPoseOuter(),
                 SwerveConstants.kPPPathFindConstraints,
+                // Units.MetersPerSecond.of(0)
                 branch.getInnerPath().getIdealStartingState().velocity()
             ),
-            followPath(swerve, branch.getInnerPath())
+            Commands.print("REACHED!"),
+            // Commands.waitUntil(RobotState::getElevatorAtDesiredPosition).withTimeout(1),
+            followPath(swerve, branch.getInnerPath()),
+            Commands.print("DONE!")
         );
     }
 

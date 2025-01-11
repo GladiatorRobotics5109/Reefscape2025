@@ -2,11 +2,14 @@ package frc.robot.subsystems.superstructure.elevator;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotState;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.util.Conversions;
+import frc.robot.util.FieldConstants;
 
 public class ElevatorSubsystem extends SubsystemBase {
     private final ElevatorIO m_io;
@@ -48,8 +51,18 @@ public class ElevatorSubsystem extends SubsystemBase {
         return Conversions.elevatorRotationsToElevatorPosition(m_inputs.positionRad);
     }
 
-    public double getDesiredPosition() {
+    public double getDesiredPositionMeters() {
         return m_desiredPositionMeters;
+    }
+
+    public boolean atDesiredPositionMeters() {
+        return MathUtil.isNear(getDesiredPositionMeters(), getCurrentPosition(), Conversions.inchesToMeters(1));
+    }
+
+    public boolean isWithinRadius() {
+        return RobotState.getSwervePose().getTranslation().getDistance(
+            FieldConstants.getAllainceReefPos()
+        ) < ElevatorConstants.kAutoElevatorReefRadiusMeters;
     }
 
     @Override
