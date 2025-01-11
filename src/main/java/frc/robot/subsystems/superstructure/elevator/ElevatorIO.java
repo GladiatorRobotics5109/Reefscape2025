@@ -21,4 +21,6 @@ public interface ElevatorIO {
     default void setPosition(double motorPositionRad) {}
 
     default void setVoltage(double volts) {}
+
+    default void updateSim() {}
 }

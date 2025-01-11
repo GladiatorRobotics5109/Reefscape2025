@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.StateMachine;
+import frc.robot.RobotState;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModule;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModuleIO;
@@ -255,7 +255,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void updatePose() {
-        VisionMeasurement[] measurements = StateMachine.getVisionMeasurements();
+        VisionMeasurement[] measurements = RobotState.getVisionMeasurements();
         for (var measurement : measurements) {
             m_poseEstimator.addVisionMeasurement(measurement.estimatedPose().toPose2d(), measurement.timestmap());
         }
@@ -283,8 +283,5 @@ public class SwerveSubsystem extends SubsystemBase {
         }
 
         updatePose();
-
-        Logger.recordOutput(SwerveConstants.kLogPath + "/currentPose", getPose());
-        Logger.recordOutput(SwerveConstants.kLogPath + "/currentModuleStates", getModuleStates());
     }
 }

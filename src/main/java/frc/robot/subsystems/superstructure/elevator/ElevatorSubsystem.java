@@ -12,6 +12,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final ElevatorIO m_io;
     private final ElevatorIOInputsAutoLogged m_inputs;
 
+    private double m_desiredPositionMeters;
+
     public ElevatorSubsystem() {
         switch (Constants.kCurrentMode) {
             case REAL:
@@ -23,9 +25,12 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
 
         m_inputs = new ElevatorIOInputsAutoLogged();
+
+        m_desiredPositionMeters = 0.0;
     }
 
     public void setPosition(double positionMeters) {
+        m_desiredPositionMeters = positionMeters;
         m_io.setPosition(positionMeters);
     }
 
@@ -33,12 +38,17 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_io.setVoltage(volts);
     }
 
-    public double getPosition() {
+    public double getCurrentPosition() {
         return Conversions.elevatorRotationsToElevatorPosition(m_inputs.positionRad);
+    }
+
+    public double getDesiredPosition() {
+        return m_desiredPositionMeters;
     }
 
     @Override
     public void periodic() {
+        m_io.updateSim();
         m_io.updateInputs(m_inputs);
         Logger.processInputs(ElevatorConstants.kLogPath, m_inputs);
 
