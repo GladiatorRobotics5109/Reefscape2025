@@ -12,9 +12,12 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.PeriodicUtil;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.util.LocalADStarAK;
+import frc.robot.util.Paths;
 
 public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
@@ -23,6 +26,10 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void robotInit() {
+        // Use AkitCompatible path finding
+        Pathfinding.setPathfinder(new LocalADStarAK());
+        Paths.init();
+
         // Record metadata
         Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
         Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);

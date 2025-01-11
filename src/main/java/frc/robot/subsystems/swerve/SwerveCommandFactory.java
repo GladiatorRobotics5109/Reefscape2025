@@ -3,11 +3,19 @@ package frc.robot.subsystems.swerve;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.LinearVelocity;
+
 import org.littletonrobotics.junction.Logger;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -15,6 +23,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.SwerveConstants.SwerveDriveConfiguration;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModule;
+import frc.robot.util.FieldUtil.ReefBranches;
 
 public final class SwerveCommandFactory {
     private SwerveCommandFactory() {
@@ -123,6 +132,25 @@ public final class SwerveCommandFactory {
             translateY,
             rot,
             superSpeed
+        );
+    }
+
+    public static Command followPath(SwerveSubsystem sewrve, PathPlannerPath path) {
+        return AutoBuilder.followPath(path);
+    }
+
+    public static Command driveToPose(Pose2d pose, PathConstraints constraints, LinearVelocity endVelocity) {
+        return AutoBuilder.pathfindToPose(pose, constraints, endVelocity);
+    }
+
+    public static Command driveToReefScore(SwerveSubsystem swerve, ReefBranches branch) {
+        return Commands.sequence(
+            driveToPose(
+                branch.getFieldPoseOuter(),
+                SwerveConstants.kPPPathFindConstraints,
+                branch.getInnerPath().getIdealStartingState().velocity()
+            ),
+            followPath(swerve, branch.getInnerPath())
         );
     }
 

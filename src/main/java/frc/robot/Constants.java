@@ -7,6 +7,7 @@ import com.github.gladiatorrobotics5109.gladiatorroboticslib.math.controller.Fee
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.math.controller.PIDConstants;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -157,6 +158,13 @@ public final class Constants {
             SwerveModuleConstants.kModulePosFR,
             SwerveModuleConstants.kModulePosBL,
             SwerveModuleConstants.kModulePosBR
+        );
+
+        public static final PathConstraints kPPPathFindConstraints = new PathConstraints(
+            Units.MetersPerSecond.of(2),
+            Units.MetersPerSecondPerSecond.of(4),
+            Units.RotationsPerSecond.of(1.5),
+            Units.RotationsPerSecondPerSecond.of(3)
         );
 
         public static final SwerveDriveConfiguration kTeleopConfig = new SwerveDriveConfiguration(

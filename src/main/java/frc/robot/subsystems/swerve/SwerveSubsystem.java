@@ -1,5 +1,7 @@
 package frc.robot.subsystems.swerve;
 
+import java.util.List;
+
 import org.littletonrobotics.junction.Logger;
 
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.loggedgyro.LoggedGyro;
@@ -8,6 +10,7 @@ import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.lo
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.loggedgyro.LoggedGyroIOSim;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -164,8 +167,21 @@ public class SwerveSubsystem extends SubsystemBase {
             (speeds, feedForward) -> drive(speeds, false),
             new PPHolonomicDriveController(SwerveConstants.kPPTranslationPID, SwerveConstants.kPPRotaitonPID),
             SwerveConstants.kPPConfig,
-            () -> false,
+            // TODO: test this
+            () -> Util.getAlliance() == Alliance.Red, // Flip if red alliance
             this
+        );
+
+        PathPlannerLogging.setLogActivePathCallback(
+            (
+                List<Pose2d> path
+            ) -> Logger.recordOutput(SwerveConstants.kLogPath + "/ActivePath", path.toArray(new Pose2d[0]))
+        );
+        PathPlannerLogging.setLogCurrentPoseCallback(
+            (Pose2d pose) -> Logger.recordOutput(SwerveConstants.kLogPath + "/PathPlannerCurrentPose", pose)
+        );
+        PathPlannerLogging.setLogTargetPoseCallback(
+            (Pose2d pose) -> Logger.recordOutput(SwerveConstants.kLogPath + "/PathPlannerDesiredPose", pose)
         );
     }
 

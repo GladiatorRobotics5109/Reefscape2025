@@ -5,10 +5,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
+import frc.robot.util.FieldUtil.ReefBranches;
 
 public class RobotContainer {
     private final SwerveSubsystem m_swerve;
@@ -45,14 +47,15 @@ public class RobotContainer {
         // () -> 0
         // )
         // );
-
-        // m_elevator.setDefaultCommand(
-        // ElevatorCommandFactory.debugControllerAxis(m_elevator, () -> m_keyboard.getRawAxis(0))
-        // );
     }
 
     public Command getAutonomousCommand() {
-        return null;
+        // return null;
+        ReefBranches branch = ReefBranches.L2E1;
+        return Commands.sequence(
+            Commands.waitSeconds(2),
+            branch.makeScoreCommand(m_swerve, m_elevator)
+        );
         // return Commands.sequence(
         // SwerveControllerFactory.makeSysIdDrive(m_swerve, 0).quasistatic(SysIdRoutine.Direction.kForward),
         // Commands.waitSeconds(2),
