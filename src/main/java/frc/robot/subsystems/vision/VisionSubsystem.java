@@ -17,16 +17,22 @@ public class VisionSubsystem extends SubsystemBase {
     private List<VisionMeasurement> m_measurements;
 
     public VisionSubsystem() {
-        m_ios = new VisionIO[0];
+        m_ios = new VisionIO[VisionConstants.kCameras.length];
+        m_inputs = new VisionIOInputs[VisionConstants.kCameras.length];
 
         switch (Constants.kCurrentMode) {
             case REAL:
                 for (int i = 0; i < VisionConstants.kCameras.length; i++) {
                     m_ios[i] = new VisionIOPhotonVision(VisionConstants.kCameras[i]);
+                    m_inputs[i] = new VisionIOInputs();
                 }
 
                 break;
             default:
+                for (int i = 0; i < VisionConstants.kCameras.length; i++) {
+                    m_ios[i] = new VisionIO() {};
+                    m_inputs[i] = new VisionIOInputs();
+                }
                 break;
         }
 
@@ -48,8 +54,9 @@ public class VisionSubsystem extends SubsystemBase {
             m_measurements.addAll(VisionMeasurement.fromInputs(m_inputs[i]));
         }
 
+        // TODO: figure out why no log targets here :(
         Logger.recordOutput(
-            VisionConstants.kLogPath.concat("measurements"),
+            VisionConstants.kLogPath.concat("/Measurements"),
             m_measurements.toArray(new VisionMeasurement[0])
         );
     }

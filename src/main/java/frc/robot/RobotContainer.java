@@ -4,22 +4,15 @@
 
 package frc.robot;
 
-import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.Mode;
-
-import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
-import frc.robot.subsystems.swerve.SwerveCommandFactory;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
 
 public class RobotContainer {
-    public static PowerDistribution powerDistribution;
-
-    private final VisionSubsystem m_vision;
     private final SwerveSubsystem m_swerve;
+    private final VisionSubsystem m_vision;
     private final ElevatorSubsystem m_elevator;
 
     private final CommandXboxController m_driverController;
@@ -31,9 +24,6 @@ public class RobotContainer {
         m_vision = new VisionSubsystem();
         m_elevator = new ElevatorSubsystem();
         RobotState.init(m_swerve, m_vision, m_elevator);
-        if (Constants.kCurrentMode == Mode.REAL) {
-            powerDistribution = new PowerDistribution(Constants.kPDPPort, ModuleType.kCTRE);
-        }
 
         m_driverController = new CommandXboxController(0);
         // m_driverController = new CommandPS5Controller(0);
@@ -43,7 +33,7 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        m_swerve.setDefaultCommand(SwerveCommandFactory.makeTeleop(m_swerve, m_driverController));
+        // m_swerve.setDefaultCommand(SwerveCommandFactory.makeTeleop(m_swerve, m_driverController));
         // m_swerve.setDefaultCommand(
         // SwerveComSmandFactory.makeTeleop(
         // m_swerve,
@@ -54,6 +44,10 @@ public class RobotContainer {
         // () -> m_keyboard.getRawAxis(2),
         // () -> 0
         // )
+        // );
+
+        // m_elevator.setDefaultCommand(
+        // ElevatorCommandFactory.debugControllerAxis(m_elevator, () -> m_keyboard.getRawAxis(0))
         // );
     }
 

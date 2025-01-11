@@ -10,6 +10,6 @@ public class ElevatorCommandFactory {
     }
 
     public static Command debugControllerAxis(ElevatorSubsystem elevator, DoubleSupplier axis) {
-        return elevator.run(() -> elevator.setVoltage(axis.getAsDouble()));
+        return elevator.run(() -> elevator.setVoltage(axis.getAsDouble() * 2));
     }
 }

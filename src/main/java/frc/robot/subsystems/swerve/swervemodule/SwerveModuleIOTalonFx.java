@@ -13,7 +13,6 @@ import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.*;
-import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.SwerveConstants.SwerveModuleConstants;
 import frc.robot.util.Conversions;
 
@@ -116,15 +115,16 @@ public class SwerveModuleIOTalonFx implements SwerveModuleIO {
         m_drive.setPosition(0);
         m_turn.setPosition(0);
 
-        BaseStatusSignal.setUpdateFrequencyForAll(
-            SwerveConstants.kOdometryFrequencyHz,
-            m_signalDrivePosition,
-            m_signalDriveVelocity,
-            m_signalDriveAcceleration,
-            m_signalTurnPosition,
-            m_signalTurnVelocity,
-            m_signalTurnAcceleration
-        );
+        // TODO: high refresh odoom
+        // BaseStatusSignal.setUpdateFrequencyForAll(
+        // SwerveConstants.kOdometryFrequencyHz,
+        // m_signalDrivePosition,
+        // m_signalDriveVelocity,
+        // m_signalDriveAcceleration,
+        // m_signalTurnPosition,
+        // m_signalTurnVelocity,
+        // m_signalTurnAcceleration
+        // );
     }
 
     @Override

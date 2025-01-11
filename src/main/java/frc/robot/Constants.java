@@ -23,7 +23,7 @@ import frc.robot.util.Conversions;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 public final class Constants {
-    public static final Mode kCurrentMode = Mode.REAL;
+    public static final Mode kCurrentMode = Mode.SIM;
 
     public static final Alliance kDefaultAlliance = Alliance.Blue;
 

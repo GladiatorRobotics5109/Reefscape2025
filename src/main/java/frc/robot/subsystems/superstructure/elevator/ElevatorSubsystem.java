@@ -20,8 +20,14 @@ public class ElevatorSubsystem extends SubsystemBase {
                 m_io = new ElevatorIOTalonfx(ElevatorConstants.kMotorPort, ElevatorConstants.kUseFOC);
 
                 break;
+            case SIM:
+                m_io = new ElevatorIOSimTalonFX(ElevatorConstants.kMotorPort, ElevatorConstants.kUseFOC);
+
+                break;
             default:
                 m_io = new ElevatorIO() {};
+
+                break;
         }
 
         m_inputs = new ElevatorIOInputsAutoLogged();

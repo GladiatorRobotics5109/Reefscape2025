@@ -19,8 +19,8 @@ public class SwerveModuleIOSimTalonFx extends SwerveModuleIOTalonFx {
         m_driveSim = new DCMotorSim(
             LinearSystemId.createDCMotorSystem(
                 DCMotor.getKrakenX60(1),
-                SwerveModuleConstants.kDriveFeedforward.kv(),
-                SwerveModuleConstants.kDriveFeedforward.ka()
+                0.025,
+                SwerveModuleConstants.kDriveGearRatio.asDouble()
             ),
             DCMotor.getKrakenX60(1)
         );
@@ -28,8 +28,8 @@ public class SwerveModuleIOSimTalonFx extends SwerveModuleIOTalonFx {
         m_turnSim = new DCMotorSim(
             LinearSystemId.createDCMotorSystem(
                 DCMotor.getKrakenX60(1),
-                SwerveModuleConstants.kTurnFeedforward.kv(),
-                SwerveModuleConstants.kTurnFeedforward.ka()
+                0.004,
+                SwerveModuleConstants.kTurnGearRatio
             ),
             DCMotor.getKrakenX60(1)
         );
