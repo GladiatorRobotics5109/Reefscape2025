@@ -16,7 +16,7 @@ import frc.robot.subsystems.swerve.SwerveCommandFactory;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 public class FieldUtil {
-    public static enum ReefBranches {
+    public static enum ReefBranch {
         L2E1(
             new Translation3d(),
             Paths.L2E1
@@ -25,7 +25,7 @@ public class FieldUtil {
         private final Translation3d m_branchPosition;
         private final PathPlannerPath m_innerPath;
 
-        private ReefBranches(Translation3d branchPosition, PathPlannerPath innerPath) {
+        private ReefBranch(Translation3d branchPosition, PathPlannerPath innerPath) {
             m_branchPosition = branchPosition;
             m_innerPath = innerPath;
         }

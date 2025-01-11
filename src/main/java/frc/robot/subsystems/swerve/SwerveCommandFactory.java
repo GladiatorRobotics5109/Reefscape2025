@@ -23,7 +23,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.SwerveConstants.SwerveDriveConfiguration;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModule;
-import frc.robot.util.FieldUtil.ReefBranches;
+import frc.robot.util.FieldUtil.ReefBranch;
 
 public final class SwerveCommandFactory {
     private SwerveCommandFactory() {
@@ -143,7 +143,7 @@ public final class SwerveCommandFactory {
         return AutoBuilder.pathfindToPose(pose, constraints, endVelocity);
     }
 
-    public static Command driveToReefScore(SwerveSubsystem swerve, ReefBranches branch) {
+    public static Command driveToReefScore(SwerveSubsystem swerve, ReefBranch branch) {
         return Commands.sequence(
             driveToPose(
                 branch.getFieldPoseOuter(),

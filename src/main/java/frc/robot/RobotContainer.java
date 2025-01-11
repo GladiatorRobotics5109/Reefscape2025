@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
-import frc.robot.util.FieldUtil.ReefBranches;
+import frc.robot.util.FieldUtil.ReefBranch;
 
 public class RobotContainer {
     private final SwerveSubsystem m_swerve;
@@ -51,7 +51,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // return null;
-        ReefBranches branch = ReefBranches.L2E1;
+        ReefBranch branch = ReefBranch.L2E1;
         return Commands.sequence(
             Commands.waitSeconds(2),
             branch.makeScoreCommand(m_swerve, m_elevator)
