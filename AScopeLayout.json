@@ -1,26 +1,25 @@
 {
   "hubs": [
     {
-      "x": 0,
-      "y": 38,
-      "width": 1133,
-      "height": 944,
+      "x": 106,
+      "y": 116,
+      "width": 1097,
+      "height": 650,
       "state": {
         "sidebar": {
-          "width": 327,
+          "width": 306,
           "expanded": [
-            "/AdvantageKit",
-            "/AdvantageKit/RealOutputs/Subsystems",
             "/AdvantageKit/Subsystems/Swerve/SwerveModule0",
             "/AdvantageKit/RealOutputs/Subsystems/Swerve/SwerveModule0/desiredState",
             "/AdvantageKit/RealOutputs/Subsystems/Swerve/SwerveModule0/currentState",
             "/AdvantageKit/Subsystems/Elevator",
             "/AdvantageKit/RealOutputs",
-            "/AdvantageKit/RealOutputs/Subsystems/Swerve"
+            "/AdvantageKit/RealOutputs/Subsystems/Elevator",
+            "/AdvantageKit"
           ]
         },
         "tabs": {
-          "selected": 1,
+          "selected": 2,
           "tabs": [
             {
               "type": 0,
@@ -28,6 +27,16 @@
               "controller": null,
               "controllerUUID": "k05fo3va82qzi8ogh8b65f7z4668a6ny",
               "renderer": "#/",
+              "controlsHeight": 0
+            },
+            {
+              "type": 5,
+              "title": "Console",
+              "controller": "NT:/AdvantageKit/RealOutputs/Console",
+              "controllerUUID": "ofy706k8mzw935cjd8jmkub0ap5dcmw1",
+              "renderer": {
+                "highlight": false
+              },
               "controlsHeight": 0
             },
             {
@@ -85,22 +94,31 @@
                     }
                   },
                   {
-                    "type": "ghost",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Swerve/PathPlannerCurrentPose",
-                    "logType": "Pose2d",
-                    "visible": true,
-                    "options": {
-                      "model": "2025 KitBot",
-                      "color": "#ff0000"
-                    }
-                  },
-                  {
                     "type": "gamePiece",
                     "logKey": "NT:/AdvantageKit/RealOutputs/TestPose",
                     "logType": "Translation3d",
                     "visible": true,
                     "options": {
+                      "variant": "Algae"
+                    }
+                  },
+                  {
+                    "type": "gamePiece",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/L2E1Pos",
+                    "logType": "Translation3d",
+                    "visible": true,
+                    "options": {
                       "variant": "Coral"
+                    }
+                  },
+                  {
+                    "type": "trajectory",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/TestPath",
+                    "logType": "Pose2d[]",
+                    "visible": true,
+                    "options": {
+                      "color": "#ff8c00",
+                      "size": "normal"
                     }
                   }
                 ],
@@ -109,19 +127,42 @@
               },
               "controllerUUID": "slopd1ymlzwba1powcwukrg6jyugfei9",
               "renderer": {
-                "cameraIndex": -2,
+                "cameraIndex": -1,
                 "orbitFov": 50,
                 "cameraPosition": [
-                  6.290677258246052,
-                  10.577106561821976,
-                  -5.925738376966029
+                  -8.908194409475875,
+                  5.650915228180166,
+                  -2.8987522898166413
                 ],
                 "cameraTarget": [
-                  0,
-                  0.5,
-                  0
+                  -2.1904958157613255,
+                  -0.40928549326508323,
+                  0.43359394240586496
                 ]
               },
+              "controlsHeight": 0
+            },
+            {
+              "type": 2,
+              "title": "Odometry",
+              "controller": {
+                "sources": [
+                  {
+                    "type": "robot",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/TestPath",
+                    "logType": "Pose2d[]",
+                    "visible": true,
+                    "options": {}
+                  }
+                ],
+                "game": "2025 Field",
+                "bumpers": "auto",
+                "origin": "blue",
+                "orientation": 0,
+                "size": 27
+              },
+              "controllerUUID": "cebje4cl171lqc1lddopk0964c2bu24f",
+              "renderer": null,
               "controlsHeight": 200
             },
             {
@@ -293,7 +334,7 @@
                 "leftSources": [
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/Subsystems/Elevator/PositionRad",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Elevator/currentPositionMeters",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -303,21 +344,11 @@
                   },
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/Subsystems/Elevator/VelocityRadPerSec",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Elevator/desiredPositionMeters",
                     "logType": "Number",
                     "visible": true,
                     "options": {
                       "color": "#af2437",
-                      "size": "normal"
-                    }
-                  },
-                  {
-                    "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/Subsystems/Elevator/AccelerationRadPerSecPerSec",
-                    "logType": "Number",
-                    "visible": true,
-                    "options": {
-                      "color": "#80588e",
                       "size": "normal"
                     }
                   }
