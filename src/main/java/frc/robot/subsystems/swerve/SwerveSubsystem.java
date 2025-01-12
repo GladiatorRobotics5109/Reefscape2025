@@ -157,7 +157,7 @@ public class SwerveSubsystem extends SubsystemBase {
             m_kinematics,
             m_gyro.getYaw(),
             getModulePositions(),
-            new Pose2d()
+            new Pose2d(5, 7, Rotation2d.fromDegrees(120))
         );
 
         AutoBuilder.configure(

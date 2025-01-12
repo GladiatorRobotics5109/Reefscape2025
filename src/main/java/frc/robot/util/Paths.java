@@ -10,14 +10,12 @@ import com.pathplanner.lib.path.Waypoint;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.util.FieldConstants.ReefFace;
 
 public final class Paths {
     private static PathPlannerPath[] s_paths = new PathPlannerPath[12];
-    private static Alliance s_generatedAllaince = Constants.kDefaultAlliance;
 
     public static Pose2d[] test = new Pose2d[0];
 
@@ -36,8 +34,8 @@ public final class Paths {
             s_paths[i] = generateFromPosition(
                 faceLocation.plus(
                     new Translation2d(
-                        FieldConstants.kReefBranchDistMeters,
-                        faceLocation.getAngle().plus(Rotation2d.fromDegrees(90))
+                        FieldConstants.kReefBranchDistMeters / 2,
+                        swerveTargetHeading.plus(Rotation2d.fromDegrees(90))
                     )
                 ),
                 swerveTargetHeading
@@ -48,8 +46,8 @@ public final class Paths {
             s_paths[i + 1] = generateFromPosition(
                 faceLocation.plus(
                     new Translation2d(
-                        FieldConstants.kReefBranchDistMeters,
-                        faceLocation.getAngle().minus(Rotation2d.fromDegrees(90))
+                        FieldConstants.kReefBranchDistMeters / 2,
+                        swerveTargetHeading.minus(Rotation2d.fromDegrees(90))
                     )
                 ),
                 swerveTargetHeading
@@ -57,10 +55,10 @@ public final class Paths {
             i += 2;
         }
 
-        s_generatedAllaince = Util.getAlliance();
         s_hasInit = true;
     }
 
+    // Probably no need to do this bc the path will be flipped dpepending on alliance
     public static void regenerate() {
         s_hasInit = false;
         init();
@@ -75,10 +73,6 @@ public final class Paths {
             init();
 
         return s_paths[index];
-    }
-
-    public static Alliance getGeneratedAlliance() {
-        return s_generatedAllaince;
     }
 
     private static PathPlannerPath generateFromPosition(Translation2d pos, Rotation2d swerveTargetHeading) {

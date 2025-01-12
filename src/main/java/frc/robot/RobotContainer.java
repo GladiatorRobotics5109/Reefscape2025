@@ -54,20 +54,10 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // return null;
-        ReefBranch branch = ReefBranch.L2E1;
+        ReefBranch branch = ReefBranch.L2E2;
         return Commands.sequence(
-            Commands.waitSeconds(3),
+            Commands.waitSeconds(4),
             branch.makeScoreCommand(m_swerve, m_elevator)
         );
-        // return Commands.sequence(
-        // SwerveControllerFactory.makeSysIdDrive(m_swerve, 0).quasistatic(SysIdRoutine.Direction.kForward),
-        // Commands.waitSeconds(2),
-        // SwerveControllerFactory.makeSysIdDrive(m_swerve, 0).quasistatic(SysIdRoutine.Direction.kReverse),
-        // Commands.waitSeconds(2),
-        // SwerveControllerFactory.makeSysIdDrive(m_swerve, 0).dynamic(SysIdRoutine.Direction.kForward),
-        // Commands.waitSeconds(2),
-        // SwerveControllerFactory.makeSysIdDrive(m_swerve, 0).dynamic(SysIdRoutine.Direction.kReverse),
-        // Commands.print("-- SysIdCompleted! -- ")
-        // );
     }
 }

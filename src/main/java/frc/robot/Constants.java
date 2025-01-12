@@ -138,7 +138,7 @@ public final class Constants {
         public static final double kFrameHeight = kFrameWidth;
 
         public static final com.pathplanner.lib.config.PIDConstants kPPTranslationPID = new com.pathplanner.lib.config.PIDConstants(
-            1,
+            2,
             0,
             0
         );
@@ -173,9 +173,9 @@ public final class Constants {
 
         public static final PathConstraints kPPPathFindConstraints = new PathConstraints(
             Units.MetersPerSecond.of(2),
-            Units.MetersPerSecondPerSecond.of(3),
+            Units.MetersPerSecondPerSecond.of(2),
             Units.RotationsPerSecond.of(1.5),
-            Units.RotationsPerSecondPerSecond.of(3)
+            Units.RotationsPerSecondPerSecond.of(2)
         );
 
         public static final PathConstraints kPPReefInnerPathConstraints = new PathConstraints(
