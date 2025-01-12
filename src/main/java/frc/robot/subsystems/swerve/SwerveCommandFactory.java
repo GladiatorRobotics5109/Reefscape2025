@@ -148,23 +148,10 @@ public final class SwerveCommandFactory {
     }
 
     public static Command driveToReefScore(SwerveSubsystem swerve, ReefBranch branch) {
-        // return Commands.sequence(
-        // Commands.print("Started!"),
-        // driveToPoseThenFollowPath(SwerveConstants.kPPPathFindConstraints, branch.getInnerPath()),
-        // Commands.print("Done!")
-        // );
         return Commands.sequence(
-            Commands.print("STARTED!"),
-            driveToPose(
-                branch.getSwerveTargetPoseOuter(),
-                SwerveConstants.kPPPathFindConstraints,
-                // Units.MetersPerSecond.of(0)
-                branch.getInnerPath().getIdealStartingState().velocity()
-            ),
-            Commands.print("REACHED!"),
-            // Commands.waitUntil(RobotState::getElevatorAtDesiredPosition).withTimeout(1),
-            followPath(swerve, branch.getInnerPath()),
-            Commands.print("DONE!")
+            Commands.print("Started!"),
+            driveToPoseThenFollowPath(SwerveConstants.kPPPathFindConstraints, branch.getInnerPath()),
+            Commands.print("Done!")
         );
     }
 

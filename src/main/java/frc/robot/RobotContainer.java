@@ -31,6 +31,9 @@ public class RobotContainer {
         // m_driverController = new CommandPS5Controller(0);
         // m_keyboard = new CommandGenericHID(0);
 
+        // Paths.init();
+        // Logger.recordOutput("TestPath", Paths.test);
+
         configureBindings();
     }
 
@@ -53,7 +56,7 @@ public class RobotContainer {
         // return null;
         ReefBranch branch = ReefBranch.L2E1;
         return Commands.sequence(
-            Commands.waitSeconds(2),
+            Commands.waitSeconds(3),
             branch.makeScoreCommand(m_swerve, m_elevator)
         );
         // return Commands.sequence(

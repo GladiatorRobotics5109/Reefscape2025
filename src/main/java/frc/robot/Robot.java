@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.util.LocalADStarAK;
 import frc.robot.util.Paths;
+import frc.robot.util.Util;
 
 public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
@@ -28,7 +29,6 @@ public class Robot extends LoggedRobot {
     public void robotInit() {
         // Use AkitCompatible path finding
         Pathfinding.setPathfinder(new LocalADStarAK());
-        Paths.init();
 
         // Record metadata
         Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
@@ -82,6 +82,7 @@ public class Robot extends LoggedRobot {
 
         // Start AdvantageKit logger
         Logger.start();
+        Paths.init();
 
         m_robotContainer = new RobotContainer();
     }
@@ -90,6 +91,11 @@ public class Robot extends LoggedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
         PeriodicUtil.periodic();
+
+        // Regenerate Paths if neccesarry
+        if (Paths.getGeneratedAlliance() != Util.getAlliance()) {
+            Paths.regenerate();
+        }
     }
 
     @Override

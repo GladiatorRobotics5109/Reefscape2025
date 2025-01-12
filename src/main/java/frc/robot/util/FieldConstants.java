@@ -8,38 +8,91 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.Waypoint;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.subsystems.superstructure.elevator.ElevatorCommandFactory;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swerve.SwerveCommandFactory;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 public class FieldConstants {
+    public static enum ReefFace {
+        E(0),
+        F(1),
+        G(2),
+        H(3),
+        I(4),
+        J(5);
+
+        private int m_index;
+
+        private ReefFace(int index) {
+            m_index = index;
+        }
+
+        public Rotation2d getFaceAngleFieldRelative() {
+            Rotation2d offset = Util.getAlliance() == Alliance.Blue ? Rotation2d.k180deg : Rotation2d.kZero;
+            Rotation2d angle = Rotation2d.fromDegrees(60 * m_index).plus(offset);
+            return angle;
+        }
+
+        public Rotation2d getSwerveTargetHeading() {
+            return getFaceAngleFieldRelative().plus(Rotation2d.k180deg);
+        }
+
+        public Translation2d getFacePosition() {
+            return new Translation2d(kReefRadiusMeters, getFaceAngleFieldRelative()).plus(getAllainceReefPos());
+        }
+
+        public int getIndex() {
+            return m_index;
+        }
+    }
+
     public static enum ReefBranch {
         L2E1(
             new Translation3d(
                 Util.getAlliance() == Alliance.Blue
                     ? getAllainceReefPos().getX() - kReefRadiusMeters + kReefL2L3InsetMeters
                     : getAllainceReefPos().getX() + kReefRadiusMeters - kReefL2L3InsetMeters,
-                getAllainceReefPos().getY() + kReefBranchDistMeters / 2,
+                Util.getAlliance() == Alliance.Blue
+                    ? getAllainceReefPos().getY() + kReefBranchDistMeters / 2
+                    : getAllainceReefPos().getY() - kReefBranchDistMeters / 2,
                 kReefL2HeightMeters
             ),
-            Paths.L2E1
+            ReefFace.E,
+            1
+        ),
+        L2E2(
+            new Translation3d(
+                Util.getAlliance() == Alliance.Blue
+                    ? getAllainceReefPos().getX() - kReefRadiusMeters + kReefL2L3InsetMeters
+                    : getAllainceReefPos().getX() + kReefRadiusMeters - kReefL2L3InsetMeters,
+                Util.getAlliance() == Alliance.Blue
+                    ? getAllainceReefPos().getY() - kReefBranchDistMeters / 2
+                    : getAllainceReefPos().getY() + kReefBranchDistMeters / 2,
+                kReefL2HeightMeters
+            ),
+            ReefFace.E,
+            2
         );
 
         private final Translation3d m_branchPosition;
         private final PathPlannerPath m_innerPath;
+        private final ReefFace m_face;
+        private final int m_num;
 
-        private ReefBranch(Translation3d branchPosition, PathPlannerPath innerPath) {
+        private ReefBranch(Translation3d branchPosition, ReefFace face, int num) {
+            Paths.init();
             m_branchPosition = branchPosition;
             // m_innerPath = AutoBuilder.shouldFlip() ? innerPath : innerPath.flipPath();
-            m_innerPath = innerPath;
-            m_innerPath.flipPath();
+            m_face = face;
+            m_num = num;
+
+            m_innerPath = Paths.getReefInnerPath(m_face.getIndex() * 2 + (m_num - 1));
         }
 
         public Pose2d getSwerveTargetPoseOuter() {
@@ -60,16 +113,25 @@ public class FieldConstants {
         }
 
         public Command makeScoreCommand(SwerveSubsystem swerve, ElevatorSubsystem elevator) {
-            return Commands.parallel(
-                SwerveCommandFactory.driveToReefScore(swerve, this),
-                ElevatorCommandFactory.toPosition(elevator, this).beforeStarting(
-                    Commands.waitUntil(elevator::isWithinRadius).withTimeout(2)
-                )
-            );
+            return SwerveCommandFactory.driveToReefScore(swerve, this);
+            // return Commands.parallel(
+            // SwerveCommandFactory.driveToReefScore(swerve, this),
+            // ElevatorCommandFactory.toPosition(elevator, this).beforeStarting(
+            // Commands.waitUntil(elevator::isWithinRadius).withTimeout(2)
+            // )
+            // );
         }
 
         public PathPlannerPath getInnerPath() {
             return m_innerPath;
+        }
+
+        public ReefFace getFace() {
+            return m_face;
+        }
+
+        public int getNum() {
+            return m_num;
         }
     }
 
@@ -85,7 +147,7 @@ public class FieldConstants {
         + Conversions.inchesToMeters(11 + (5 / 8));
     public static final double kReefL4HeightMeters = Conversions.feetToMeters(6);
     // Distance between branch centers
-    public static final double kReefBranchDistMeters = Conversions.inchesToMeters(12.938);
+    public static final double kReefBranchDistMeters = Conversions.inchesToMeters(13);
     public static final double kReefBranchDiameterMeters = Conversions.inchesToMeters(1.6);
     public static final double kReefBranchRadiusMeters = kReefBranchDiameterMeters / 2;
 

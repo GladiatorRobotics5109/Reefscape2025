@@ -35,6 +35,8 @@ public final class Constants {
 
     public static final double kJoystickDeadzone = 0.15;
 
+    public static final double kBumperWidthMeters = Conversions.inchesToMeters(3.25);
+
     public static final class SwerveConstants {
         public static final class SwerveModuleConstants {
             /* Use PID controller on motor controllers */
@@ -132,6 +134,8 @@ public final class Constants {
         public static final double kOdometryFrequencyHz = 50;
         public static final Pose2d kStartingPose = new Pose2d();
         public static final String kLogPath = "Subsystems/Swerve";
+        public static final double kFrameWidth = Conversions.inchesToMeters(29.5);
+        public static final double kFrameHeight = kFrameWidth;
 
         public static final com.pathplanner.lib.config.PIDConstants kPPTranslationPID = new com.pathplanner.lib.config.PIDConstants(
             1,
@@ -156,7 +160,7 @@ public final class Constants {
             new ModuleConfig(
                 SwerveModuleConstants.kWheelRadiusMeters,
                 SwerveModuleConstants.kDriveMaxFreeSpeed.in(Units.MetersPerSecond),
-                5,
+                1.0,
                 SwerveModuleConstants.kUseFOC ? DCMotor.getKrakenX60Foc(1) : DCMotor.getKrakenX60(1),
                 SwerveModuleConstants.kDriveSupplyCurrentLimit,
                 1
@@ -169,9 +173,16 @@ public final class Constants {
 
         public static final PathConstraints kPPPathFindConstraints = new PathConstraints(
             Units.MetersPerSecond.of(2),
-            Units.MetersPerSecondPerSecond.of(4),
+            Units.MetersPerSecondPerSecond.of(3),
             Units.RotationsPerSecond.of(1.5),
             Units.RotationsPerSecondPerSecond.of(3)
+        );
+
+        public static final PathConstraints kPPReefInnerPathConstraints = new PathConstraints(
+            Units.MetersPerSecond.of(0.25),
+            Units.MetersPerSecondPerSecond.of(1),
+            Units.RotationsPerSecond.of(1.5),
+            Units.RotationsPerSecondPerSecond.of(2)
         );
 
         public static final SwerveDriveConfiguration kTeleopConfig = new SwerveDriveConfiguration(
