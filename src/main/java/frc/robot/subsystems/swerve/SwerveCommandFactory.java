@@ -1,6 +1,7 @@
 package frc.robot.subsystems.swerve;
 
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.LinearVelocity;
@@ -145,6 +146,10 @@ public final class SwerveCommandFactory {
 
     public static Command driveToPoseThenFollowPath(PathConstraints constraints, PathPlannerPath path) {
         return AutoBuilder.pathfindThenFollowPath(path, constraints);
+    }
+
+    public static Command setPosition(SwerveSubsystem swerve, Supplier<Pose2d> pose) {
+        return swerve.runOnce(() -> swerve.setPosition(pose.get()));
     }
 
     public static Command driveToReefScore(SwerveSubsystem swerve, ReefBranch branch) {

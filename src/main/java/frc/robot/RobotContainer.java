@@ -4,10 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.swerve.SwerveCommandFactory;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.util.FieldConstants.ReefBranch;
@@ -21,13 +24,16 @@ public class RobotContainer {
     // private final CommandPS5Controller m_driverController;
     // private final CommandGenericHID m_keyboard;
 
+    private final CommandXboxController m_operatorController;
+
     public RobotContainer() {
         m_swerve = new SwerveSubsystem();
         m_vision = new VisionSubsystem();
         m_elevator = new ElevatorSubsystem();
         RobotState.init(m_swerve, m_vision, m_elevator);
 
-        m_driverController = new CommandXboxController(0);
+        m_driverController = new CommandXboxController(Constants.DriveTeamConstants.kDriveControllerPort);
+        m_operatorController = new CommandXboxController(Constants.DriveTeamConstants.kOperatorControllerPort);
         // m_driverController = new CommandPS5Controller(0);
         // m_keyboard = new CommandGenericHID(0);
 
@@ -56,6 +62,7 @@ public class RobotContainer {
         // return null;
         ReefBranch branch = ReefBranch.L2E2;
         return Commands.sequence(
+            SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(6, 1, Rotation2d.fromDegrees(190))),
             Commands.waitSeconds(4),
             branch.makeScoreCommand(m_swerve, m_elevator)
         );

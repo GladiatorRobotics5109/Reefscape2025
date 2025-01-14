@@ -157,7 +157,7 @@ public class SwerveSubsystem extends SubsystemBase {
             m_kinematics,
             m_gyro.getYaw(),
             getModulePositions(),
-            new Pose2d(5, 7, Rotation2d.fromDegrees(120))
+            new Pose2d()
         );
 
         AutoBuilder.configure(
@@ -268,6 +268,10 @@ public class SwerveSubsystem extends SubsystemBase {
         }
 
         controller.schedule();
+    }
+
+    public void setPosition(Pose2d pose) {
+        m_poseEstimator.resetPosition(m_gyro.getYaw(), getModulePositions(), pose);
     }
 
     public void updatePose() {

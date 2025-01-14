@@ -96,9 +96,10 @@ public class SwerveModule {
             m_io.setTurnVoltage(0);
         }
         else {
+            double cos = m_desiredState.angle.minus(m_currentState.angle).getCos();
             if (m_useMotorPID) {
                 m_io.setDriveWheelSpeed(
-                    Conversions.driveWheelMetersToWheelRadians(m_desiredState.speedMetersPerSecond)
+                    Conversions.driveWheelMetersToWheelRadians(m_desiredState.speedMetersPerSecond * cos)
                 );
 
                 m_io.setTurnPosition(m_desiredState.angle);
@@ -106,11 +107,11 @@ public class SwerveModule {
             else {
                 m_io.setDriveVoltage(
                     m_driveFeedforward.calculate(
-                        Conversions.driveWheelMetersToWheelRadians(m_desiredState.speedMetersPerSecond)
+                        Conversions.driveWheelMetersToWheelRadians(m_desiredState.speedMetersPerSecond * cos)
                     )
                         + m_drivePID.calculate(
                             Conversions.driveWheelMetersToWheelRadians(m_currentState.speedMetersPerSecond),
-                            Conversions.driveWheelMetersToWheelRadians(m_desiredState.speedMetersPerSecond)
+                            Conversions.driveWheelMetersToWheelRadians(m_desiredState.speedMetersPerSecond * cos)
                         )
                 );
                 m_io.setTurnVoltage(

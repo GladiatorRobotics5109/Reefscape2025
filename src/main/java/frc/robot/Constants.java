@@ -37,6 +37,11 @@ public final class Constants {
 
     public static final double kBumperWidthMeters = Conversions.inchesToMeters(3.25);
 
+    public static final class DriveTeamConstants {
+        public static final int kDriveControllerPort = 0;
+        public static final int kOperatorControllerPort = 1;
+    }
+
     public static final class SwerveConstants {
         public static final class SwerveModuleConstants {
             /* Use PID controller on motor controllers */
@@ -238,17 +243,17 @@ public final class Constants {
         public static final double kSupplyCurrentLimit = 40.0;
         public static final double kStatorCurrentLimit = 1.75 * kSupplyCurrentLimit;
 
-        public static final double kGearRatio = 1.0;
+        public static final double kGearRatio = 20;
+        public static final double kSproketRadiusMeters = Conversions.inchesToMeters(0.819);
 
         public static final PIDConstants kPID = new PIDConstants(1, 0.0, 0.0);
         public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(0.0, 0.0, 0.0, 0.0);
-
-        public static final double kSproketRadiusMeters = Conversions.inchesToMeters(1.0);
 
         // Height of the base of elevator from the floor
         public static final double kElevatorBaseHeightMeters = SwerveModuleConstants.kWheelRadiusMeters
             + Conversions.inchesToMeters(2);
 
-        public static final double kAutoElevatorReefRadiusMeters = 5.0;
+        // The distance from the center of the reef that the elevator will be allowed to autonomously extend
+        public static final double kAutoElevatorExtendRequiredDistanceMeters = 5.0;
     }
 }
