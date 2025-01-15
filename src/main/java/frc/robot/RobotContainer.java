@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -78,7 +80,8 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // return null;
-        ReefBranch branch = ReefBranch.kL2E2;
+        ReefBranch branch = ReefBranch.kL2F2;
+        Logger.recordOutput("Test", branch.getFace().getFaceAngleFieldRelative());
         return Commands.sequence(
             SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(6, 1, Rotation2d.fromDegrees(190))),
             Commands.waitSeconds(4),

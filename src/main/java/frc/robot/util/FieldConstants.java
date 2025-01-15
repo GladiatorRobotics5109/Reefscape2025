@@ -86,8 +86,9 @@ public class FieldConstants {
     public static class ReefBranch {
         public static final ReefBranch kL2E1 = new ReefBranch(ReefHeight.L2, ReefFace.E, ReefIndex.One);
         public static final ReefBranch kL2E2 = new ReefBranch(ReefHeight.L2, ReefFace.E, ReefIndex.Two);
-        // new Translation3d(
-        // Util.getAlliance() == Alliance.Blue
+        public static final ReefBranch kL2F1 = new ReefBranch(ReefHeight.L2, ReefFace.F, ReefIndex.One);
+        public static final ReefBranch kL2F2 = new ReefBranch(ReefHeight.L2, ReefFace.F, ReefIndex.Two);
+        // new Translation3d( // Util.getAlliance() == Alliance.Blue
         // ? getAllainceReefPos().getX() - kReefRadiusMeters + kReefL2L3InsetMeters
         // : getAllainceReefPos().getX() + kReefRadiusMeters - kReefL2L3InsetMeters,
         // face == Alliance.Blue
@@ -215,7 +216,7 @@ public class FieldConstants {
     );
 
     public static Translation2d getAllainceReefPos() {
-        Logger.recordOutput("TestPose", new Translation3d(kBlueReefPos.getX(), kBlueReefPos.getY(), 2));
+        Logger.recordOutput("AllianceReefPose", new Translation3d(kBlueReefPos.getX(), kBlueReefPos.getY(), 1.5));
         return Util.getAlliance() == Alliance.Red ? kRedReefPos : kBlueReefPos;
     }
 }
