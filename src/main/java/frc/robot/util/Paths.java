@@ -29,7 +29,7 @@ public final class Paths {
         int i = 0;
         for (ReefFace face : faces) {
             Rotation2d swerveTargetHeading = face.getSwerveTargetHeading();
-            Translation2d faceLocation = face.getFacePosition();
+            Translation2d faceLocation = face.getFieldRelativeFacePosition();
 
             s_paths[i] = generateFromPosition(
                 faceLocation.plus(

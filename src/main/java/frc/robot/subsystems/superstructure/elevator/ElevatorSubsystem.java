@@ -4,12 +4,14 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotState;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.util.Conversions;
 import frc.robot.util.FieldConstants;
+import frc.robot.util.FieldConstants.ReefHeight;
 
 public class ElevatorSubsystem extends SubsystemBase {
     private final ElevatorIO m_io;
@@ -45,6 +47,18 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public void setVoltage(double volts) {
         m_io.setVoltage(volts);
+    }
+
+    public void setController(Command controller) {
+        if (!controller.hasRequirement(this)) {
+            DriverStation.reportWarning("Elevator Controller Command does not require this subsystem!", true);
+        }
+
+        controller.schedule();
+    }
+
+    public void setTargetHeight(ReefHeight height) {
+        setPosition(height.getHeight() - ElevatorConstants.kElevatorBaseHeightMeters);
     }
 
     public double getCurrentPosition() {

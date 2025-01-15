@@ -9,6 +9,7 @@ import com.pathplanner.lib.path.Waypoint;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -19,6 +20,32 @@ import frc.robot.subsystems.swerve.SwerveCommandFactory;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 public class FieldConstants {
+    public static enum ReefIndex {
+        One,
+        Two;
+
+        public int asInt() {
+            return this == One ? 1 : 2;
+        }
+    }
+
+    public static enum ReefHeight {
+        L1(0.0), // TOOD: Fix this
+        L2(kReefL2HeightMeters),
+        L3(kReefL3HeightMeters),
+        L4(kReefL4HeightMeters);
+
+        private final double m_height;
+
+        private ReefHeight(double heightMeters) {
+            m_height = heightMeters;
+        }
+
+        public double getHeight() {
+            return m_height;
+        }
+    }
+
     public static enum ReefFace {
         E(0),
         F(1),
@@ -43,8 +70,12 @@ public class FieldConstants {
             return getFaceAngleFieldRelative().plus(Rotation2d.k180deg);
         }
 
-        public Translation2d getFacePosition() {
+        public Translation2d getFieldRelativeFacePosition() {
             return new Translation2d(kReefRadiusMeters, getFaceAngleFieldRelative()).plus(getAllainceReefPos());
+        }
+
+        public Translation2d getReefRelativeFacePosition() {
+            return new Translation2d(kReefRadiusMeters, getFaceAngleFieldRelative());
         }
 
         public int getIndex() {
@@ -52,47 +83,66 @@ public class FieldConstants {
         }
     }
 
-    public static enum ReefBranch {
-        L2E1(
-            new Translation3d(
-                Util.getAlliance() == Alliance.Blue
-                    ? getAllainceReefPos().getX() - kReefRadiusMeters + kReefL2L3InsetMeters
-                    : getAllainceReefPos().getX() + kReefRadiusMeters - kReefL2L3InsetMeters,
-                Util.getAlliance() == Alliance.Blue
-                    ? getAllainceReefPos().getY() + kReefBranchDistMeters / 2
-                    : getAllainceReefPos().getY() - kReefBranchDistMeters / 2,
-                kReefL2HeightMeters
-            ),
-            ReefFace.E,
-            1
-        ),
-        L2E2(
-            new Translation3d(
-                Util.getAlliance() == Alliance.Blue
-                    ? getAllainceReefPos().getX() - kReefRadiusMeters + kReefL2L3InsetMeters
-                    : getAllainceReefPos().getX() + kReefRadiusMeters - kReefL2L3InsetMeters,
-                Util.getAlliance() == Alliance.Blue
-                    ? getAllainceReefPos().getY() - kReefBranchDistMeters / 2
-                    : getAllainceReefPos().getY() + kReefBranchDistMeters / 2,
-                kReefL2HeightMeters
-            ),
-            ReefFace.E,
-            2
-        );
+    public static class ReefBranch {
+        public static final ReefBranch kL2E1 = new ReefBranch(ReefHeight.L2, ReefFace.E, ReefIndex.One);
+        public static final ReefBranch kL2E2 = new ReefBranch(ReefHeight.L2, ReefFace.E, ReefIndex.Two);
+        // new Translation3d(
+        // Util.getAlliance() == Alliance.Blue
+        // ? getAllainceReefPos().getX() - kReefRadiusMeters + kReefL2L3InsetMeters
+        // : getAllainceReefPos().getX() + kReefRadiusMeters - kReefL2L3InsetMeters,
+        // face == Alliance.Blue
+        // ? getAllainceReefPos().getY() + kReefBranchDistMeters / 2
+        // : getAllainceReefPos().getY() - kReefBranchDistMeters / 2,
+        // kReefL2HeightMeters
+        // ),
+        // ReefFace.E,
+        // ReefHeight.L2,
+        // 1
+        // ),
+        // L2E2(
+        // new Translation3d(
+        // Util.getAlliance() == Alliance.Blue
+        // ? getAllainceReefPos().getX() - kReefRadiusMeters + kReefL2L3InsetMeters
+        // : getAllainceReefPos().getX() + kReefRadiusMeters - kReefL2L3InsetMeters,
+        // Util.getAlliance() == Alliance.Blue
+        // ? getAllainceReefPos().getY() - kReefBranchDistMeters / 2
+        // : getAllainceReefPos().getY() + kReefBranchDistMeters / 2,
+        // kReefL2HeightMeters
+        // ),
+        // ReefFace.E,
+        // ReefHeight.L2,
+        // 2
+        // );
 
         private final Translation3d m_branchPosition;
         private final PathPlannerPath m_innerPath;
         private final ReefFace m_face;
-        private final int m_num;
+        private final ReefHeight m_height;
+        private final ReefIndex m_index;
 
-        private ReefBranch(Translation3d branchPosition, ReefFace face, int num) {
+        private ReefBranch(ReefHeight height, ReefFace face, ReefIndex index) {
             Paths.init();
-            m_branchPosition = branchPosition;
-            // m_innerPath = AutoBuilder.shouldFlip() ? innerPath : innerPath.flipPath();
             m_face = face;
-            m_num = num;
+            m_height = height;
+            m_index = index;
 
-            m_innerPath = Paths.getReefInnerPath(m_face.getIndex() * 2 + (m_num - 1));
+            // I'm very sorry for this...
+            m_branchPosition = new Translation3d(getAllainceReefPos()).plus(
+                new Translation3d(face.getReefRelativeFacePosition())
+            ).plus(
+                new Translation3d(
+                    kReefBranchDistMeters / 2,
+                    new Rotation3d(
+                        m_face.getFaceAngleFieldRelative().plus(
+                            Util.getAlliance() == Alliance.Blue
+                                ? (m_index == ReefIndex.One ? Rotation2d.fromDegrees(90) : Rotation2d.fromDegrees(-90))
+                                : (m_index == ReefIndex.One ? Rotation2d.fromDegrees(-90) : Rotation2d.fromDegrees(90))
+                        )
+                    )
+                )
+            ).plus(new Translation3d(0, 0, height.getHeight()));
+
+            m_innerPath = Paths.getReefInnerPath(m_face.getIndex() * 2 + (m_index.asInt() - 1));
         }
 
         public Pose2d getSwerveTargetPoseOuter() {
@@ -130,8 +180,8 @@ public class FieldConstants {
             return m_face;
         }
 
-        public int getNum() {
-            return m_num;
+        public ReefIndex getIndex() {
+            return m_index;
         }
     }
 

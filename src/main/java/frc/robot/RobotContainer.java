@@ -60,7 +60,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // return null;
-        ReefBranch branch = ReefBranch.L2E2;
+        ReefBranch branch = ReefBranch.kL2E2;
         return Commands.sequence(
             SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(6, 1, Rotation2d.fromDegrees(190))),
             Commands.waitSeconds(4),
