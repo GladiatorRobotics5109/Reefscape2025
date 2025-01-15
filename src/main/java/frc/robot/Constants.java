@@ -139,8 +139,9 @@ public final class Constants {
         public static final double kOdometryFrequencyHz = 50;
         public static final Pose2d kStartingPose = new Pose2d();
         public static final String kLogPath = "Subsystems/Swerve";
-        public static final double kFrameWidth = Conversions.inchesToMeters(29.5);
+        public static final double kFrameWidth = Conversions.inchesToMeters(29);
         public static final double kFrameHeight = kFrameWidth;
+        public static final double kDriveBaseRadiusMeters = Math.hypot(kFrameWidth, kFrameHeight);
 
         public static final com.pathplanner.lib.config.PIDConstants kPPTranslationPID = new com.pathplanner.lib.config.PIDConstants(
             2,

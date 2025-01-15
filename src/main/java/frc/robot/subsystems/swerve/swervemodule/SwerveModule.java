@@ -86,6 +86,10 @@ public class SwerveModule {
         return m_currentPosition;
     }
 
+    public double getDrivePositionRads() {
+        return m_inputs.drivePositionRad;
+    }
+
     public void periodic() {
         m_io.periodic();
         m_io.updateInputs(m_inputs);

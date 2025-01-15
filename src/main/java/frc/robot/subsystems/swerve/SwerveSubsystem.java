@@ -256,6 +256,16 @@ public class SwerveSubsystem extends SubsystemBase {
         };
     }
 
+    /** Get the position of all drive wheels in radians. */
+    public double[] getWheelRadiusCharacterizationPosition() {
+        return new double[] {
+            m_moduleFL.getDrivePositionRads(),
+            m_moduleFR.getDrivePositionRads(),
+            m_moduleBL.getDrivePositionRads(),
+            m_moduleBR.getDrivePositionRads()
+        };
+    }
+
     public ChassisSpeeds getChassisSpeeds() {
         return m_kinematics.toChassisSpeeds(getModuleStates());
     }
