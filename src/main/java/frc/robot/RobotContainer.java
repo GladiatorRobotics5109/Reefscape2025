@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.AutomatedTeleopCommand;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swerve.SwerveCommandFactory;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
@@ -44,7 +45,7 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        // m_swerve.setDefaultCommand(SwerveCommandFactory.makeTeleop(m_swerve, m_driverController));
+        m_swerve.setDefaultCommand(SwerveCommandFactory.makeTeleop(m_swerve, m_driverController));
         // m_swerve.setDefaultCommand(
         // SwerveComSmandFactory.makeTeleop(
         // m_swerve,
@@ -66,5 +67,9 @@ public class RobotContainer {
             Commands.waitSeconds(4),
             branch.makeScoreCommand(m_swerve, m_elevator)
         );
+    }
+
+    public Command getTeleopCommand() {
+        return new AutomatedTeleopCommand(m_elevator, m_swerve, m_driverController, m_operatorController);
     }
 }

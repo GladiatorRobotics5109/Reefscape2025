@@ -120,7 +120,7 @@ public class FieldConstants {
         private final ReefHeight m_height;
         private final ReefIndex m_index;
 
-        private ReefBranch(ReefHeight height, ReefFace face, ReefIndex index) {
+        public ReefBranch(ReefHeight height, ReefFace face, ReefIndex index) {
             Paths.init();
             m_face = face;
             m_height = height;

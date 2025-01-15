@@ -21,6 +21,7 @@ import frc.robot.util.Paths;
 
 public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
+    private Command m_teleopCommand;
 
     private RobotContainer m_robotContainer;
 
@@ -120,6 +121,12 @@ public class Robot extends LoggedRobot {
     public void teleopInit() {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
+        }
+
+        m_teleopCommand = m_robotContainer.getTeleopCommand();
+
+        if (m_teleopCommand != null) {
+            m_teleopCommand.schedule();
         }
     }
 
