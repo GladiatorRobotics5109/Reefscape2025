@@ -191,28 +191,23 @@ public final class Constants {
         );
 
         public static final SwerveDriveConfiguration kTeleopConfig = new SwerveDriveConfiguration(
-            // Units.MetersPerSecond.of(0.5),
-            Units.MetersPerSecond.of(3),
-            SwerveModuleConstants.kDriveMaxFreeSpeed, // Theoretically max achievable speed
+            SwerveModuleConstants.kDriveMaxFreeSpeed,
+            Units.MetersPerSecond.of(0.5),
             // Units.RotationsPerSecond.of(0.2),
-            Units.RotationsPerSecond.of(0.75),
             Units.RotationsPerSecond.of(1.25),
+            Units.RotationsPerSecond.of(0.5),
             kTeleopFieldRelative
         );
 
         // Provides a way to describe the configuration of the swerve subsystem (like drive speeds) with values that may
         // change throughout a match (like auto -> teleop)
-        public static final record SwerveDriveConfiguration(LinearVelocity defaultDriveSpeed, LinearVelocity maxDriveSpeed, AngularVelocity defaultRotationSpeed, AngularVelocity maxRotationSpeed, boolean fieldRelative) {
-            public LinearVelocity evalDriveSpeed(double t) {
-                // l(t) = (f / i) * t + i
-                double slope = maxDriveSpeed.in(Units.MetersPerSecond) / defaultDriveSpeed.in(Units.MetersPerSecond);
-                return defaultDriveSpeed.plus(Units.MetersPerSecond.of(slope * MathUtil.clamp(t, 0, 1)));
+        public static final record SwerveDriveConfiguration(LinearVelocity defaultDriveSpeed, LinearVelocity modifiedDriveSpeed, AngularVelocity defaultRotationSpeed, AngularVelocity modifiedRotationSpeed, boolean fieldRelative) {
+            public double evalDriveSpeed(double t) {
+                return MathUtil.interpolate(defaultDriveSpeed.in(Units.MetersPerSecond), modifiedDriveSpeed.in(Units.MetersPerSecond), t);
             }
 
-            public AngularVelocity evalRotationSpeed(double t) {
-                // l(t) = (f / i) * t + i
-                double slope = maxRotationSpeed.in(Units.RadiansPerSecond) / defaultRotationSpeed.in(Units.RadiansPerSecond);
-                return defaultRotationSpeed.plus(Units.RotationsPerSecond.of(slope * MathUtil.clamp(t, 0, 1)));
+            public double evalRotationSpeed(double t) {
+                return MathUtil.interpolate(defaultRotationSpeed.in(Units.RadiansPerSecond), modifiedRotationSpeed.in(Units.RadiansPerSecond), t);
             }
         }
     }

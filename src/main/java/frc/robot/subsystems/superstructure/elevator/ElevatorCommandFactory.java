@@ -5,6 +5,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.util.FieldConstants.ReefBranch;
+import frc.robot.util.FieldConstants.ReefHeight;
 
 public class ElevatorCommandFactory {
     public static Command toPosition(ElevatorSubsystem elevator, DoubleSupplier positionMeters) {
@@ -16,6 +17,10 @@ public class ElevatorCommandFactory {
             elevator,
             () -> branch.getBranchPosition().getZ() - ElevatorConstants.kElevatorBaseHeightMeters
         );
+    }
+
+    public static Command toPosition(ElevatorSubsystem elevator, ReefHeight height) {
+        return ElevatorCommandFactory.toPosition(elevator, () -> height.getHeight() - ElevatorConstants.kElevatorBaseHeightMeters);
     }
 
     public static Command debugControllerAxis(ElevatorSubsystem elevator, DoubleSupplier axis) {

@@ -262,14 +262,6 @@ public class SwerveSubsystem extends SubsystemBase {
         return m_kinematics.toChassisSpeeds(getModuleStates());
     }
 
-    public void setController(Command controller) {
-        if (!controller.hasRequirement(this)) {
-            DriverStation.reportWarning("Swerve Controller Command does not require this subsystem!", true);
-        }
-
-        controller.schedule();
-    }
-
     public void setPosition(Pose2d pose) {
         m_poseEstimator.resetPosition(m_gyro.getYaw(), getModulePositions(), pose);
     }

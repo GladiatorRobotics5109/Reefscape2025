@@ -49,14 +49,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_io.setVoltage(volts);
     }
 
-    public void setController(Command controller) {
-        if (!controller.hasRequirement(this)) {
-            DriverStation.reportWarning("Elevator Controller Command does not require this subsystem!", true);
-        }
-
-        controller.schedule();
-    }
-
     public void setTargetHeight(ReefHeight height) {
         setPosition(height.getHeight() - ElevatorConstants.kElevatorBaseHeightMeters);
     }

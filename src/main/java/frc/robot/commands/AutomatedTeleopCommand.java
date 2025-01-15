@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
@@ -85,7 +86,7 @@ public class AutomatedTeleopCommand extends Command {
     private final ElevatorSubsystem m_elevator;
     private final SwerveSubsystem m_swerve;
 
-    private final CommandXboxController m_driverController;
+    private final CommandPS4Controller m_driverController;
     private final CommandXboxController m_operatorController;
 
     private final List<ControllerButton> m_queuedBranch;
@@ -94,11 +95,12 @@ public class AutomatedTeleopCommand extends Command {
     public AutomatedTeleopCommand(
         ElevatorSubsystem elevator,
         SwerveSubsystem swerve,
-        CommandXboxController driverController,
+        CommandPS4Controller driverController,
         CommandXboxController operatorController
     ) {
         m_elevator = elevator;
         m_swerve = swerve;
+        addRequirements(m_elevator, m_swerve);
 
         m_driverController = driverController;
         m_operatorController = operatorController;
@@ -111,7 +113,7 @@ public class AutomatedTeleopCommand extends Command {
     public void execute() {
         updateQueued();
 
-        if (m_queuedCommand.isPresent() && m_driverController.a().getAsBoolean()) {
+        if (m_queuedCommand.isPresent() && m_driverController.options().getAsBoolean()) {
             m_queuedCommand.get().alongWith(
                 ControllerRumbleCommand.makeLinearDecay(1, RumbleType.kBothRumble, 0.5, new GenericHID[] {
                     m_driverController.getHID(), m_operatorController.getHID()
