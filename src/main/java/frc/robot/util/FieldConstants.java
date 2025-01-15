@@ -176,6 +176,10 @@ public class FieldConstants {
             return m_innerPath;
         }
 
+        public ReefHeight getHeight() {
+            return m_height;
+        }
+
         public ReefFace getFace() {
             return m_face;
         }

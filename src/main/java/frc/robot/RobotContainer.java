@@ -55,7 +55,7 @@ public class RobotContainer {
         m_driverController.circle().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L2));
         m_driverController.triangle().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L3));
         m_driverController.square().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L4));
-        
+
         // TODO: impliment this
         // L1 - intake
         // R2 - outake

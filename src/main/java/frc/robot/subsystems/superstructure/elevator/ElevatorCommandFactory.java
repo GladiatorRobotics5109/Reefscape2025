@@ -12,15 +12,18 @@ public class ElevatorCommandFactory {
         return elevator.runOnce(() -> elevator.setPosition(positionMeters.getAsDouble()));
     }
 
-    public static Command toPosition(ElevatorSubsystem elevator, ReefBranch branch) {
+    public static Command toPosition(ElevatorSubsystem elevator, ReefHeight height) {
         return ElevatorCommandFactory.toPosition(
             elevator,
-            () -> branch.getBranchPosition().getZ() - ElevatorConstants.kElevatorBaseHeightMeters
+            () -> height.getHeight() - ElevatorConstants.kEndEffectorHeightMeters
         );
     }
 
-    public static Command toPosition(ElevatorSubsystem elevator, ReefHeight height) {
-        return ElevatorCommandFactory.toPosition(elevator, () -> height.getHeight() - ElevatorConstants.kElevatorBaseHeightMeters);
+    public static Command toPosition(ElevatorSubsystem elevator, ReefBranch branch) {
+        return ElevatorCommandFactory.toPosition(
+            elevator,
+            branch.getHeight()
+        );
     }
 
     public static Command debugControllerAxis(ElevatorSubsystem elevator, DoubleSupplier axis) {

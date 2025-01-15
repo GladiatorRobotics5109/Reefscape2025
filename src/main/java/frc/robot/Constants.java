@@ -247,6 +247,8 @@ public final class Constants {
         // Height of the base of elevator from the floor
         public static final double kElevatorBaseHeightMeters = SwerveModuleConstants.kWheelRadiusMeters
             + Conversions.inchesToMeters(2);
+        public static final double kEndEffectorHeightMeters = kElevatorBaseHeightMeters
+            + Conversions.inchesToMeters(25);
 
         // The distance from the center of the reef that the elevator will be allowed to autonomously extend
         public static final double kAutoElevatorExtendRequiredDistanceMeters = 5.0;
