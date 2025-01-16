@@ -24,7 +24,7 @@ public class FieldConstants {
         One,
         Two;
 
-        public int asInt() {
+        public int getIndex() {
             return this == One ? 1 : 2;
         }
     }
@@ -62,16 +62,28 @@ public class FieldConstants {
 
         public Rotation2d getFaceAngleFieldRelative() {
             Rotation2d offset = Util.getAlliance() == Alliance.Blue ? Rotation2d.k180deg : Rotation2d.kZero;
-            Rotation2d angle = Rotation2d.fromDegrees(60 * m_index).plus(offset);
+            Rotation2d angle = Rotation2d.fromDegrees(60 * -m_index).plus(offset);
             return angle;
+        }
+
+        public Rotation2d getFaceAngleFieldRelativeBlueAlliance() {
+            return Rotation2d.fromDegrees(60 * -m_index).plus(Rotation2d.k180deg);
         }
 
         public Rotation2d getSwerveTargetHeading() {
             return getFaceAngleFieldRelative().plus(Rotation2d.k180deg);
         }
 
+        public Rotation2d getSwerveTargetHeadingBlueAlliance() {
+            return getFaceAngleFieldRelativeBlueAlliance().plus(Rotation2d.k180deg);
+        }
+
         public Translation2d getFieldRelativeFacePosition() {
-            return new Translation2d(kReefRadiusMeters, getFaceAngleFieldRelative()).plus(getAllainceReefPos());
+            return new Translation2d(kReefRadiusMeters, getFaceAngleFieldRelative()).plus(getAllianceReefPos());
+        }
+
+        public Translation2d getFieldRelativeFacePositionBlueAlliance() {
+            return new Translation2d(kReefRadiusMeters, getFaceAngleFieldRelativeBlueAlliance()).plus(kBlueReefPos);
         }
 
         public Translation2d getReefRelativeFacePosition() {
@@ -128,7 +140,7 @@ public class FieldConstants {
             m_index = index;
 
             // I'm very sorry for this...
-            m_branchPosition = new Translation3d(getAllainceReefPos()).plus(
+            m_branchPosition = new Translation3d(getAllianceReefPos()).plus(
                 new Translation3d(face.getReefRelativeFacePosition())
             ).plus(
                 new Translation3d(
@@ -143,7 +155,7 @@ public class FieldConstants {
                 )
             ).plus(new Translation3d(0, 0, height.getHeight()));
 
-            m_innerPath = Paths.getReefInnerPath(m_face.getIndex() * 2 + (m_index.asInt() - 1));
+            m_innerPath = Paths.getReefInnerPath(face, index);
         }
 
         public Pose2d getSwerveTargetPoseOuter() {
@@ -215,7 +227,7 @@ public class FieldConstants {
         Conversions.inchesToMeters(158.5)
     );
 
-    public static Translation2d getAllainceReefPos() {
+    public static Translation2d getAllianceReefPos() {
         Logger.recordOutput("AllianceReefPose", new Translation3d(kBlueReefPos.getX(), kBlueReefPos.getY(), 1.5));
         return Util.getAlliance() == Alliance.Red ? kRedReefPos : kBlueReefPos;
     }

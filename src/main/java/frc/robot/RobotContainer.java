@@ -9,15 +9,16 @@ import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.AutomatedTeleopCommand;
+import frc.robot.commands.AutomatedTeleopControllerListenerCommand;
 import frc.robot.subsystems.superstructure.elevator.ElevatorCommandFactory;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swerve.SwerveCommandFactory;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
+import frc.robot.util.Paths;
 import frc.robot.util.FieldConstants.ReefBranch;
 import frc.robot.util.FieldConstants.ReefHeight;
 
@@ -26,8 +27,8 @@ public class RobotContainer {
     private final VisionSubsystem m_vision;
     private final ElevatorSubsystem m_elevator;
 
-    // private final CommandXboxController m_driverController;
-    private final CommandPS4Controller m_driverController;
+    private final CommandXboxController m_driverController;
+    // private final CommandPS4Controller m_driverController;
     // private final CommandGenericHID m_keyboard;
 
     private final CommandXboxController m_operatorController;
@@ -38,25 +39,42 @@ public class RobotContainer {
         m_elevator = new ElevatorSubsystem();
         RobotState.init(m_swerve, m_vision, m_elevator);
 
-        m_driverController = new CommandPS4Controller(Constants.DriveTeamConstants.kDriveControllerPort);
+        // m_driverController = new CommandPS4Controller(Constants.DriveTeamConstants.kDriveControllerPort);
+        m_driverController = new CommandXboxController(Constants.DriveTeamConstants.kDriveControllerPort);
         m_operatorController = new CommandXboxController(Constants.DriveTeamConstants.kOperatorControllerPort);
         // m_driverController = new CommandPS5Controller(0);
         // m_keyboard = new CommandGenericHID(0);
+
+        Logger.recordOutput("GeneratedPaths", Paths.test);
 
         // Paths.init();
         // Logger.recordOutput("TestPath", Paths.test);
 
         configureBindings();
+
+        CommandScheduler.getInstance().onCommandInitialize((Command command) -> {
+            Logger.recordOutput("CommandLog", "Started: " + command.getName() + "\n");
+        });
+        CommandScheduler.getInstance().onCommandFinish((Command command) -> {
+            Logger.recordOutput("CommandLog", "Finished: " + command.getName() + "\n");
+        });
+        CommandScheduler.getInstance().onCommandInterrupt((Command command) -> {
+            Logger.recordOutput("CommandLog", "Interrupted: " + command.getName() + "\n");
+        });
     }
 
     private void configureBindings() {
         m_swerve.setDefaultCommand(SwerveCommandFactory.makeTeleop(m_swerve, m_driverController));
 
         // Elevator setpoints
-        m_driverController.cross().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L1));
-        m_driverController.circle().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L2));
-        m_driverController.triangle().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L3));
-        m_driverController.square().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L4));
+        // m_driverController.cross().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L1));
+        // m_driverController.circle().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L2));
+        // m_driverController.triangle().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L3));
+        // m_driverController.square().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L4));
+        m_driverController.a().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L1));
+        m_driverController.b().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L2));
+        m_driverController.y().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L3));
+        m_driverController.x().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L4));
 
         // TODO: impliment this
         // L1 - intake
@@ -90,6 +108,11 @@ public class RobotContainer {
     }
 
     public Command getTeleopCommand() {
-        return new AutomatedTeleopCommand(m_elevator, m_swerve, m_driverController, m_operatorController);
+        return new AutomatedTeleopControllerListenerCommand(
+            m_elevator,
+            m_swerve,
+            m_driverController,
+            m_operatorController
+        );
     }
 }

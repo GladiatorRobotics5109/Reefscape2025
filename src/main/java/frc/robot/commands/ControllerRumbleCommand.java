@@ -38,6 +38,8 @@ public class ControllerRumbleCommand extends Command {
         m_lengthSeconds = lengthSeconds;
         m_timer = new Timer();
         m_targets = targets;
+
+        setName("AutomatedTeleopCommand");
     }
 
     @Override

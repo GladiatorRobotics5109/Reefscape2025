@@ -36,7 +36,7 @@ public final class SwerveTeleopCommand extends Command {
         m_yRateLimit = new SlewRateLimiter(20);
         m_rotRateLimit = new SlewRateLimiter(10);
 
-        // Configure button bindings
+        setName("SwerveTeleopCommand");
     }
 
     @Override

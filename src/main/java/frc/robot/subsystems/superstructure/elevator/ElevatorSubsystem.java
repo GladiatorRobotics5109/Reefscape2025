@@ -66,7 +66,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public boolean isWithinRadius() {
         return RobotState.getSwervePose().getTranslation().getDistance(
-            FieldConstants.getAllainceReefPos()
+            FieldConstants.getAllianceReefPos()
         ) < ElevatorConstants.kAutoElevatorExtendRequiredDistanceMeters;
     }
 

@@ -1,6 +1,8 @@
 package frc.robot.util;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.IdealStartingState;
@@ -13,11 +15,14 @@ import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.util.FieldConstants.ReefFace;
+import frc.robot.util.FieldConstants.ReefIndex;
 
 public final class Paths {
-    private static PathPlannerPath[] s_paths = new PathPlannerPath[12];
+    private static record FaceAndIndex(ReefFace face, ReefIndex index) {}
 
-    public static Pose2d[] test = new Pose2d[0];
+    private static Map<FaceAndIndex, PathPlannerPath> s_paths = new HashMap<FaceAndIndex, PathPlannerPath>();
+
+    public static Pose2d[][] test = new Pose2d[12][0];
 
     private static boolean s_hasInit = false;
 
@@ -28,10 +33,23 @@ public final class Paths {
         ReefFace[] faces = ReefFace.values();
         int i = 0;
         for (ReefFace face : faces) {
-            Rotation2d swerveTargetHeading = face.getSwerveTargetHeading();
-            Translation2d faceLocation = face.getFieldRelativeFacePosition();
+            Rotation2d swerveTargetHeading = face.getSwerveTargetHeadingBlueAlliance();
+            Rotation2d faceAngle = swerveTargetHeading.plus(Rotation2d.k180deg);
+            Translation2d faceLocation = face.getFieldRelativeFacePositionBlueAlliance();
 
-            s_paths[i] = generateFromPosition(
+            s_paths.put(
+                new FaceAndIndex(face, ReefIndex.One),
+                generateFromPosition(
+                    faceLocation.plus(
+                        new Translation2d(
+                            FieldConstants.kReefBranchDistMeters / 2,
+                            swerveTargetHeading.plus(Rotation2d.fromDegrees(90))
+                        )
+                    ),
+                    swerveTargetHeading
+                )
+            );
+            test[i] = generateFromPosition(
                 faceLocation.plus(
                     new Translation2d(
                         FieldConstants.kReefBranchDistMeters / 2,
@@ -39,11 +57,23 @@ public final class Paths {
                     )
                 ),
                 swerveTargetHeading
+            ).getPathPoses().toArray(new Pose2d[0]);
+            i++;
+
+            s_paths.put(
+                new FaceAndIndex(face, ReefIndex.Two),
+                generateFromPosition(
+                    faceLocation.plus(
+                        new Translation2d(
+                            FieldConstants.kReefBranchDistMeters / 2,
+                            swerveTargetHeading.minus(Rotation2d.fromDegrees(90))
+                        )
+                    ),
+                    swerveTargetHeading
+                )
             );
-            if (test.length == 0) {
-                test = s_paths[i].getPathPoses().toArray(new Pose2d[0]);
-            }
-            s_paths[i + 1] = generateFromPosition(
+
+            test[i] = generateFromPosition(
                 faceLocation.plus(
                     new Translation2d(
                         FieldConstants.kReefBranchDistMeters / 2,
@@ -51,8 +81,8 @@ public final class Paths {
                     )
                 ),
                 swerveTargetHeading
-            );
-            i += 2;
+            ).getPathPoses().toArray(new Pose2d[0]);
+            i++;
         }
 
         s_hasInit = true;
@@ -68,11 +98,11 @@ public final class Paths {
         return s_hasInit;
     }
 
-    public static PathPlannerPath getReefInnerPath(int index) {
+    public static PathPlannerPath getReefInnerPath(ReefFace face, ReefIndex i) {
         if (!s_hasInit)
             init();
 
-        return s_paths[index];
+        return s_paths.get(new FaceAndIndex(face, i));
     }
 
     private static PathPlannerPath generateFromPosition(Translation2d pos, Rotation2d swerveTargetHeading) {
@@ -83,7 +113,6 @@ public final class Paths {
             )
         );
         List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-            // Should be 1 m away from reef base
             new Pose2d(
                 targetEndPos.plus(new Translation2d(0.8, swerveTargetHeading.plus(Rotation2d.k180deg))),
                 swerveTargetHeading
