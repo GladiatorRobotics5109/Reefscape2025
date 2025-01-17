@@ -98,7 +98,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // return null;
-        ReefBranch branch = ReefBranch.kL2H1;
+        ReefBranch branch = ReefBranch.kL2J2;
         Logger.recordOutput("Test", branch.getFace().getFaceAngleFieldRelative());
         return Commands.sequence(
             SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(6, 1, Rotation2d.fromDegrees(190))),

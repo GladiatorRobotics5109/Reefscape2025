@@ -104,32 +104,36 @@ public class FieldConstants {
         public static final ReefBranch kL2G2 = new ReefBranch(ReefHeight.L2, ReefFace.G, ReefIndex.Two);
         public static final ReefBranch kL2H1 = new ReefBranch(ReefHeight.L2, ReefFace.H, ReefIndex.One);
         public static final ReefBranch kL2H2 = new ReefBranch(ReefHeight.L2, ReefFace.H, ReefIndex.Two);
-        // new Translation3d( // Util.getAlliance() == Alliance.Blue
-        // ? getAllainceReefPos().getX() - kReefRadiusMeters + kReefL2L3InsetMeters
-        // : getAllainceReefPos().getX() + kReefRadiusMeters - kReefL2L3InsetMeters,
-        // face == Alliance.Blue
-        // ? getAllainceReefPos().getY() + kReefBranchDistMeters / 2
-        // : getAllainceReefPos().getY() - kReefBranchDistMeters / 2,
-        // kReefL2HeightMeters
-        // ),
-        // ReefFace.E,
-        // ReefHeight.L2,
-        // 1
-        // ),
-        // L2E2(
-        // new Translation3d(
-        // Util.getAlliance() == Alliance.Blue
-        // ? getAllainceReefPos().getX() - kReefRadiusMeters + kReefL2L3InsetMeters
-        // : getAllainceReefPos().getX() + kReefRadiusMeters - kReefL2L3InsetMeters,
-        // Util.getAlliance() == Alliance.Blue
-        // ? getAllainceReefPos().getY() - kReefBranchDistMeters / 2
-        // : getAllainceReefPos().getY() + kReefBranchDistMeters / 2,
-        // kReefL2HeightMeters
-        // ),
-        // ReefFace.E,
-        // ReefHeight.L2,
-        // 2
-        // );
+        public static final ReefBranch kL2I1 = new ReefBranch(ReefHeight.L2, ReefFace.I, ReefIndex.One);
+        public static final ReefBranch kL2I2 = new ReefBranch(ReefHeight.L2, ReefFace.I, ReefIndex.Two);
+        public static final ReefBranch kL2J1 = new ReefBranch(ReefHeight.L2, ReefFace.J, ReefIndex.One);
+        public static final ReefBranch kL2J2 = new ReefBranch(ReefHeight.L2, ReefFace.J, ReefIndex.Two);
+
+        public static final ReefBranch kL3E1 = new ReefBranch(ReefHeight.L3, ReefFace.E, ReefIndex.One);
+        public static final ReefBranch kL3E2 = new ReefBranch(ReefHeight.L3, ReefFace.E, ReefIndex.Two);
+        public static final ReefBranch kL3F1 = new ReefBranch(ReefHeight.L3, ReefFace.F, ReefIndex.One);
+        public static final ReefBranch kL3F2 = new ReefBranch(ReefHeight.L3, ReefFace.F, ReefIndex.Two);
+        public static final ReefBranch kL3G1 = new ReefBranch(ReefHeight.L3, ReefFace.G, ReefIndex.One);
+        public static final ReefBranch kL3G2 = new ReefBranch(ReefHeight.L3, ReefFace.G, ReefIndex.Two);
+        public static final ReefBranch kL3H1 = new ReefBranch(ReefHeight.L3, ReefFace.H, ReefIndex.One);
+        public static final ReefBranch kL3H2 = new ReefBranch(ReefHeight.L3, ReefFace.H, ReefIndex.Two);
+        public static final ReefBranch kL3I1 = new ReefBranch(ReefHeight.L3, ReefFace.I, ReefIndex.One);
+        public static final ReefBranch kL3I2 = new ReefBranch(ReefHeight.L3, ReefFace.I, ReefIndex.Two);
+        public static final ReefBranch kL3J1 = new ReefBranch(ReefHeight.L3, ReefFace.J, ReefIndex.One);
+        public static final ReefBranch kL3J2 = new ReefBranch(ReefHeight.L3, ReefFace.J, ReefIndex.Two);
+
+        public static final ReefBranch kL4E1 = new ReefBranch(ReefHeight.L4, ReefFace.E, ReefIndex.One);
+        public static final ReefBranch kL4E2 = new ReefBranch(ReefHeight.L4, ReefFace.E, ReefIndex.Two);
+        public static final ReefBranch kL4F1 = new ReefBranch(ReefHeight.L4, ReefFace.F, ReefIndex.One);
+        public static final ReefBranch kL4F2 = new ReefBranch(ReefHeight.L4, ReefFace.F, ReefIndex.Two);
+        public static final ReefBranch kL4G1 = new ReefBranch(ReefHeight.L4, ReefFace.G, ReefIndex.One);
+        public static final ReefBranch kL4G2 = new ReefBranch(ReefHeight.L4, ReefFace.G, ReefIndex.Two);
+        public static final ReefBranch kL4H1 = new ReefBranch(ReefHeight.L4, ReefFace.H, ReefIndex.One);
+        public static final ReefBranch kL4H2 = new ReefBranch(ReefHeight.L4, ReefFace.H, ReefIndex.Two);
+        public static final ReefBranch kL4I1 = new ReefBranch(ReefHeight.L4, ReefFace.I, ReefIndex.One);
+        public static final ReefBranch kL4I2 = new ReefBranch(ReefHeight.L4, ReefFace.I, ReefIndex.Two);
+        public static final ReefBranch kL4J1 = new ReefBranch(ReefHeight.L4, ReefFace.J, ReefIndex.One);
+        public static final ReefBranch kL4J2 = new ReefBranch(ReefHeight.L4, ReefFace.J, ReefIndex.Two);
 
         private final Translation3d m_branchPosition;
         private final PathPlannerPath m_innerPath;
