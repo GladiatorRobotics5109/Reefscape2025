@@ -37,9 +37,20 @@ public final class Paths {
             Rotation2d faceAngle = swerveTargetHeading.plus(Rotation2d.k180deg);
             Translation2d faceLocation = face.getFieldRelativeFacePositionBlueAlliance();
 
-            s_paths.put(
-                new FaceAndIndex(face, ReefIndex.One),
-                generateFromPosition(
+            if (face == ReefFace.E || face == ReefFace.I || face == ReefFace.J) {
+                s_paths.put(
+                    new FaceAndIndex(face, ReefIndex.One),
+                    generateFromPosition(
+                        faceLocation.plus(
+                            new Translation2d(
+                                FieldConstants.kReefBranchDistMeters / 2,
+                                swerveTargetHeading.plus(Rotation2d.fromDegrees(90))
+                            )
+                        ),
+                        swerveTargetHeading
+                    )
+                );
+                test[i] = generateFromPosition(
                     faceLocation.plus(
                         new Translation2d(
                             FieldConstants.kReefBranchDistMeters / 2,
@@ -47,22 +58,23 @@ public final class Paths {
                         )
                     ),
                     swerveTargetHeading
-                )
-            );
-            test[i] = generateFromPosition(
-                faceLocation.plus(
-                    new Translation2d(
-                        FieldConstants.kReefBranchDistMeters / 2,
-                        swerveTargetHeading.plus(Rotation2d.fromDegrees(90))
-                    )
-                ),
-                swerveTargetHeading
-            ).getPathPoses().toArray(new Pose2d[0]);
-            i++;
+                ).getPathPoses().toArray(new Pose2d[0]);
+                i++;
 
-            s_paths.put(
-                new FaceAndIndex(face, ReefIndex.Two),
-                generateFromPosition(
+                s_paths.put(
+                    new FaceAndIndex(face, ReefIndex.Two),
+                    generateFromPosition(
+                        faceLocation.plus(
+                            new Translation2d(
+                                FieldConstants.kReefBranchDistMeters / 2,
+                                swerveTargetHeading.minus(Rotation2d.fromDegrees(90))
+                            )
+                        ),
+                        swerveTargetHeading
+                    )
+                );
+
+                test[i] = generateFromPosition(
                     faceLocation.plus(
                         new Translation2d(
                             FieldConstants.kReefBranchDistMeters / 2,
@@ -70,19 +82,57 @@ public final class Paths {
                         )
                     ),
                     swerveTargetHeading
-                )
-            );
-
-            test[i] = generateFromPosition(
-                faceLocation.plus(
-                    new Translation2d(
-                        FieldConstants.kReefBranchDistMeters / 2,
-                        swerveTargetHeading.minus(Rotation2d.fromDegrees(90))
+                ).getPathPoses().toArray(new Pose2d[0]);
+                i++;
+            }
+            else {
+                s_paths.put(
+                    new FaceAndIndex(face, ReefIndex.One),
+                    generateFromPosition(
+                        faceLocation.plus(
+                            new Translation2d(
+                                FieldConstants.kReefBranchDistMeters / 2,
+                                swerveTargetHeading.minus(Rotation2d.fromDegrees(90))
+                            )
+                        ),
+                        swerveTargetHeading
                     )
-                ),
-                swerveTargetHeading
-            ).getPathPoses().toArray(new Pose2d[0]);
-            i++;
+                );
+                test[i] = generateFromPosition(
+                    faceLocation.plus(
+                        new Translation2d(
+                            FieldConstants.kReefBranchDistMeters / 2,
+                            swerveTargetHeading.minus(Rotation2d.fromDegrees(90))
+                        )
+                    ),
+                    swerveTargetHeading
+                ).getPathPoses().toArray(new Pose2d[0]);
+                i++;
+
+                s_paths.put(
+                    new FaceAndIndex(face, ReefIndex.Two),
+                    generateFromPosition(
+                        faceLocation.plus(
+                            new Translation2d(
+                                FieldConstants.kReefBranchDistMeters / 2,
+                                swerveTargetHeading.plus(Rotation2d.fromDegrees(90))
+                            )
+                        ),
+                        swerveTargetHeading
+                    )
+                );
+
+                test[i] = generateFromPosition(
+                    faceLocation.plus(
+                        new Translation2d(
+                            FieldConstants.kReefBranchDistMeters / 2,
+                            swerveTargetHeading.plus(Rotation2d.fromDegrees(90))
+                        )
+                    ),
+                    swerveTargetHeading
+                ).getPathPoses().toArray(new Pose2d[0]);
+                i++;
+            }
         }
 
         s_hasInit = true;

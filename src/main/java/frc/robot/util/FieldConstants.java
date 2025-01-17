@@ -100,6 +100,10 @@ public class FieldConstants {
         public static final ReefBranch kL2E2 = new ReefBranch(ReefHeight.L2, ReefFace.E, ReefIndex.Two);
         public static final ReefBranch kL2F1 = new ReefBranch(ReefHeight.L2, ReefFace.F, ReefIndex.One);
         public static final ReefBranch kL2F2 = new ReefBranch(ReefHeight.L2, ReefFace.F, ReefIndex.Two);
+        public static final ReefBranch kL2G1 = new ReefBranch(ReefHeight.L2, ReefFace.G, ReefIndex.One);
+        public static final ReefBranch kL2G2 = new ReefBranch(ReefHeight.L2, ReefFace.G, ReefIndex.Two);
+        public static final ReefBranch kL2H1 = new ReefBranch(ReefHeight.L2, ReefFace.H, ReefIndex.One);
+        public static final ReefBranch kL2H2 = new ReefBranch(ReefHeight.L2, ReefFace.H, ReefIndex.Two);
         // new Translation3d( // Util.getAlliance() == Alliance.Blue
         // ? getAllainceReefPos().getX() - kReefRadiusMeters + kReefL2L3InsetMeters
         // : getAllainceReefPos().getX() + kReefRadiusMeters - kReefL2L3InsetMeters,
