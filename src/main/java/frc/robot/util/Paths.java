@@ -22,7 +22,7 @@ public final class Paths {
 
     private static Map<FaceAndIndex, PathPlannerPath> s_paths = new HashMap<FaceAndIndex, PathPlannerPath>();
 
-    public static Pose2d[][] test = new Pose2d[12][0];
+    public static Pose2d[][] generatedPaths = new Pose2d[12][0];
 
     private static boolean s_hasInit = false;
 
@@ -34,7 +34,6 @@ public final class Paths {
         int i = 0;
         for (ReefFace face : faces) {
             Rotation2d swerveTargetHeading = face.getSwerveTargetHeadingBlueAlliance();
-            Rotation2d faceAngle = swerveTargetHeading.plus(Rotation2d.k180deg);
             Translation2d faceLocation = face.getFieldRelativeFacePositionBlueAlliance();
 
             if (face == ReefFace.E || face == ReefFace.I || face == ReefFace.J) {
@@ -50,7 +49,7 @@ public final class Paths {
                         swerveTargetHeading
                     )
                 );
-                test[i] = generateFromPosition(
+                generatedPaths[i] = generateFromPosition(
                     faceLocation.plus(
                         new Translation2d(
                             FieldConstants.kReefBranchDistMeters / 2,
@@ -74,7 +73,7 @@ public final class Paths {
                     )
                 );
 
-                test[i] = generateFromPosition(
+                generatedPaths[i] = generateFromPosition(
                     faceLocation.plus(
                         new Translation2d(
                             FieldConstants.kReefBranchDistMeters / 2,
@@ -98,7 +97,7 @@ public final class Paths {
                         swerveTargetHeading
                     )
                 );
-                test[i] = generateFromPosition(
+                generatedPaths[i] = generateFromPosition(
                     faceLocation.plus(
                         new Translation2d(
                             FieldConstants.kReefBranchDistMeters / 2,
@@ -122,7 +121,7 @@ public final class Paths {
                     )
                 );
 
-                test[i] = generateFromPosition(
+                generatedPaths[i] = generateFromPosition(
                     faceLocation.plus(
                         new Translation2d(
                             FieldConstants.kReefBranchDistMeters / 2,

@@ -45,7 +45,7 @@ public class RobotContainer {
         // m_driverController = new CommandPS5Controller(0);
         // m_keyboard = new CommandGenericHID(0);
 
-        Logger.recordOutput("GeneratedPaths", Paths.test);
+        Logger.recordOutput("GeneratedPaths", Paths.generatedPaths);
 
         // Paths.init();
         // Logger.recordOutput("TestPath", Paths.test);
@@ -98,7 +98,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // return null;
-        ReefBranch branch = ReefBranch.kL2J2;
+        ReefBranch branch = ReefBranch.kL4G2;
         Logger.recordOutput("Test", branch.getFace().getFaceAngleFieldRelative());
         return Commands.sequence(
             SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(6, 1, Rotation2d.fromDegrees(190))),

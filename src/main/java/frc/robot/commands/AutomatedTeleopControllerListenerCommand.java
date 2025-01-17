@@ -130,7 +130,7 @@ public class AutomatedTeleopControllerListenerCommand extends Command {
         m_driverController.rightBumper().onTrue(Commands.runOnce(() -> {
             if (m_queuedBranch.isEmpty())
                 return;
-            m_queuedBranch.get().makeScoreCommand(swerve, elevator).alongWith(
+            m_queuedBranch.get().makeScoreCommand(m_swerve, m_elevator).alongWith(
                 ControllerRumbleCommand.makeLinearDecay(1, RumbleType.kBothRumble, 0.5, new GenericHID[] {
                     m_driverController.getHID(), m_operatorController.getHID()
             })
