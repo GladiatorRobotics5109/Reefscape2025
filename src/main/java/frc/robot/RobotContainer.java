@@ -4,13 +4,14 @@
 
 package frc.robot;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.util.FieldConstants;
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AutomatedTeleopControllerListenerCommand;
 import frc.robot.subsystems.superstructure.elevator.ElevatorCommandFactory;
@@ -19,8 +20,8 @@ import frc.robot.subsystems.swerve.SwerveCommandFactory;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.util.Paths;
-import frc.robot.util.FieldConstants.ReefBranch;
 import frc.robot.util.FieldConstants.ReefHeight;
+import frc.robot.util.FieldConstants.ReefBranch;
 
 public class RobotContainer {
     private final SwerveSubsystem m_swerve;
@@ -47,9 +48,6 @@ public class RobotContainer {
 
         Logger.recordOutput("GeneratedPaths", Paths.generatedPaths);
 
-        // Paths.init();
-        // Logger.recordOutput("TestPath", Paths.test);
-
         configureBindings();
 
         CommandScheduler.getInstance().onCommandInitialize((Command command) -> {
@@ -71,10 +69,10 @@ public class RobotContainer {
         // m_driverController.circle().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L2));
         // m_driverController.triangle().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L3));
         // m_driverController.square().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L4));
-        m_driverController.a().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L1));
-        m_driverController.b().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L2));
-        m_driverController.y().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L3));
-        m_driverController.x().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L4));
+        m_driverController.a().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L1));
+        m_driverController.b().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L2));
+        m_driverController.y().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3));
+        m_driverController.x().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4));
 
         // TODO: impliment this
         // L1 - intake
@@ -98,8 +96,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // return null;
-        ReefBranch branch = ReefBranch.kL4G2;
-        Logger.recordOutput("Test", branch.getFace().getFaceAngleFieldRelative());
+        ReefBranch branch = FieldConstants.ReefBranch.kL4G2;
         return Commands.sequence(
             SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(6, 1, Rotation2d.fromDegrees(190))),
             Commands.waitSeconds(4),

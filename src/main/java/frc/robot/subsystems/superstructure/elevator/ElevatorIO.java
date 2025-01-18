@@ -14,11 +14,20 @@ public interface ElevatorIO {
         public double motorSupplyVoltage = 0.0;
         public double motorStatorCurrentAmps = 0.0;
         public double motorSupplyCurrentAmps = 0.0;
+
+        public double followerMotorTempCelsius = 0.0;
+        public double followerMotorAppliedVolts = 0.0;
+        public double followerMotorSupplyVoltage = 0.0;
+        public double followerMotorStatorCurrentAmps = 0.0;
+        public double followerMotorSupplyCurrentAmps = 0.0;
+
+        public boolean motorSoftUpLimited = false;
+        public boolean motorSoftDownLimited = false;
     }
 
     default void updateInputs(ElevatorIOInputs inputs) {}
 
-    default void setPosition(double positionMeters) {}
+    default void setPosition(double positionRot) {}
 
     default void setVoltage(double volts) {}
 

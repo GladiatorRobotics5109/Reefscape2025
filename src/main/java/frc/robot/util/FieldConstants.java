@@ -2,6 +2,8 @@ package frc.robot.util;
 
 import java.util.List;
 
+import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.superstructure.elevator.ElevatorCommandFactory;
 import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -93,6 +95,18 @@ public class FieldConstants {
         public int getIndex() {
             return m_index;
         }
+
+        // @Override
+        // public String toString() {
+        // switch (m_index) {
+        // case 0: "E",
+        // F(1),
+        // G(2),
+        // H(3),
+        // I(4),
+        // J(5);
+        // }
+        // }
     }
 
     public static class ReefBranch {
@@ -183,13 +197,13 @@ public class FieldConstants {
         }
 
         public Command makeScoreCommand(SwerveSubsystem swerve, ElevatorSubsystem elevator) {
-            return SwerveCommandFactory.driveToReefScore(swerve, this);
-            // return Commands.parallel(
-            // SwerveCommandFactory.driveToReefScore(swerve, this),
-            // ElevatorCommandFactory.toPosition(elevator, this).beforeStarting(
-            // Commands.waitUntil(elevator::isWithinRadius).withTimeout(2)
-            // )
-            // );
+            // return SwerveCommandFactory.driveToReefScore(swerve, this);
+            return Commands.parallel(
+                SwerveCommandFactory.driveToReefScore(swerve, this),
+                Commands.waitUntil(elevator::isWithinRadius).withTimeout(2).andThen(
+                    ElevatorCommandFactory.toReefBranch(elevator, this)
+                )
+            ).withName(this + " Score Command");
         }
 
         public PathPlannerPath getInnerPath() {
@@ -206,6 +220,11 @@ public class FieldConstants {
 
         public ReefIndex getIndex() {
             return m_index;
+        }
+
+        @Override
+        public String toString() {
+            return m_height.toString() + m_face.toString() + m_index.getIndex();
         }
     }
 
@@ -235,7 +254,10 @@ public class FieldConstants {
     );
 
     public static Translation2d getAllianceReefPos() {
-        Logger.recordOutput("AllianceReefPose", new Translation3d(kBlueReefPos.getX(), kBlueReefPos.getY(), 1.5));
+        Logger.recordOutput(
+            "AllianceReefPose",
+            new Translation3d(kBlueReefPos.getX(), kBlueReefPos.getY(), 2.872660334721429)
+        );
         return Util.getAlliance() == Alliance.Red ? kRedReefPos : kBlueReefPos;
     }
 }

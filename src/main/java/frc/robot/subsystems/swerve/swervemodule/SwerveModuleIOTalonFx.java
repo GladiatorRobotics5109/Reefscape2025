@@ -59,7 +59,7 @@ public class SwerveModuleIOTalonFx implements SwerveModuleIO {
         driveConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
         // TODO: test new ratios
         driveConfigs.Feedback.SensorToMechanismRatio = SwerveModuleConstants.kDriveGearRatio.asDouble();
-        // Need to convert to rations here bc talonfx native units is rotations
+        // Need to convert to rations here bc TalonFX native unit is rotations
         driveConfigs.Slot0.kP = Conversions.radiansToRotations(SwerveModuleConstants.kDrivePID.kp());
         driveConfigs.Slot0.kI = Conversions.radiansToRotations(SwerveModuleConstants.kDrivePID.ki());
         driveConfigs.Slot0.kD = Conversions.radiansToRotations(SwerveModuleConstants.kDrivePID.kd());
@@ -74,10 +74,11 @@ public class SwerveModuleIOTalonFx implements SwerveModuleIO {
         turnConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
         turnConfigs.Feedback.SensorToMechanismRatio = SwerveModuleConstants.kTurnGearRatio;
         turnConfigs.ClosedLoopGeneral.ContinuousWrap = true;
-        // Need to convert to rations here bc talonfx native units is rotations
+        // Need to convert to rations here bc TalonFX native unit is rotations
         turnConfigs.Slot0.kP = Conversions.radiansToRotations(SwerveModuleConstants.kTurnPID.kp());
         turnConfigs.Slot0.kI = Conversions.radiansToRotations(SwerveModuleConstants.kTurnPID.ki());
         turnConfigs.Slot0.kD = Conversions.radiansToRotations(SwerveModuleConstants.kTurnPID.kd());
+        driveConfigs.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;
         turnConfigs.Slot0.kS = Conversions.radiansToRotations(SwerveModuleConstants.kTurnFeedforward.ks());
         turnConfigs.Slot0.kV = Conversions.radiansToRotations(SwerveModuleConstants.kTurnFeedforward.kv());
         turnConfigs.Slot0.kA = Conversions.radiansToRotations(SwerveModuleConstants.kTurnFeedforward.ka());

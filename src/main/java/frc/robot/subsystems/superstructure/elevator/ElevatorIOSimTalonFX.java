@@ -9,11 +9,11 @@ import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.util.Conversions;
 
-public class ElevatorIOSimTalonFX extends ElevatorIOTalonfx {
+public class ElevatorIOSimTalonFX extends ElevatorIOTalonFX {
     private final DCMotorSim m_sim;
 
-    public ElevatorIOSimTalonFX(int motorPort, boolean useFOC) {
-        super(motorPort, useFOC);
+    public ElevatorIOSimTalonFX(int motorPort, int followerPort, boolean useFOC) {
+        super(motorPort, followerPort, useFOC);
 
         // TODO: find correct MOI
         m_sim = new DCMotorSim(

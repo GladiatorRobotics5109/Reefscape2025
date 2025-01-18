@@ -234,16 +234,28 @@ public final class Constants {
         public static final String kLogPath = "Subsystems/Elevator";
 
         public static final int kMotorPort = 20;
+        public static final boolean kInvertMotor = false;
+        public static final int kFollowerPort = 21;
+
         public static final boolean kUseFOC = true;
 
         public static final double kSupplyCurrentLimit = 40.0;
         public static final double kStatorCurrentLimit = 1.75 * kSupplyCurrentLimit;
 
         public static final double kGearRatio = 20;
-        public static final double kSproketRadiusMeters = Conversions.inchesToMeters(0.819);
+        public static final double kSprocketRadiusMeters = Conversions.inchesToMeters(0.819);
 
-        public static final PIDConstants kPID = new PIDConstants(1, 0.0, 0.0);
-        public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(0.0, 0.0, 0.0, 0.0);
+        public static final double kElevatorMinLengthMeters = Conversions.inchesToMeters(37.236);
+        public static final double kElevatorMaxLengthMeters = Conversions.inchesToMeters(69.736220);
+        public static final double kElevatorMaxLengthChangeMeters = kElevatorMaxLengthMeters - kElevatorMinLengthMeters;
+
+        public static final double kUpLimitMotorRotations = Conversions.elevatorPositionToRotations(
+            kElevatorMaxLengthChangeMeters
+        );
+        public static final double kDownLimitMotorRotations = 0.0;
+
+        public static final PIDConstants kPID = new PIDConstants(5, 0.0, 0.0);
+        public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(0.0, 0.0, 0.0, 6.0);
 
         // Height of the base of elevator from the floor
         public static final double kElevatorBaseHeightMeters = SwerveModuleConstants.kWheelRadiusMeters

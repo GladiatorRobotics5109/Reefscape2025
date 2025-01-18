@@ -40,11 +40,11 @@ public class RobotState {
     }
 
     public static double getElevatorCurrentPositionMeters() {
-        return s_elevator.getCurrentPosition();
+        return s_elevator.getCurrentHeightElevatorRelativeMeters();
     }
 
     public static double getElevatorDesiredPositionMeters() {
-        return s_elevator.getDesiredPositionMeters();
+        return s_elevator.getDesiredPositionElevatorRelativeMeters();
     }
 
     public static boolean getElevatorAtDesiredPosition() {

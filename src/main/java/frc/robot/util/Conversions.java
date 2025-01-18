@@ -61,14 +61,14 @@ public class Conversions extends ConversionsBase {
     // TODO: check this
     public static final double elevatorPositionToRotations(double m) {
         return ConversionsBase.radiansToRotations(
-            ConversionsBase.metersToRadians(m, ElevatorConstants.kSproketRadiusMeters, 1.0)
+            ConversionsBase.metersToRadians(m, ElevatorConstants.kSprocketRadiusMeters, 1.0)
         );
     }
 
     public static final double elevatorRotationsToElevatorPosition(double rot) {
         return ConversionsBase.radiansToMeters(
             ConversionsBase.rotationsToRadians(rot),
-            ElevatorConstants.kSproketRadiusMeters
+            ElevatorConstants.kSprocketRadiusMeters
         );
     }
 }
