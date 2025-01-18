@@ -10,6 +10,7 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.littletonrobotics.urcl.URCL;
 
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.PeriodicUtil;
 import com.pathplanner.lib.pathfinding.Pathfinding;
@@ -81,6 +82,7 @@ public class Robot extends LoggedRobot {
         // AdvantageKit. Logger.disableDeterministicTimestamps()
 
         // Start AdvantageKit logger
+        Logger.registerURCL(URCL.startExternal());
         Logger.start();
         Paths.init();
 

@@ -142,7 +142,6 @@ public class FieldConstants {
         private final ReefIndex m_index;
 
         public ReefBranch(ReefHeight height, ReefFace face, ReefIndex index) {
-            Paths.init();
             m_face = face;
             m_height = height;
             m_index = index;
