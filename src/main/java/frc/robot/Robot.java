@@ -28,8 +28,9 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void robotInit() {
-        // Use AkitCompatible path finding
+        // Use Akit compatible path finding
         Pathfinding.setPathfinder(new LocalADStarAK());
+        // PathfindingCommand.warmupCommand().schedule();
 
         // Record metadata
         Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);

@@ -144,12 +144,12 @@ public final class Constants {
         public static final double kDriveBaseRadiusMeters = Math.hypot(kFrameWidth, kFrameHeight);
 
         public static final com.pathplanner.lib.config.PIDConstants kPPTranslationPID = new com.pathplanner.lib.config.PIDConstants(
-            2,
+            5,
             0,
             0
         );
         public static final com.pathplanner.lib.config.PIDConstants kPPRotaitonPID = new com.pathplanner.lib.config.PIDConstants(
-            1,
+            5,
             0,
             0
         );
@@ -167,7 +167,9 @@ public final class Constants {
                 SwerveModuleConstants.kWheelRadiusMeters,
                 SwerveModuleConstants.kDriveMaxFreeSpeed.in(Units.MetersPerSecond),
                 1.0,
-                SwerveModuleConstants.kUseFOC ? DCMotor.getKrakenX60Foc(1) : DCMotor.getKrakenX60(1),
+                SwerveModuleConstants.kUseFOC
+                    ? DCMotor.getKrakenX60Foc(1).withReduction(SwerveModuleConstants.kDriveGearRatio.asDouble())
+                    : DCMotor.getKrakenX60(1).withReduction(SwerveModuleConstants.kDriveGearRatio.asDouble()),
                 SwerveModuleConstants.kDriveSupplyCurrentLimit,
                 1
             ),
@@ -178,9 +180,13 @@ public final class Constants {
         );
 
         public static final PathConstraints kPPPathFindConstraints = new PathConstraints(
-            Units.MetersPerSecond.of(2),
+            // Units.MetersPerSecond.of(2),
+            // Units.MetersPerSecondPerSecond.of(2),
+            // Units.RotationsPerSecond.of(1.5),
+            // Units.RotationsPerSecondPerSecond.of(2)
+            Units.MetersPerSecond.of(0.5),
             Units.MetersPerSecondPerSecond.of(2),
-            Units.RotationsPerSecond.of(1.5),
+            Units.RotationsPerSecond.of(0.5),
             Units.RotationsPerSecondPerSecond.of(2)
         );
 

@@ -1,4 +1,4 @@
-package frc.robot.subsystems.swerve;
+package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -14,13 +14,12 @@ import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.commands.SwerveTeleopCommand;
+import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModule;
 import frc.robot.util.FieldConstants.ReefBranch;
 
@@ -96,11 +95,7 @@ public final class SwerveCommandFactory {
     }
 
     public static Command driveToReefScore(SwerveSubsystem swerve, ReefBranch branch) {
-        return Commands.sequence(
-            Commands.print("Started!"),
-            driveToPoseThenFollowPath(SwerveConstants.kPPPathFindConstraints, branch.getInnerPath()),
-            Commands.print("Done!")
-        );
+        return driveToPoseThenFollowPath(SwerveConstants.kPPPathFindConstraints, branch.getInnerPath());
     }
 
     public static SysIdRoutine makeSysIdTurn(SwerveSubsystem swerve, int modNum) {
