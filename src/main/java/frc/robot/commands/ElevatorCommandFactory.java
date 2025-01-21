@@ -27,6 +27,10 @@ public class ElevatorCommandFactory {
         );
     }
 
+    public static Command autoToReefBranch(ElevatorSubsystem elevator, ReefBranch branch) {
+        return Commands.waitUntil(elevator::isWithinRadius).withTimeout(2).andThen(toReefBranch(elevator, branch));
+    }
+
     public static Command debugControllerAxis(ElevatorSubsystem elevator, DoubleSupplier axis) {
         return elevator.run(() -> elevator.setVoltage(axis.getAsDouble() * 2));
     }

@@ -6,6 +6,7 @@ import com.github.gladiatorrobotics5109.gladiatorroboticslib.PeriodicUtil;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.SwerveConstants;
@@ -37,6 +38,10 @@ public class RobotState {
 
     public static SwerveModuleState[] getSwerveModuleStates() {
         return s_swerve.getModuleStates();
+    }
+
+    public static ChassisSpeeds getSwerveCurrentChassisSpeeds() {
+        return s_swerve.getCurrentChassisSpeeds();
     }
 
     public static double getElevatorCurrentPositionMeters() {

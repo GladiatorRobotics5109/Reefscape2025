@@ -272,4 +272,16 @@ public final class Constants {
         // The distance from the center of the reef that the elevator will be allowed to autonomously extend
         public static final double kAutoElevatorExtendRequiredDistanceMeters = 3.0;
     }
+
+    public static final class EndEffectorConstants {
+        // The maximum distance the chassis can be from the auto score location to score
+        public static final double kAutoScoreMaxDistMeters = 0.02;
+        public static final double kAutoScoreMaxAngleRadians = Conversions.degreesToRadians(5);
+        public static final double kAutoScoreMaxLinearSpeedMetersPerSecond = 0.1;
+        public static final double kAutoScoreMaxAngularSpeedRadiansPerSecond = Conversions.degreesToRadians(10);
+
+        public static final double kScoreTimeoutSeconds = 2;
+
+        public static final double kScoreVoltage = 6;
+    }
 }

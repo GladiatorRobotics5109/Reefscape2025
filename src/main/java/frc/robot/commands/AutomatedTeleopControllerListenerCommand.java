@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 import frc.robot.util.FieldConstants.ReefConstants.ReefFace;
@@ -87,6 +88,7 @@ public class AutomatedTeleopControllerListenerCommand extends Command {
 
     private final ElevatorSubsystem m_elevator;
     private final SwerveSubsystem m_swerve;
+    private final EndEffectorSubsystem m_endEffector;
 
     private final CommandXboxController m_driverController;
     private final CommandXboxController m_operatorController;
@@ -97,11 +99,13 @@ public class AutomatedTeleopControllerListenerCommand extends Command {
     public AutomatedTeleopControllerListenerCommand(
         ElevatorSubsystem elevator,
         SwerveSubsystem swerve,
+        EndEffectorSubsystem endEffector,
         CommandXboxController driverController,
         CommandXboxController operatorController
     ) {
         m_elevator = elevator;
         m_swerve = swerve;
+        m_endEffector = endEffector;
 
         m_driverController = driverController;
         m_operatorController = operatorController;
@@ -130,7 +134,7 @@ public class AutomatedTeleopControllerListenerCommand extends Command {
         m_driverController.rightBumper().onTrue(Commands.runOnce(() -> {
             if (m_queuedBranch.isEmpty())
                 return;
-            m_queuedBranch.get().makeScoreCommand(m_swerve, m_elevator).alongWith(
+            m_queuedBranch.get().makeScoreCommand(m_swerve, m_elevator, m_endEffector).alongWith(
                 ControllerRumbleCommand.makeLinearDecay(1, RumbleType.kBothRumble, 0.5, new GenericHID[] {
                     m_driverController.getHID(), m_operatorController.getHID()
             })

@@ -17,9 +17,10 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.ElevatorCommandFactory;
+import frc.robot.commands.SuperstructureCommandFactory;
 import frc.robot.commands.SwerveCommandFactory;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 public class FieldConstants {
@@ -208,13 +209,13 @@ public class FieldConstants {
                 return m_branchPosition;
             }
 
-            public Command makeScoreCommand(SwerveSubsystem swerve, ElevatorSubsystem elevator) {
+            public
+                Command
+                makeScoreCommand(SwerveSubsystem swerve, ElevatorSubsystem elevator, EndEffectorSubsystem endEffector) {
                 // return SwerveCommandFactory.driveToReefScore(swerve, this);
                 return Commands.parallel(
                     SwerveCommandFactory.driveToReefScore(swerve, this),
-                    Commands.waitUntil(elevator::isWithinRadius).withTimeout(2).andThen(
-                        ElevatorCommandFactory.toReefBranch(elevator, this)
-                    )
+                    SuperstructureCommandFactory.autoScore(elevator, endEffector, this)
                 ).withName(this + " Score Command");
             }
 

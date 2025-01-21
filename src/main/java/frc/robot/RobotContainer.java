@@ -17,6 +17,7 @@ import frc.robot.commands.AutomatedTeleopControllerListenerCommand;
 import frc.robot.commands.ElevatorCommandFactory;
 import frc.robot.commands.SwerveCommandFactory;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
@@ -26,6 +27,7 @@ public class RobotContainer {
     private final SwerveSubsystem m_swerve;
     private final VisionSubsystem m_vision;
     private final ElevatorSubsystem m_elevator;
+    private final EndEffectorSubsystem m_endEffector;
 
     private final CommandXboxController m_driverController;
     // private final CommandPS4Controller m_driverController;
@@ -37,6 +39,7 @@ public class RobotContainer {
         m_swerve = new SwerveSubsystem();
         m_vision = new VisionSubsystem();
         m_elevator = new ElevatorSubsystem();
+        m_endEffector = new EndEffectorSubsystem();
         RobotState.init(m_swerve, m_vision, m_elevator);
 
         // m_driverController = new CommandPS4Controller(Constants.DriveTeamConstants.kDriveControllerPort);
@@ -96,7 +99,7 @@ public class RobotContainer {
         return Commands.sequence(
             SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(5, 1, Rotation2d.fromDegrees(0))),
             Commands.waitSeconds(4),
-            branch.makeScoreCommand(m_swerve, m_elevator)
+            branch.makeScoreCommand(m_swerve, m_elevator, m_endEffector)
         );
     }
 
@@ -104,6 +107,7 @@ public class RobotContainer {
         return new AutomatedTeleopControllerListenerCommand(
             m_elevator,
             m_swerve,
+            m_endEffector,
             m_driverController,
             m_operatorController
         );
