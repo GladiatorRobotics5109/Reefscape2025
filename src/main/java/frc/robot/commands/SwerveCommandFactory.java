@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModule;
-import frc.robot.util.FieldConstants.ReefBranch;
+import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 
 public final class SwerveCommandFactory {
     private SwerveCommandFactory() {

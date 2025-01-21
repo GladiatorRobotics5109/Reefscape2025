@@ -13,6 +13,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.urcl.URCL;
 
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.PeriodicUtil;
+import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,7 +31,7 @@ public class Robot extends LoggedRobot {
     public void robotInit() {
         // Use Akit compatible path finding
         Pathfinding.setPathfinder(new LocalADStarAK());
-        // PathfindingCommand.warmupCommand().schedule();
+        PathfindingCommand.warmupCommand().schedule();
 
         // Record metadata
         Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
@@ -86,6 +87,7 @@ public class Robot extends LoggedRobot {
         Logger.registerURCL(URCL.startExternal());
         Logger.start();
         Paths.init();
+        Paths.log();
 
         m_robotContainer = new RobotContainer();
     }

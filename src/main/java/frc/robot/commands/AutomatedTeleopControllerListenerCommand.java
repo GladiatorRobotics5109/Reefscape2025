@@ -14,10 +14,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
-import frc.robot.util.FieldConstants.ReefBranch;
-import frc.robot.util.FieldConstants.ReefFace;
-import frc.robot.util.FieldConstants.ReefHeight;
-import frc.robot.util.FieldConstants.ReefIndex;
+import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
+import frc.robot.util.FieldConstants.ReefConstants.ReefFace;
+import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
+import frc.robot.util.FieldConstants.ReefConstants.ReefIndex;
 
 public class AutomatedTeleopControllerListenerCommand extends Command {
     private static enum ControllerButton {

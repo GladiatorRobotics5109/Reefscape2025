@@ -10,7 +10,7 @@ import frc.robot.RobotState;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.util.Conversions;
 import frc.robot.util.FieldConstants;
-import frc.robot.util.FieldConstants.ReefHeight;
+import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
@@ -102,7 +102,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public boolean isWithinRadius() {
         return RobotState.getSwervePose().getTranslation().getDistance(
-            FieldConstants.getAllianceReefPos()
+            FieldConstants.ReefConstants.getAllianceReefPos()
         ) < ElevatorConstants.kAutoElevatorExtendRequiredDistanceMeters;
     }
 

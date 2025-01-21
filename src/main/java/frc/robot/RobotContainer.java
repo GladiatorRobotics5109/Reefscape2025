@@ -19,9 +19,8 @@ import frc.robot.commands.SwerveCommandFactory;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
-import frc.robot.util.Paths;
-import frc.robot.util.FieldConstants.ReefHeight;
-import frc.robot.util.FieldConstants.ReefBranch;
+import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
+import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 
 public class RobotContainer {
     private final SwerveSubsystem m_swerve;
@@ -45,8 +44,6 @@ public class RobotContainer {
         m_operatorController = new CommandXboxController(Constants.DriveTeamConstants.kOperatorControllerPort);
         // m_driverController = new CommandPS5Controller(0);
         // m_keyboard = new CommandGenericHID(0);
-
-        Logger.recordOutput("GeneratedPaths", Paths.generatedPaths);
 
         configureBindings();
 
@@ -76,7 +73,7 @@ public class RobotContainer {
 
         // TODO: impliment this
         // L1 - intake
-        // R2 - outake
+        // R1 - outake
         // Right d-pad - climb
         // Left d-pad - abort climb
 
@@ -95,10 +92,9 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        // return null;
-        ReefBranch branch = FieldConstants.ReefBranch.kL4H2;
+        ReefBranch branch = FieldConstants.ReefConstants.ReefBranch.kL4F1;
         return Commands.sequence(
-            SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(1, 3, Rotation2d.fromDegrees(0))),
+            SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(5, 1, Rotation2d.fromDegrees(0))),
             Commands.waitSeconds(4),
             branch.makeScoreCommand(m_swerve, m_elevator)
         );

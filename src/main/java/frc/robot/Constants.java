@@ -180,14 +180,14 @@ public final class Constants {
         );
 
         public static final PathConstraints kPPPathFindConstraints = new PathConstraints(
-            // Units.MetersPerSecond.of(2),
-            // Units.MetersPerSecondPerSecond.of(2),
-            // Units.RotationsPerSecond.of(1.5),
-            // Units.RotationsPerSecondPerSecond.of(2)
-            Units.MetersPerSecond.of(0.5),
+            Units.MetersPerSecond.of(2),
             Units.MetersPerSecondPerSecond.of(2),
-            Units.RotationsPerSecond.of(0.5),
+            Units.RotationsPerSecond.of(1.5),
             Units.RotationsPerSecondPerSecond.of(2)
+            // Units.MetersPerSecond.of(0.5),
+            // Units.MetersPerSecondPerSecond.of(2),
+            // Units.RotationsPerSecond.of(0.5),
+            // Units.RotationsPerSecondPerSecond.of(2)
         );
 
         public static final PathConstraints kPPReefInnerPathConstraints = new PathConstraints(
@@ -270,6 +270,6 @@ public final class Constants {
             + Conversions.inchesToMeters(25);
 
         // The distance from the center of the reef that the elevator will be allowed to autonomously extend
-        public static final double kAutoElevatorExtendRequiredDistanceMeters = 5.0;
+        public static final double kAutoElevatorExtendRequiredDistanceMeters = 3.0;
     }
 }

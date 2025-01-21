@@ -58,7 +58,12 @@
     "edu.wpi.first.math.**.struct.*",
   ],
   "cSpell.words": [
-    "CTRE"
+    "CTRE",
+    "Pathfinding",
+    "periodics",
+    "teleop",
+    "URCL",
+    "WPILOG"
   ],
   "java.debug.settings.onBuildFailureProceed": true
 }
