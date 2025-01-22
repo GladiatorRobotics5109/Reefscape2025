@@ -226,19 +226,13 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {
-            m_moduleFL.getPosition(),
-            m_moduleFR.getPosition(),
-            m_moduleBL.getPosition(),
-            m_moduleBR.getPosition()
+            m_moduleFL.getPosition(), m_moduleFR.getPosition(), m_moduleBL.getPosition(), m_moduleBR.getPosition()
         };
     }
 
     public SwerveModuleState[] getModuleStates() {
         return new SwerveModuleState[] {
-            m_moduleFL.getState(),
-            m_moduleFR.getState(),
-            m_moduleBL.getState(),
-            m_moduleBR.getState()
+            m_moduleFL.getState(), m_moduleFR.getState(), m_moduleBL.getState(), m_moduleBR.getState()
         };
     }
 
@@ -249,19 +243,14 @@ public class SwerveSubsystem extends SubsystemBase {
      */
     public SwerveModule[] getSwerveModules() {
         return new SwerveModule[] {
-            m_moduleFL,
-            m_moduleFR,
-            m_moduleBL,
-            m_moduleBR
+            m_moduleFL, m_moduleFR, m_moduleBL, m_moduleBR
         };
     }
 
     /** Get the position of all drive wheels in radians. */
     public double[] getWheelRadiusCharacterizationPosition() {
         return new double[] {
-            m_moduleFL.getDrivePositionRads(),
-            m_moduleFR.getDrivePositionRads(),
-            m_moduleBL.getDrivePositionRads(),
+            m_moduleFL.getDrivePositionRads(), m_moduleFR.getDrivePositionRads(), m_moduleBL.getDrivePositionRads(),
             m_moduleBR.getDrivePositionRads()
         };
     }

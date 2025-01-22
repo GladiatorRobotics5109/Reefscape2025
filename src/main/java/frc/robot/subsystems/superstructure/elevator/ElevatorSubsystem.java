@@ -117,9 +117,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
 
         // Update mech
-        m_mechElevator.setLength(
-            getCurrentHeightElevatorRelativeMeters() + ElevatorConstants.kElevatorMinLengthMeters
-        );
+        m_mechElevator.setLength(getCurrentHeightElevatorRelativeMeters() + ElevatorConstants.kElevatorMinLengthMeters);
         Logger.recordOutput(ElevatorConstants.kLogPath + "/Mechanism", m_mech);
     }
 }

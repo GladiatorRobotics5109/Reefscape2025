@@ -21,10 +21,11 @@ public class ElevatorCommandFactory {
     }
 
     public static Command toReefBranch(ElevatorSubsystem elevator, ReefBranch branch) {
-        return ElevatorCommandFactory.toReefHeight(
-            elevator,
-            branch.getHeight()
-        );
+        return ElevatorCommandFactory.toReefHeight(elevator, branch.getHeight());
+    }
+
+    public static Command toHome(ElevatorSubsystem elevator) {
+        return toElevatorRelativeHeight(elevator, () -> 0.0);
     }
 
     public static Command autoToReefBranch(ElevatorSubsystem elevator, ReefBranch branch) {
@@ -43,11 +44,7 @@ public class ElevatorCommandFactory {
                 null,
                 (state) -> Logger.recordOutput("SysIdTestState", state.toString())
             ),
-            new SysIdRoutine.Mechanism(
-                voltage -> elevator.setVoltage(voltage.in(Units.Volts)),
-                null,
-                elevator
-            )
+            new SysIdRoutine.Mechanism(voltage -> elevator.setVoltage(voltage.in(Units.Volts)), null, elevator)
         );
 
         return Commands.sequence(

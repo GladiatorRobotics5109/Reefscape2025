@@ -16,6 +16,7 @@ import com.github.gladiatorrobotics5109.gladiatorroboticslib.PeriodicUtil;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.util.LocalADStarAK;
@@ -31,7 +32,7 @@ public class Robot extends LoggedRobot {
     public void robotInit() {
         // Use Akit compatible path finding
         Pathfinding.setPathfinder(new LocalADStarAK());
-        PathfindingCommand.warmupCommand().schedule();
+        PathfindingCommand.warmupCommand().onlyWhile(DriverStation::isDisabled).schedule();
 
         // Record metadata
         Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);

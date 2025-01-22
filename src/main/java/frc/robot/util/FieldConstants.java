@@ -17,6 +17,9 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.SwerveConstants;
+import frc.robot.commands.ElevatorCommandFactory;
+import frc.robot.commands.EndEffectorCommandFactory;
 import frc.robot.commands.SuperstructureCommandFactory;
 import frc.robot.commands.SwerveCommandFactory;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
@@ -103,18 +106,6 @@ public class FieldConstants {
             public int getIndex() {
                 return m_index;
             }
-
-            // @Override
-            // public String toString() {
-            // switch (m_index) {
-            // case 0: "E",
-            // F(1),
-            // G(2),
-            // H(3),
-            // I(4),
-            // J(5);
-            // }
-            // }
         }
 
         public static class ReefBranch {
@@ -323,7 +314,7 @@ public class FieldConstants {
                     (2 - m_index.getIndex()) * (kCoralStationOpeningWidthMeters / 3),
                     getAllianceSideCoralStationFaceAngle(side).plus(Rotation2d.fromDegrees(90))
                 );
-                m_position = getAllianceCoralStationPos(side).plus(indexOffset);
+                m_position = getBlueCoralStationPos(side).getTranslation().plus(indexOffset);
             }
 
             public Translation2d getPosition() {
@@ -332,6 +323,33 @@ public class FieldConstants {
 
             public Rotation2d getFaceAngle() {
                 return getAllianceSideCoralStationFaceAngle(m_side);
+            }
+
+            public CoralStationSide getSide() {
+                return m_side;
+            }
+
+            public CoralStationIndex getIndex() {
+                return m_index;
+            }
+
+            public PathPlannerPath getInnerPath() {
+                return Paths.getCoralStationInnerPath(this);
+            }
+
+            public Command makeIntakeCommand(
+                SwerveSubsystem swerve,
+                ElevatorSubsystem elevator,
+                EndEffectorSubsystem endEffector
+            ) {
+                return Commands.parallel(
+                    SwerveCommandFactory.driveToPoseThenFollowPath(
+                        SwerveConstants.kPPPathFindConstraints,
+                        getInnerPath()
+                    ),
+                    ElevatorCommandFactory.toHome(elevator),
+                    EndEffectorCommandFactory.intake(endEffector)
+                );
             }
 
             @Override
@@ -351,20 +369,26 @@ public class FieldConstants {
         public static final Rotation2d kCoralStationCloseFaceAngle = Rotation2d.fromDegrees(54);
         public static final Rotation2d kCoralStationFarFaceAngle = Rotation2d.fromDegrees(-54);
 
-        public static final Translation2d kBlueCloseCoralStationPos = new Translation2d();
-        public static final Translation2d kBlueFarCoralStationPos = new Translation2d();
-        public static final Translation2d kRedCloseCoralStationPos = new Translation2d();
-        public static final Translation2d kRedFarCoralStationPos = new Translation2d();
+        public static final Pose2d kBlueCloseCoralStationPose = new Pose2d(
+            Conversions.inchesToMeters(33.526),
+            Conversions.inchesToMeters(25.824),
+            kCoralStationCloseFaceAngle
+        );
+        public static final Pose2d kBlueFarCoralStationPose = new Pose2d(
+            Conversions.inchesToMeters(33.526),
+            Conversions.inchesToMeters(291.176),
+            kCoralStationFarFaceAngle
+        );
 
-        public static final Translation2d getBlueCoralStaionPos(CoralStationSide side) {
-            return side == CoralStationSide.C ? kBlueCloseCoralStationPos : kBlueFarCoralStationPos;
+        public static final Pose2d getBlueCoralStationPos(CoralStationSide side) {
+            return side == CoralStationSide.C ? kBlueCloseCoralStationPose : kBlueFarCoralStationPose;
         }
 
-        public static final Translation2d getAllianceCoralStationPos(CoralStationSide side) {
-            return Util.getAlliance() == Alliance.Blue
-                ? (side == CoralStationSide.C ? kBlueCloseCoralStationPos : kBlueFarCoralStationPos)
-                : (side == CoralStationSide.C ? kRedCloseCoralStationPos : kRedFarCoralStationPos);
-        }
+        // public static final Pose2d getAllianceCoralStationPos(CoralStationSide side) {
+        // return Util.getAlliance() == Alliance.Blue
+        // ? (side == CoralStationSide.C ? kBlueCloseCoralStationPos : kBlueFarCoralStationPos)
+        // : (side == CoralStationSide.C ? kRedCloseCoralStationPos : kRedFarCoralStationPos);
+        // }
 
         public static final Rotation2d getAllianceSideCoralStationFaceAngle(CoralStationSide side) {
             Rotation2d offset = Util.getAlliance() == Alliance.Blue ? Rotation2d.fromDegrees(0)
@@ -374,7 +398,7 @@ public class FieldConstants {
             return angle.plus(offset);
         }
 
-        public static final Rotation2d getBlueSideCoralStationFaceAngle(CoralStationSide side) {
+        public static final Rotation2d getCoralStationFaceAngleBlueAlliance(CoralStationSide side) {
             return side == CoralStationSide.C ? kCoralStationCloseFaceAngle : kCoralStationFarFaceAngle;
         }
     }

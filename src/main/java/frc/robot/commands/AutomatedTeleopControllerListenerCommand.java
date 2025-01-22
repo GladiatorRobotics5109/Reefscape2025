@@ -158,13 +158,7 @@ public class AutomatedTeleopControllerListenerCommand extends Command {
                 m_operatorController.setRumble(RumbleType.kBothRumble, 1.0);
                 m_driverController.setRumble(RumbleType.kBothRumble, 1.0);
 
-                m_queuedBranch = Optional.of(
-                    new ReefBranch(
-                        height.get(),
-                        face.get(),
-                        index.get()
-                    )
-                );
+                m_queuedBranch = Optional.of(new ReefBranch(height.get(), face.get(), index.get()));
 
                 m_buttonQueue.clear();
             }

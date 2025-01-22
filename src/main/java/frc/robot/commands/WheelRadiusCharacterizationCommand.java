@@ -101,11 +101,7 @@ public class WheelRadiusCharacterizationCommand extends Command {
             System.out.println("Not enough data for characterization");
         }
         else {
-            System.out.println(
-                "Effective Wheel Radius: "
-                    + currentEffectiveWheelRadius
-                    + " m"
-            );
+            System.out.println("Effective Wheel Radius: " + currentEffectiveWheelRadius + " m");
         }
     }
 }

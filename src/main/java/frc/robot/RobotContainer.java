@@ -4,15 +4,12 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.util.FieldConstants;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.AutoBuilder;
 import frc.robot.commands.AutomatedTeleopControllerListenerCommand;
 import frc.robot.commands.ElevatorCommandFactory;
 import frc.robot.commands.SwerveCommandFactory;
@@ -21,7 +18,6 @@ import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
-import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 
 public class RobotContainer {
     private final SwerveSubsystem m_swerve;
@@ -95,12 +91,13 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        ReefBranch branch = FieldConstants.ReefConstants.ReefBranch.kL4F1;
-        return Commands.sequence(
-            SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(5, 1, Rotation2d.fromDegrees(0))),
-            Commands.waitSeconds(4),
-            branch.makeScoreCommand(m_swerve, m_elevator, m_endEffector)
-        );
+        // ReefBranch branch = FieldConstants.ReefConstants.ReefBranch.kL4G1;
+        // return Commands.sequence(
+        // SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(5, 1, Rotation2d.fromDegrees(0))),
+        // Commands.waitSeconds(4),
+        // branch.makeScoreCommand(m_swerve, m_elevator, m_endEffector)
+        // );
+        return AutoBuilder.testAuto(m_swerve, m_elevator, m_endEffector);
     }
 
     public Command getTeleopCommand() {

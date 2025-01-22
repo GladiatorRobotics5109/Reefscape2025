@@ -159,7 +159,7 @@ public final class Constants {
             52.0,
             5.0,
             // Conversions.poundsToKilograms(112),
-            // // Fix rough esimate
+            // // Fix rough estimate
             // (1 / 12) * Conversions.poundsToKilograms(112)
             // * (Math.pow(SwerveModuleConstants.kModulePosFL.getX(), 2)
             // + Math.pow(SwerveModuleConstants.kModulePosFL.getY(), 2)),
@@ -196,6 +196,8 @@ public final class Constants {
             Units.RotationsPerSecond.of(1.5),
             Units.RotationsPerSecondPerSecond.of(2)
         );
+
+        public static final PathConstraints kPPCoralStationInnerPathConstraints = kPPReefInnerPathConstraints;
 
         public static final SwerveDriveConfiguration kTeleopConfig = new SwerveDriveConfiguration(
             SwerveModuleConstants.kDriveMaxFreeSpeed,
@@ -261,7 +263,7 @@ public final class Constants {
         public static final double kDownLimitMotorRotations = 0.0;
 
         public static final PIDConstants kPID = new PIDConstants(5, 0.0, 0.0);
-        public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(0.0, 0.0, 0.0, 6.0);
+        public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(6.0, 0.0, 0.0, 0.0);
 
         // Height of the base of elevator from the floor
         public static final double kElevatorBaseHeightMeters = SwerveModuleConstants.kWheelRadiusMeters
