@@ -11,9 +11,11 @@ import frc.robot.util.FieldConstants.CoralStationConstants.CoralStation;
 import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 
 public class AutoBuilder {
-    public static
-        Command
-        testAuto(SwerveSubsystem swerve, ElevatorSubsystem elevator, EndEffectorSubsystem endEffectorSubsystem) {
+    public static Command testAuto(
+        SwerveSubsystem swerve,
+        ElevatorSubsystem elevator,
+        EndEffectorSubsystem endEffectorSubsystem
+    ) {
         return Commands.sequence(
             SwerveCommandFactory.setPosition(swerve, () -> new Pose2d(8.5, 7.6, Rotation2d.fromDegrees(180))),
             Commands.waitSeconds(4),
@@ -24,6 +26,14 @@ public class AutoBuilder {
             ReefBranch.kL2E1.makeScoreCommand(swerve, elevator, endEffectorSubsystem),
             CoralStation.kC2.makeIntakeCommand(swerve, elevator, endEffectorSubsystem),
             ReefBranch.kL3I2.makeScoreCommand(swerve, elevator, endEffectorSubsystem)
+        );
+    }
+
+    public static Command simpleTaxiForward(SwerveSubsystem swerve) {
+        return Commands.sequence(
+            SwerveCommandFactory.drive(swerve, 0.0, 1.0, 0.0, false),
+            Commands.waitSeconds(1),
+            SwerveCommandFactory.stopAndX(swerve)
         );
     }
 }

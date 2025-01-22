@@ -6,18 +6,18 @@ package frc.robot;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AutoBuilder;
 import frc.robot.commands.AutomatedTeleopControllerListenerCommand;
-import frc.robot.commands.ElevatorCommandFactory;
 import frc.robot.commands.SwerveCommandFactory;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
-import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 
 public class RobotContainer {
     private final SwerveSubsystem m_swerve;
@@ -27,7 +27,7 @@ public class RobotContainer {
 
     private final CommandXboxController m_driverController;
     // private final CommandPS4Controller m_driverController;
-    // private final CommandGenericHID m_keyboard;
+    private final CommandGenericHID m_keyboard;
 
     private final CommandXboxController m_operatorController;
 
@@ -42,7 +42,7 @@ public class RobotContainer {
         m_driverController = new CommandXboxController(Constants.DriveTeamConstants.kDriveControllerPort);
         m_operatorController = new CommandXboxController(Constants.DriveTeamConstants.kOperatorControllerPort);
         // m_driverController = new CommandPS5Controller(0);
-        // m_keyboard = new CommandGenericHID(0);
+        m_keyboard = new CommandGenericHID(0);
 
         configureBindings();
 
@@ -58,17 +58,21 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        m_swerve.setDefaultCommand(SwerveCommandFactory.makeTeleop(m_swerve, m_driverController));
+        // m_swerve.setDefaultCommand(
+        // SwerveCommandFactory.makeTeleop(m_swerve, m_driverController).onlyWhile(
+        // () -> DriverStation.isTeleop() || DriverStation.isTest()
+        // )
+        // );
 
         // Elevator setpoints
         // m_driverController.cross().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L1));
         // m_driverController.circle().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L2));
         // m_driverController.triangle().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L3));
         // m_driverController.square().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L4));
-        m_driverController.a().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L1));
-        m_driverController.b().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L2));
-        m_driverController.y().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3));
-        m_driverController.x().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4));
+        // m_driverController.a().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L1));
+        // m_driverController.b().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L2));
+        // m_driverController.y().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3));
+        // m_driverController.x().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4));
 
         // TODO: impliment this
         // L1 - intake
@@ -77,17 +81,19 @@ public class RobotContainer {
         // Left d-pad - abort climb
 
         // Keyboard controls
-        // m_swerve.setDefaultCommand(
-        // SwerveComSmandFactory.makeTeleop(
-        // m_swerve,
-        // // () -> 0,
-        // // () -> 1,
-        // () -> m_keyboard.getRawAxis(0),
-        // () -> -m_keyboard.getRawAxis(1),
-        // () -> m_keyboard.getRawAxis(2),
-        // () -> 0
-        // )
-        // );
+        m_swerve.setDefaultCommand(
+            SwerveCommandFactory.makeTeleop(
+                m_swerve,
+                // () -> 0,
+                // () -> 1,
+                () -> -m_keyboard.getRawAxis(0),
+                () -> -m_keyboard.getRawAxis(1),
+                () -> m_keyboard.getRawAxis(2),
+                () -> 0
+            ).onlyIf(
+                () -> DriverStation.isTeleop() || DriverStation.isTest()
+            )
+        );
     }
 
     public Command getAutonomousCommand() {
@@ -97,7 +103,8 @@ public class RobotContainer {
         // Commands.waitSeconds(4),
         // branch.makeScoreCommand(m_swerve, m_elevator, m_endEffector)
         // );
-        return AutoBuilder.testAuto(m_swerve, m_elevator, m_endEffector);
+        // return AutoBuilder.testAuto(m_swerve, m_elevator, m_endEffector);
+        return AutoBuilder.simpleTaxiForward(m_swerve);
     }
 
     public Command getTeleopCommand() {

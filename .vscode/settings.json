@@ -59,12 +59,14 @@
   ],
   "cSpell.words": [
     "CTRE",
+    "Deadzone",
     "Feedforward",
     "jank",
     "Pathfinding",
     "periodics",
     "teleop",
     "URCL",
+    "vrot",
     "WPILOG"
   ],
   "java.debug.settings.onBuildFailureProceed": true

@@ -194,11 +194,11 @@ public class SwerveSubsystem extends SubsystemBase {
      * @param fieldRelative
      */
     public void drive(double vx, double vy, double vrot, boolean fieldRelative) {
-        Rotation2d headingOffset = Util.getAlliance() == Alliance.Red ? Rotation2d.fromDegrees(0)
-            : Rotation2d.fromDegrees(180);
+        Rotation2d headingOffset = Util.getAlliance() == Alliance.Red ? Rotation2d.fromDegrees(180)
+            : Rotation2d.fromDegrees(0);
         ChassisSpeeds desiredSpeeds = fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(vy, vx, vrot, getHeading().plus(headingOffset))
-            : new ChassisSpeeds(vx, vy, vrot);
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, getHeading().plus(headingOffset))
+            : new ChassisSpeeds(vy, vx, vrot);
         desiredSpeeds = ChassisSpeeds.discretize(desiredSpeeds, Constants.kLoopPeriodSecs);
 
         SwerveModuleState[] desiredStates = m_kinematics.toSwerveModuleStates(desiredSpeeds);
@@ -214,6 +214,23 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void drive(ChassisSpeeds speeds, boolean fieldRelative) {
         drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false);
+    }
+
+    public void stopAndX() {
+        SwerveModuleState flBr = new SwerveModuleState(0.0, Rotation2d.fromDegrees(45));
+        SwerveModuleState frBL = new SwerveModuleState(0.0, Rotation2d.fromDegrees(-45));
+
+        m_moduleFL.setDesiredState(flBr, false);
+        m_moduleFR.setDesiredState(frBL, false);
+        m_moduleBL.setDesiredState(frBL, false);
+        m_moduleBR.setDesiredState(flBr, false);
+
+        Logger.recordOutput(SwerveConstants.kLogPath + "/desiredModuleStates", new SwerveModuleState[] {
+            flBr,
+            frBL,
+            frBL,
+            flBr
+        });
     }
 
     public Pose2d getPose() {

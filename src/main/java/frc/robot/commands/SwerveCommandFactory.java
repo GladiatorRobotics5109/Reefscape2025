@@ -78,7 +78,15 @@ public final class SwerveCommandFactory {
         );
     }
 
-    public static Command followPath(SwerveSubsystem sewrve, PathPlannerPath path) {
+    public static Command drive(SwerveSubsystem swerve, double vx, double vy, double vrot, boolean fieldRelative) {
+        return swerve.runOnce(() -> swerve.drive(vx, vy, vrot, fieldRelative));
+    }
+
+    public static Command stopAndX(SwerveSubsystem swerve) {
+        return swerve.runOnce(swerve::stopAndX);
+    }
+
+    public static Command followPath(SwerveSubsystem swerve, PathPlannerPath path) {
         return AutoBuilder.followPath(path);
     }
 
