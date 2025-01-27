@@ -196,7 +196,7 @@ public class SwerveSubsystem extends SubsystemBase {
             : Rotation2d.fromDegrees(0);
         ChassisSpeeds desiredSpeeds = fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, getHeading().plus(headingOffset))
-            : new ChassisSpeeds(vy, vx, vrot);
+            : new ChassisSpeeds(vx, vy, vrot);
         desiredSpeeds = ChassisSpeeds.discretize(desiredSpeeds, Constants.kLoopPeriodSecs);
 
         SwerveModuleState[] desiredStates = m_kinematics.toSwerveModuleStates(desiredSpeeds);
@@ -211,7 +211,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void drive(ChassisSpeeds speeds, boolean fieldRelative) {
-        drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false);
+        drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, fieldRelative);
     }
 
     public void stopAndX() {

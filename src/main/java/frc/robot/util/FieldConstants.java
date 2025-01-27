@@ -378,4 +378,15 @@ public class FieldConstants {
             return side == CoralStationSide.C ? kCoralStationCloseFaceAngle : kCoralStationFarFaceAngle;
         }
     }
+
+    public static final class CoralConstants {
+        public static final double kCoralLengthMeters = Conversions.inchesToMeters(11 + (7 / 8));
+
+        public static final double kCoralInnerDiameterMeters = Conversions.inchesToMeters(4);
+        public static final double kCoralInnerRadiusMeters = kCoralInnerDiameterMeters / 2;
+
+        public static final double kCoralOuterDiameterMeters = kCoralInnerDiameterMeters
+            + Conversions.inchesToMeters(0.5);
+        public static final double kCoralOuterRadiusMeters = kCoralOuterDiameterMeters / 2;
+    }
 }

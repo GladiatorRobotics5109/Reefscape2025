@@ -13,11 +13,11 @@ import org.littletonrobotics.junction.Logger;
 
 public class ElevatorCommandFactory {
     public static Command toElevatorRelativeHeight(ElevatorSubsystem elevator, DoubleSupplier positionMeters) {
-        return elevator.runOnce(() -> elevator.setTargetHeightElevatorRelative(positionMeters.getAsDouble()));
+        return elevator.runOnce(() -> elevator.setDesiredPositionElevatorRelative(positionMeters.getAsDouble()));
     }
 
     public static Command toReefHeight(ElevatorSubsystem elevator, ReefHeight height) {
-        return elevator.runOnce(() -> elevator.setTargetHeightFieldRelative(height));
+        return elevator.runOnce(() -> elevator.setDesiredPositionEndEffectorRelative(height));
     }
 
     public static Command toReefBranch(ElevatorSubsystem elevator, ReefBranch branch) {
@@ -29,7 +29,7 @@ public class ElevatorCommandFactory {
     }
 
     public static Command autoToReefBranch(ElevatorSubsystem elevator, ReefBranch branch) {
-        return Commands.waitUntil(elevator::isWithinRadius).withTimeout(2).andThen(toReefBranch(elevator, branch));
+        return Commands.waitUntil(elevator::canAutoExtend).withTimeout(2).andThen(toReefBranch(elevator, branch));
     }
 
     public static Command debugControllerAxis(ElevatorSubsystem elevator, DoubleSupplier axis) {

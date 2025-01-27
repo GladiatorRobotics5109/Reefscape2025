@@ -23,6 +23,7 @@ import frc.robot.Constants.SwerveConstants.SwerveModuleConstants;
 import frc.robot.util.Conversions;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.util.FieldConstants;
 
 public final class Constants {
     public static final Mode kCurrentMode = Mode.SIM;
@@ -267,23 +268,33 @@ public final class Constants {
         public static final double kGearRatio = 20;
         public static final double kSprocketRadiusMeters = Conversions.inchesToMeters(0.819);
 
-        public static final double kElevatorMinLengthMeters = Conversions.inchesToMeters(37.236);
-        public static final double kElevatorMaxLengthMeters = Conversions.inchesToMeters(69.736220);
-        public static final double kElevatorMaxLengthChangeMeters = kElevatorMaxLengthMeters - kElevatorMinLengthMeters;
+        public static final double kElevatorMaxPositionMeters = Conversions.inchesToMeters(69.736220);
 
-        public static final double kUpLimitMotorRotations = Conversions.elevatorPositionToRotations(
-            kElevatorMaxLengthChangeMeters
+        public static final double kUpLimitMotorRotations = Conversions.elevatorMetersToElevatorRotations(
+            kElevatorMaxPositionMeters
         );
         public static final double kDownLimitMotorRotations = 0.0;
 
         public static final PIDConstants kPID = new PIDConstants(5, 0.0, 0.0);
-        public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(6.0, 0.0, 0.0, 0.0);
+        public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(
+            0.0,
+            Conversions.elevatorMetersToElevatorRotations(18.99),
+            Conversions.elevatorMetersToElevatorRotations(0.01),
+            Conversions.elevatorMetersToElevatorRotations(0.06)
+        );
 
-        // Height of the base of elevator from the floor
+        /** Distance from the top face of the bottom bar of the second stage to the floor */
         public static final double kElevatorBaseHeightMeters = SwerveModuleConstants.kWheelRadiusMeters
             + Conversions.inchesToMeters(2);
+        /**
+         * Distance from the center of the leading edge of the coral to the floor when the elevator is at its starting
+         * configuration
+         */
         public static final double kEndEffectorHeightMeters = kElevatorBaseHeightMeters
-            + Conversions.inchesToMeters(25);
+            + Conversions.inchesToMeters(25)
+            + FieldConstants.CoralConstants.kCoralOuterRadiusMeters;
+
+        public static final double kPositionToleranceMeters = Conversions.inchesToMeters(1);
 
         // The distance from the center of the reef that the elevator will be allowed to autonomously extend
         public static final double kAutoElevatorExtendRequiredDistanceMeters = 3.0;

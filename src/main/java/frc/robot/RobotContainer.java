@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.util.FieldConstants;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -11,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.AutoBuilder;
 import frc.robot.commands.AutomatedTeleopControllerListenerCommand;
 import frc.robot.commands.SwerveCommandFactory;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
@@ -97,14 +100,13 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        // ReefBranch branch = FieldConstants.ReefConstants.ReefBranch.kL4G1;
-        // return Commands.sequence(
-        // SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(5, 1, Rotation2d.fromDegrees(0))),
-        // Commands.waitSeconds(4),
-        // branch.makeScoreCommand(m_swerve, m_elevator, m_endEffector)
-        // );
-        // return AutoBuilder.testAuto(m_swerve, m_elevator, m_endEffector);
-        return AutoBuilder.simpleTaxiForward(m_swerve);
+        FieldConstants.ReefConstants.ReefBranch branch = FieldConstants.ReefConstants.ReefBranch.kL4G1;
+        return Commands.sequence(
+            SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(5, 1, Rotation2d.fromDegrees(0))),
+            Commands.waitSeconds(4),
+            branch.makeScoreCommand(m_swerve, m_elevator, m_endEffector)
+        );
+        //        return AutoBuilder.testAuto(m_swerve, m_elevator, m_endEffector);
     }
 
     public Command getTeleopCommand() {

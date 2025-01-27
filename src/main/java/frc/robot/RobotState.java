@@ -36,15 +36,11 @@ public class RobotState {
 
     public static ChassisSpeeds getSwerveCurrentChassisSpeeds() { return s_swerve.getCurrentChassisSpeeds(); }
 
-    public static double getElevatorCurrentPositionMeters() {
-        return s_elevator.getCurrentHeightElevatorRelativeMeters();
-    }
+    public static double getElevatorCurrentPositionMeters() { return s_elevator.getCurrentPositionElevatorRelative(); }
 
-    public static double getElevatorDesiredPositionMeters() {
-        return s_elevator.getDesiredPositionElevatorRelativeMeters();
-    }
+    public static double getElevatorDesiredPositionMeters() { return s_elevator.getDesiredPositionElevatorRelative(); }
 
-    public static boolean getElevatorAtDesiredPosition() { return s_elevator.atDesiredPositionMeters(); }
+    public static boolean getElevatorAtDesiredPosition() { return s_elevator.atDesiredPosition(); }
 
     public static void log() {
         Logger.recordOutput(SwerveConstants.kLogPath + "/currentPose", getSwervePose());
