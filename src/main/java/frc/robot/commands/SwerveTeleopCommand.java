@@ -40,11 +40,6 @@ public final class SwerveTeleopCommand extends Command {
     }
 
     @Override
-    public void initialize() {
-
-    }
-
-    @Override
     public void execute() {
         boolean fieldRelative = m_config.fieldRelative();
         double driveSpeedMetersPerSec = m_config.evalDriveSpeed(m_speedModifier.getAsDouble());
@@ -65,16 +60,16 @@ public final class SwerveTeleopCommand extends Command {
 
         double rotationSpeedRadPerSec = m_config.evalRotationSpeed(m_speedModifier.getAsDouble());
         double vrot = rotationSpeedRadPerSec
-            * -m_rotRateLimit.calculate(MathUtil.applyDeadband(m_rot.getAsDouble(), Constants.kJoystickDeadzone));
+            * -m_rotRateLimit.calculate(
+                MathUtil.applyDeadband(m_rot.getAsDouble(), Constants.kJoystickDeadzone)
+            );
 
         m_swerve.drive(vx, vy, vrot, fieldRelative);
         // m_swerve.drive(0.0, 1.0, 0.0, false);
     }
 
     @Override
-    public boolean isFinished() {
-        return false;
-    }
+    public boolean isFinished() { return false; }
 
     @Override
     public void end(boolean interrupted) {

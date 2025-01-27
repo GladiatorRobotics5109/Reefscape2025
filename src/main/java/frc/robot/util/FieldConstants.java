@@ -32,9 +32,7 @@ public class FieldConstants {
             One,
             Two;
 
-            public int getIndex() {
-                return this == One ? 1 : 2;
-            }
+            public int getIndex() { return this == One ? 1 : 2; }
 
             @Override
             public String toString() {
@@ -54,9 +52,7 @@ public class FieldConstants {
                 m_height = heightMeters;
             }
 
-            public double getHeight() {
-                return m_height;
-            }
+            public double getHeight() { return m_height; }
         }
 
         public static enum ReefFace {
@@ -83,9 +79,7 @@ public class FieldConstants {
                 return Rotation2d.fromDegrees(60 * -m_index).plus(Rotation2d.k180deg);
             }
 
-            public Rotation2d getSwerveTargetHeading() {
-                return getFaceAngleFieldRelative().plus(Rotation2d.k180deg);
-            }
+            public Rotation2d getSwerveTargetHeading() { return getFaceAngleFieldRelative().plus(Rotation2d.k180deg); }
 
             public Rotation2d getSwerveTargetHeadingBlueAlliance() {
                 return getFaceAngleFieldRelativeBlueAlliance().plus(Rotation2d.k180deg);
@@ -103,9 +97,7 @@ public class FieldConstants {
                 return new Translation2d(kReefRadiusMeters, getFaceAngleFieldRelative());
             }
 
-            public int getIndex() {
-                return m_index;
-            }
+            public int getIndex() { return m_index; }
         }
 
         public static class ReefBranch {
@@ -167,11 +159,14 @@ public class FieldConstants {
                         kReefBranchDistMeters / 2,
                         new Rotation3d(
                             m_face.getFaceAngleFieldRelative().plus(
-                                Util.getAlliance() == Alliance.Blue
-                                    ? (m_index == ReefIndex.One ? Rotation2d.fromDegrees(90)
-                                        : Rotation2d.fromDegrees(-90))
-                                    : (m_index == ReefIndex.One ? Rotation2d.fromDegrees(-90)
-                                        : Rotation2d.fromDegrees(90))
+                                Util.getAlliance()
+                                    == Alliance.Blue
+                                        ? (m_index == ReefIndex.One
+                                            ? Rotation2d.fromDegrees(90)
+                                            : Rotation2d.fromDegrees(-90))
+                                        : (m_index == ReefIndex.One
+                                            ? Rotation2d.fromDegrees(-90)
+                                            : Rotation2d.fromDegrees(90))
                             )
                         )
                     )
@@ -196,13 +191,13 @@ public class FieldConstants {
                 );
             }
 
-            public Translation3d getBranchPosition() {
-                return m_branchPosition;
-            }
+            public Translation3d getBranchPosition() { return m_branchPosition; }
 
-            public
-                Command
-                makeScoreCommand(SwerveSubsystem swerve, ElevatorSubsystem elevator, EndEffectorSubsystem endEffector) {
+            public Command makeScoreCommand(
+                SwerveSubsystem swerve,
+                ElevatorSubsystem elevator,
+                EndEffectorSubsystem endEffector
+            ) {
                 // return SwerveCommandFactory.driveToReefScore(swerve, this);
                 return Commands.parallel(
                     SwerveCommandFactory.driveToReefScore(swerve, this),
@@ -210,21 +205,13 @@ public class FieldConstants {
                 ).withName(this + " Score Command");
             }
 
-            public PathPlannerPath getInnerPath() {
-                return m_innerPath;
-            }
+            public PathPlannerPath getInnerPath() { return m_innerPath; }
 
-            public ReefHeight getHeight() {
-                return m_height;
-            }
+            public ReefHeight getHeight() { return m_height; }
 
-            public ReefFace getFace() {
-                return m_face;
-            }
+            public ReefFace getFace() { return m_face; }
 
-            public ReefIndex getIndex() {
-                return m_index;
-            }
+            public ReefIndex getIndex() { return m_index; }
 
             @Override
             public String toString() {
@@ -278,9 +265,7 @@ public class FieldConstants {
                 m_index = index;
             }
 
-            public int getIndex() {
-                return m_index;
-            }
+            public int getIndex() { return m_index; }
 
             @Override
             public String toString() {
@@ -317,25 +302,15 @@ public class FieldConstants {
                 m_position = getBlueCoralStationPos(side).getTranslation().plus(indexOffset);
             }
 
-            public Translation2d getPosition() {
-                return m_position;
-            }
+            public Translation2d getPosition() { return m_position; }
 
-            public Rotation2d getFaceAngle() {
-                return getAllianceSideCoralStationFaceAngle(m_side);
-            }
+            public Rotation2d getFaceAngle() { return getAllianceSideCoralStationFaceAngle(m_side); }
 
-            public CoralStationSide getSide() {
-                return m_side;
-            }
+            public CoralStationSide getSide() { return m_side; }
 
-            public CoralStationIndex getIndex() {
-                return m_index;
-            }
+            public CoralStationIndex getIndex() { return m_index; }
 
-            public PathPlannerPath getInnerPath() {
-                return Paths.getCoralStationInnerPath(this);
-            }
+            public PathPlannerPath getInnerPath() { return Paths.getCoralStationInnerPath(this); }
 
             public Command makeIntakeCommand(
                 SwerveSubsystem swerve,
@@ -391,7 +366,8 @@ public class FieldConstants {
         // }
 
         public static final Rotation2d getAllianceSideCoralStationFaceAngle(CoralStationSide side) {
-            Rotation2d offset = Util.getAlliance() == Alliance.Blue ? Rotation2d.fromDegrees(0)
+            Rotation2d offset = Util.getAlliance() == Alliance.Blue
+                ? Rotation2d.fromDegrees(0)
                 : Rotation2d.fromDegrees(90);
             Rotation2d angle = side == CoralStationSide.C ? kCoralStationCloseFaceAngle : kCoralStationFarFaceAngle;
 

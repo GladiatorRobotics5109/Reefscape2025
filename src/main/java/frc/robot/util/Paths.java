@@ -60,7 +60,8 @@ public final class Paths {
                 generateReefInnerPath(
                     faceLocation,
                     face.getFaceAngleFieldRelativeBlueAlliance(),
-                    face == ReefFace.E || face == ReefFace.I || face == ReefFace.J ? Rotation2d.kCW_90deg
+                    face == ReefFace.E || face == ReefFace.I || face == ReefFace.J
+                        ? Rotation2d.kCW_90deg
                         : Rotation2d.kCCW_90deg
                 )
             );
@@ -70,7 +71,8 @@ public final class Paths {
                 generateReefInnerPath(
                     faceLocation,
                     faceAngle,
-                    face == ReefFace.E || face == ReefFace.I || face == ReefFace.J ? Rotation2d.kCCW_90deg
+                    face == ReefFace.E || face == ReefFace.I || face == ReefFace.J
+                        ? Rotation2d.kCCW_90deg
                         : Rotation2d.kCW_90deg
                 )
             );
@@ -130,9 +132,11 @@ public final class Paths {
         );
     }
 
-    private static
-        PathPlannerPath
-        generateReefInnerPath(Translation2d facePos, Rotation2d faceAngle, Rotation2d toBranch) {
+    private static PathPlannerPath generateReefInnerPath(
+        Translation2d facePos,
+        Rotation2d faceAngle,
+        Rotation2d toBranch
+    ) {
         Translation2d branchPos = facePos.plus(
             new Translation2d(FieldConstants.ReefConstants.kReefBranchDistMeters / 2, faceAngle.plus(toBranch))
         );
@@ -174,6 +178,7 @@ public final class Paths {
      * @param direction
      * @param targetHeading
      * @param constraints
+     *
      * @return
      */
     private static PathPlannerPath generatePathAlongVector(

@@ -84,13 +84,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public double getCurrentHeightFieldRelativeMeters() {
-        return getCurrentHeightElevatorRelativeMeters() + ElevatorConstants.kElevatorBaseHeightMeters
+        return getCurrentHeightElevatorRelativeMeters()
+            + ElevatorConstants.kElevatorBaseHeightMeters
             + ElevatorConstants.kElevatorMinLengthMeters;
     }
 
-    public double getDesiredPositionElevatorRelativeMeters() {
-        return m_desiredPositionMeters;
-    }
+    public double getDesiredPositionElevatorRelativeMeters() { return m_desiredPositionMeters; }
 
     public boolean atDesiredPositionMeters() {
         return MathUtil.isNear(

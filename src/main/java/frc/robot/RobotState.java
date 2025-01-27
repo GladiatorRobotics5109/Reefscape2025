@@ -28,21 +28,13 @@ public class RobotState {
         PeriodicUtil.registerPeriodic(RobotState::log);
     }
 
-    public static VisionMeasurement[] getVisionMeasurements() {
-        return s_vision.getMeasurements();
-    }
+    public static VisionMeasurement[] getVisionMeasurements() { return s_vision.getMeasurements(); }
 
-    public static Pose2d getSwervePose() {
-        return s_swerve.getPose();
-    }
+    public static Pose2d getSwervePose() { return s_swerve.getPose(); }
 
-    public static SwerveModuleState[] getSwerveModuleStates() {
-        return s_swerve.getModuleStates();
-    }
+    public static SwerveModuleState[] getSwerveModuleStates() { return s_swerve.getModuleStates(); }
 
-    public static ChassisSpeeds getSwerveCurrentChassisSpeeds() {
-        return s_swerve.getCurrentChassisSpeeds();
-    }
+    public static ChassisSpeeds getSwerveCurrentChassisSpeeds() { return s_swerve.getCurrentChassisSpeeds(); }
 
     public static double getElevatorCurrentPositionMeters() {
         return s_elevator.getCurrentHeightElevatorRelativeMeters();
@@ -52,9 +44,7 @@ public class RobotState {
         return s_elevator.getDesiredPositionElevatorRelativeMeters();
     }
 
-    public static boolean getElevatorAtDesiredPosition() {
-        return s_elevator.atDesiredPositionMeters();
-    }
+    public static boolean getElevatorAtDesiredPosition() { return s_elevator.atDesiredPositionMeters(); }
 
     public static void log() {
         Logger.recordOutput(SwerveConstants.kLogPath + "/currentPose", getSwervePose());

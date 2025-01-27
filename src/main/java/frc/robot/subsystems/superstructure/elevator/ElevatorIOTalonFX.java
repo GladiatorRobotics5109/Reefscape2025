@@ -73,7 +73,8 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         configs.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
         configs.SoftwareLimitSwitch.ReverseSoftLimitThreshold = ElevatorConstants.kDownLimitMotorRotations;
 
-        configs.MotorOutput.Inverted = ElevatorConstants.kInvertMotor ? InvertedValue.CounterClockwise_Positive
+        configs.MotorOutput.Inverted = ElevatorConstants.kInvertMotor
+            ? InvertedValue.CounterClockwise_Positive
             : InvertedValue.Clockwise_Positive;
         m_motor.getConfigurator().apply(configs);
         m_followerMotor.getConfigurator().apply(configs);

@@ -9,9 +9,12 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class ControllerRumbleCommand extends Command {
-    public static
-        ControllerRumbleCommand
-        makeLinearDecay(double startValue, RumbleType type, double lengthSeconds, GenericHID[] targets) {
+    public static ControllerRumbleCommand makeLinearDecay(
+        double startValue,
+        RumbleType type,
+        double lengthSeconds,
+        GenericHID[] targets
+    ) {
         return new ControllerRumbleCommand(
             (Double t) -> MathUtil.interpolate(startValue, 0.0, t / lengthSeconds),
             type,
@@ -57,7 +60,5 @@ public class ControllerRumbleCommand extends Command {
     }
 
     @Override
-    public boolean isFinished() {
-        return m_timer.hasElapsed(m_lengthSeconds);
-    }
+    public boolean isFinished() { return m_timer.hasElapsed(m_lengthSeconds); }
 }

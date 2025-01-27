@@ -27,7 +27,8 @@ public class WheelRadiusCharacterizationCommand extends Command {
         0.1
     );
     private static final double driveRadius = SwerveConstants.kDriveBaseRadiusMeters;
-    private static final DoubleSupplier gyroYawRadsSupplier = () -> RobotState.getSwervePose().getRotation().getRadians();
+    private static final DoubleSupplier gyroYawRadsSupplier = () -> RobotState.getSwervePose().getRotation()
+        .getRadians();
 
     public enum Direction {
         CLOCKWISE(-1),

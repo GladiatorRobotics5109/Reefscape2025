@@ -185,16 +185,14 @@ public class SwerveSubsystem extends SubsystemBase {
 
     /**
      *
-     * @param vx
-     *            velocity in m/s
-     * @param vy
-     *            velocity in m/s
-     * @param vrot
-     *            rotational velocity in rad/s
+     * @param vx velocity in m/s
+     * @param vy velocity in m/s
+     * @param vrot rotational velocity in rad/s
      * @param fieldRelative
      */
     public void drive(double vx, double vy, double vrot, boolean fieldRelative) {
-        Rotation2d headingOffset = Util.getAlliance() == Alliance.Red ? Rotation2d.fromDegrees(180)
+        Rotation2d headingOffset = Util.getAlliance() == Alliance.Red
+            ? Rotation2d.fromDegrees(180)
             : Rotation2d.fromDegrees(0);
         ChassisSpeeds desiredSpeeds = fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, getHeading().plus(headingOffset))
@@ -225,31 +223,37 @@ public class SwerveSubsystem extends SubsystemBase {
         m_moduleBL.setDesiredState(frBL, false);
         m_moduleBR.setDesiredState(flBr, false);
 
-        Logger.recordOutput(SwerveConstants.kLogPath + "/desiredModuleStates", new SwerveModuleState[] {
-            flBr,
-            frBL,
-            frBL,
-            flBr
-        });
+        Logger.recordOutput(
+            SwerveConstants.kLogPath
+                + "/desiredModuleStates",
+            new SwerveModuleState[] {
+                flBr,
+                frBL,
+                frBL,
+                flBr
+            }
+        );
     }
 
-    public Pose2d getPose() {
-        return m_poseEstimator.getEstimatedPosition();
-    }
+    public Pose2d getPose() { return m_poseEstimator.getEstimatedPosition(); }
 
-    public Rotation2d getHeading() {
-        return getPose().getRotation();
-    }
+    public Rotation2d getHeading() { return getPose().getRotation(); }
 
     public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {
-            m_moduleFL.getPosition(), m_moduleFR.getPosition(), m_moduleBL.getPosition(), m_moduleBR.getPosition()
+            m_moduleFL.getPosition(),
+            m_moduleFR.getPosition(),
+            m_moduleBL.getPosition(),
+            m_moduleBR.getPosition()
         };
     }
 
     public SwerveModuleState[] getModuleStates() {
         return new SwerveModuleState[] {
-            m_moduleFL.getState(), m_moduleFR.getState(), m_moduleBL.getState(), m_moduleBR.getState()
+            m_moduleFL.getState(),
+            m_moduleFR.getState(),
+            m_moduleBL.getState(),
+            m_moduleBR.getState()
         };
     }
 
@@ -260,21 +264,24 @@ public class SwerveSubsystem extends SubsystemBase {
      */
     public SwerveModule[] getSwerveModules() {
         return new SwerveModule[] {
-            m_moduleFL, m_moduleFR, m_moduleBL, m_moduleBR
+            m_moduleFL,
+            m_moduleFR,
+            m_moduleBL,
+            m_moduleBR
         };
     }
 
     /** Get the position of all drive wheels in radians. */
     public double[] getWheelRadiusCharacterizationPosition() {
         return new double[] {
-            m_moduleFL.getDrivePositionRads(), m_moduleFR.getDrivePositionRads(), m_moduleBL.getDrivePositionRads(),
+            m_moduleFL.getDrivePositionRads(),
+            m_moduleFR.getDrivePositionRads(),
+            m_moduleBL.getDrivePositionRads(),
             m_moduleBR.getDrivePositionRads()
         };
     }
 
-    public ChassisSpeeds getCurrentChassisSpeeds() {
-        return m_kinematics.toChassisSpeeds(getModuleStates());
-    }
+    public ChassisSpeeds getCurrentChassisSpeeds() { return m_kinematics.toChassisSpeeds(getModuleStates()); }
 
     public void setPosition(Pose2d pose) {
         m_poseEstimator.resetPosition(m_gyro.getYaw(), getModulePositions(), pose);
@@ -282,7 +289,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void updatePose() {
         VisionMeasurement[] measurements = RobotState.getVisionMeasurements();
-        for (var measurement : measurements) {
+        for (VisionMeasurement measurement : measurements) {
             m_poseEstimator.addVisionMeasurement(measurement.estimatedPose().toPose2d(), measurement.timestmap());
         }
 

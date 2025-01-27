@@ -140,7 +140,7 @@ public final class Constants {
         public static final Pose2d kStartingPose = new Pose2d();
         public static final String kLogPath = "Subsystems/Swerve";
         public static final double kFrameWidth = Conversions.inchesToMeters(29);
-        public static final double kFrameHeight = kFrameWidth;
+        public static final double kFrameHeight = Conversions.inchesToMeters(29);
         public static final double kDriveBaseRadiusMeters = Math.hypot(kFrameWidth, kFrameHeight);
 
         public static final com.pathplanner.lib.config.PIDConstants kPPTranslationPID = new com.pathplanner.lib.config.PIDConstants(
@@ -210,13 +210,27 @@ public final class Constants {
 
         // Provides a way to describe the configuration of the swerve subsystem (like drive speeds) with values that may
         // change throughout a match (like auto -> teleop)
-        public static final record SwerveDriveConfiguration(LinearVelocity defaultDriveSpeed, LinearVelocity modifiedDriveSpeed, AngularVelocity defaultRotationSpeed, AngularVelocity modifiedRotationSpeed, boolean fieldRelative) {
+        public static final record SwerveDriveConfiguration(
+            LinearVelocity defaultDriveSpeed,
+            LinearVelocity modifiedDriveSpeed,
+            AngularVelocity defaultRotationSpeed,
+            AngularVelocity modifiedRotationSpeed,
+            boolean fieldRelative
+        ) {
             public double evalDriveSpeed(double t) {
-                return MathUtil.interpolate(defaultDriveSpeed.in(Units.MetersPerSecond), modifiedDriveSpeed.in(Units.MetersPerSecond), t);
+                return MathUtil.interpolate(
+                    defaultDriveSpeed.in(Units.MetersPerSecond),
+                    modifiedDriveSpeed.in(Units.MetersPerSecond),
+                    t
+                );
             }
 
             public double evalRotationSpeed(double t) {
-                return MathUtil.interpolate(defaultRotationSpeed.in(Units.RadiansPerSecond), modifiedRotationSpeed.in(Units.RadiansPerSecond), t);
+                return MathUtil.interpolate(
+                    defaultRotationSpeed.in(Units.RadiansPerSecond),
+                    modifiedRotationSpeed.in(Units.RadiansPerSecond),
+                    t
+                );
             }
         }
     }
