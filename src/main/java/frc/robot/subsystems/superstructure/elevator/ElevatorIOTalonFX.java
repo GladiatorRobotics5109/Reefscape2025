@@ -67,6 +67,9 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         configs.Slot0.GravityType = GravityTypeValue.Elevator_Static;
         configs.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;
         configs.Slot0.kG = ElevatorConstants.kFeedForward.kg();
+        configs.Slot0.kS = ElevatorConstants.kFeedForward.ks();
+        configs.Slot0.kV = ElevatorConstants.kFeedForward.kv();
+        configs.Slot0.kA = ElevatorConstants.kFeedForward.ka();
 
         configs.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
         configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = ElevatorConstants.kUpLimitMotorRotations;

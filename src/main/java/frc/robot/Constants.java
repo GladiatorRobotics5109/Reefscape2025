@@ -257,7 +257,7 @@ public final class Constants {
         public static final String kLogPath = "Subsystems/Elevator";
 
         public static final int kMotorPort = 20;
-        public static final boolean kInvertMotor = false;
+        public static final boolean kInvertMotor = true;
         public static final int kFollowerPort = 21;
 
         public static final boolean kUseFOC = true;
@@ -275,12 +275,12 @@ public final class Constants {
         );
         public static final double kDownLimitMotorRotations = 0.0;
 
-        public static final PIDConstants kPID = new PIDConstants(5, 0.0, 0.0);
+        public static final PIDConstants kPID = new PIDConstants(20, 0.0, 0.0);
         public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(
+            20.0,
             0.0,
-            Conversions.elevatorMetersToElevatorRotations(18.99),
-            Conversions.elevatorMetersToElevatorRotations(0.01),
-            Conversions.elevatorMetersToElevatorRotations(0.06)
+            0.0,
+            25.5
         );
 
         /** Distance from the top face of the bottom bar of the second stage to the floor */
