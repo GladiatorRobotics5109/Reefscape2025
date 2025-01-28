@@ -73,10 +73,9 @@ public class SwerveModule {
         m_io.setTurnVoltage(volts);
     }
 
-    public Rotation2d getTurnAngle() {
-        // return m_desiredState.angle;
-        return m_currentState.angle;
-    }
+    public Rotation2d getTurnAngle() { return m_currentState.angle; }
+
+    public double getTurnVelocityRadPerSec() { return m_inputs.turnVelocityRadPerSec; }
 
     public SwerveModuleState getState() { return m_currentState; }
 

@@ -257,6 +257,15 @@ public class SwerveSubsystem extends SubsystemBase {
         };
     }
 
+    public double[] getModuleTurnVelocities() {
+        return new double[] {
+            m_moduleFL.getTurnVelocityRadPerSec(),
+            m_moduleFR.getTurnVelocityRadPerSec(),
+            m_moduleBL.getTurnVelocityRadPerSec(),
+            m_moduleBR.getTurnVelocityRadPerSec(),
+        };
+    }
+
     /**
      * Should be used for debug/testing purposes only
      *

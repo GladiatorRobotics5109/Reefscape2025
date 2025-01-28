@@ -4,10 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.util.FieldConstants;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 
 import org.littletonrobotics.junction.Logger;
@@ -103,12 +99,13 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        FieldConstants.ReefConstants.ReefBranch branch = FieldConstants.ReefConstants.ReefBranch.kL4G1;
-        return Commands.sequence(
-            SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(5, 1, Rotation2d.fromDegrees(0))),
-            Commands.waitSeconds(4),
-            branch.makeScoreCommand(m_swerve, m_elevator, m_endEffector)
-        );
+        //        FieldConstants.ReefConstants.ReefBranch branch = FieldConstants.ReefConstants.ReefBranch.kL4G1;
+        //        return Commands.sequence(
+        //            SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(5, 1, Rotation2d.fromDegrees(0))),
+        //            Commands.waitSeconds(4),
+        //            branch.makeScoreCommand(m_swerve, m_elevator, m_endEffector)
+        //        );
+        return SwerveCommandFactory.makeSysIdTurn(m_swerve);
         //        return AutoBuilder.testAuto(m_swerve, m_elevator, m_endEffector);
     }
 

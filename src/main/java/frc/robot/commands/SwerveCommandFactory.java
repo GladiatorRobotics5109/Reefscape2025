@@ -3,9 +3,13 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
-import edu.wpi.first.units.Units;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.measure.LinearVelocity;
 
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import frc.robot.util.Conversions;
 import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -17,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModule;
@@ -106,35 +109,99 @@ public final class SwerveCommandFactory {
         return driveToPoseThenFollowPath(SwerveConstants.kPPPathFindConstraints, branch.getInnerPath());
     }
 
-    public static SysIdRoutine makeSysIdTurn(SwerveSubsystem swerve, int modNum) {
-        SwerveModule module = swerve.getSwerveModules()[modNum];
+    public static Command makeSysIdTurn(SwerveSubsystem swerve) {
+        SwerveModule[] modules = swerve.getSwerveModules();
 
-        var routine = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                null,
-                null,
-                null,
-                (state) -> Logger.recordOutput("SysIdTestState Mod" + modNum, state.toString())
-            ),
-            new SysIdRoutine.Mechanism((volts) -> module.setTurnVoltage(volts.in(Units.Volts)), null, swerve)
+        Timer timer = new Timer();
+        final double kRampRateVoltsPerSec = 0.1;
+        final String kLogPath = SwerveConstants.kLogPath + "/SysIdTurn";
+        final double kSpeedThresholdRadPerSec = Conversions.degreesToRadians(0.1);
+
+        return Commands.sequence(
+            swerve.runOnce(() -> {
+                for (var module : modules) {
+                    module.setDesiredState(new SwerveModuleState(), false);
+                }
+            }),
+            Commands.waitSeconds(1.5),
+            new FunctionalCommand(
+                timer::restart, // OnInit
+                () -> { // Execute
+                    double volts = kRampRateVoltsPerSec * timer.get();
+                    for (var module : modules) {
+                        module.setTurnVoltage(volts);
+                    }
+
+                    Logger.recordOutput(kLogPath + "/AppliedVolts", volts);
+                    Logger.recordOutput(kLogPath + "/CurrentTurnVelocities", swerve.getModuleTurnVelocities());
+                },
+                (Boolean interrupted) -> { // End
+                    for (var module : modules) {
+                        module.setDesiredState(new SwerveModuleState(), false);
+                    }
+
+                    timer.stop();
+                },
+                () -> { // IsFinished
+                    double[] velocities = swerve.getModuleTurnVelocities();
+                    double avgSpeed = 0.0;
+                    for (double vel : velocities) {
+                        avgSpeed += vel;
+                    }
+                    avgSpeed /= 4;
+
+                    return avgSpeed >= kSpeedThresholdRadPerSec;
+                },
+                swerve
+            )
         );
-
-        return routine;
     }
 
-    public static SysIdRoutine makeSysIdDrive(SwerveSubsystem swerve, int modNum) {
-        SwerveModule module = swerve.getSwerveModules()[modNum];
+    public static Command makeSysIdDrive(SwerveSubsystem swerve) {
+        SwerveModule[] modules = swerve.getSwerveModules();
 
-        var routine = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                null,
-                null,
-                null,
-                (state) -> Logger.recordOutput("SysIdTestState Mod" + modNum, state.toString())
-            ),
-            new SysIdRoutine.Mechanism((volts) -> module.setDriveVoltage(volts.in(Units.Volts)), null, swerve)
+        Timer timer = new Timer();
+        final double kRampRateVoltsPerSec = 0.1;
+        final String kLogPath = SwerveConstants.kLogPath + "/SysIdDrive";
+        final double kSpeedThresholdMetersPerSec = Conversions.inchesToMeters(0.1);
+
+        return Commands.sequence(
+            swerve.runOnce(() -> {
+                for (var module : modules) {
+                    module.setDesiredState(new SwerveModuleState(), false);
+                }
+            }),
+            Commands.waitSeconds(1.5),
+            new FunctionalCommand(
+                timer::restart, // OnInit
+                () -> { // Execute
+                    double volts = kRampRateVoltsPerSec * timer.get();
+                    for (var module : modules) {
+                        module.setDriveVoltage(volts);
+                    }
+
+                    Logger.recordOutput(kLogPath + "/AppliedVolts", volts);
+                    Logger.recordOutput(kLogPath + "/CurrentStates", swerve.getModuleStates());
+                },
+                (Boolean interrupted) -> { // End
+                    for (var module : modules) {
+                        module.setDesiredState(new SwerveModuleState(), false);
+                    }
+
+                    timer.stop();
+                },
+                () -> { // IsFinished
+                    SwerveModuleState[] states = swerve.getModuleStates();
+                    double avgSpeed = 0.0;
+                    for (SwerveModuleState state : states) {
+                        avgSpeed += state.speedMetersPerSecond;
+                    }
+                    avgSpeed /= 4;
+
+                    return avgSpeed >= kSpeedThresholdMetersPerSec;
+                },
+                swerve
+            )
         );
-
-        return routine;
     }
 }
