@@ -73,8 +73,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void setDesiredPositionElevatorRelative(double positionMeters) {
-        m_desiredPositionMeters = positionMeters;
-        m_io.setPosition(Conversions.elevatorMetersToElevatorRotations(positionMeters));
+        m_desiredPositionMeters = MathUtil.clamp(positionMeters, 0.0, ElevatorConstants.kElevatorMaxPositionMeters);
+        m_io.setPosition(Conversions.elevatorMetersToElevatorRotations(m_desiredPositionMeters));
     }
 
     public void setDesiredPositionEndEffectorRelative(double positionMeters) {

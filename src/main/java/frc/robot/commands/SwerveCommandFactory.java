@@ -32,8 +32,8 @@ public final class SwerveCommandFactory {
         return new SwerveTeleopCommand(
             swerve,
             SwerveConstants.kTeleopConfig,
-            controller::getLeftX,
-            controller::getLeftY,
+            () -> -controller.getLeftX(),
+            () -> -controller.getLeftY(),
             controller::getRightX,
             controller::getRightTriggerAxis
         );
@@ -54,8 +54,8 @@ public final class SwerveCommandFactory {
         return new SwerveTeleopCommand(
             swerve,
             SwerveConstants.kTeleopConfig,
-            controller::getLeftX,
-            controller::getLeftY,
+            () -> -controller.getLeftX(),
+            () -> -controller.getLeftY(),
             controller::getRightX,
             controller::getR2Axis
         );

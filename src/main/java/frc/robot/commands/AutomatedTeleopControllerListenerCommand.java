@@ -124,24 +124,30 @@ public class AutomatedTeleopControllerListenerCommand extends Command {
 
         m_operatorController.leftBumper().and(m_operatorController.rightBumper()).onTrue(
             Commands.parallel(
-                Commands.runOnce(() -> m_buttonQueue.clear()),
+                Commands.runOnce(() -> {
+                    m_buttonQueue.clear();
+                    m_queuedBranch = Optional.empty();
+                    m_driverController.setRumble(RumbleType.kBothRumble, 0);
+                }),
                 ControllerRumbleCommand.makeLinearDecay(
-                    0.5,
+                    1.0,
                     RumbleType.kBothRumble,
-                    0.2,
+                    0.5,
                     new GenericHID[] { m_operatorController.getHID() }
                 )
             )
         );
 
-        m_driverController.rightBumper().onTrue(Commands.runOnce(() -> {
+        m_driverController.leftBumper().onTrue(Commands.runOnce(() -> {
             if (m_queuedBranch.isEmpty())
                 return;
-            m_queuedBranch.get().makeScoreCommand(m_swerve, m_elevator, m_endEffector).alongWith(
+            m_queuedBranch.get().makeScoreCommand(m_swerve, m_elevator, m_endEffector).onlyWhile(
+                m_driverController.rightBumper().negate()
+            ).alongWith(
                 ControllerRumbleCommand.makeLinearDecay(
                     1,
                     RumbleType.kBothRumble,
-                    0.5,
+                    1.0,
                     new GenericHID[] { m_driverController.getHID(), m_operatorController.getHID() }
                 )
             ).beforeStarting(() -> {

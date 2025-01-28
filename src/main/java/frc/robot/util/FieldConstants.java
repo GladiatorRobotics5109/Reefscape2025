@@ -41,7 +41,7 @@ public class FieldConstants {
         }
 
         public static enum ReefHeight {
-            L1(0.0), // TOOD: Fix this
+            L1(kReefL1HeightMeters),
             L2(kReefL2HeightMeters),
             L3(kReefL3HeightMeters),
             L4(kReefL4HeightMeters);
@@ -225,11 +225,14 @@ public class FieldConstants {
         // Distance form reef base to branch at L2 and L3
         public static final double kReefL2L3InsetMeters = Conversions.inchesToMeters(1 + (5 / 8));
         public static final double kReefL4InsetMeters = Conversions.inchesToMeters(1 + (1 / 8));
+
+        public static final double kReefL1HeightMeters = Conversions.feetToMeters(1) + Conversions.inchesToMeters(6);
         public static final double kReefL2HeightMeters = Conversions.feetToMeters(2)
             + Conversions.inchesToMeters(7 + (7 / 8));
         public static final double kReefL3HeightMeters = Conversions.feetToMeters(3)
             + Conversions.inchesToMeters(11 + (5 / 8));
         public static final double kReefL4HeightMeters = Conversions.feetToMeters(6);
+
         // Distance between branch centers
         public static final double kReefBranchDistMeters = Conversions.inchesToMeters(13);
         public static final double kReefBranchDiameterMeters = Conversions.inchesToMeters(1.6);

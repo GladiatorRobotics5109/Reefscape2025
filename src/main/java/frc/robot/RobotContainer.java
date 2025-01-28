@@ -8,6 +8,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.util.FieldConstants;
+import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -16,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AutomatedTeleopControllerListenerCommand;
+import frc.robot.commands.ElevatorCommandFactory;
 import frc.robot.commands.SwerveCommandFactory;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
@@ -61,21 +64,21 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        // m_swerve.setDefaultCommand(
-        // SwerveCommandFactory.makeTeleop(m_swerve, m_driverController).onlyWhile(
-        // () -> DriverStation.isTeleop() || DriverStation.isTest()
-        // )
-        // );
+        m_swerve.setDefaultCommand(
+            SwerveCommandFactory.makeTeleop(m_swerve, m_driverController).onlyWhile(
+                () -> DriverStation.isTeleop() || DriverStation.isTest()
+            )
+        );
 
         // Elevator setpoints
-        // m_driverController.cross().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L1));
-        // m_driverController.circle().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L2));
-        // m_driverController.triangle().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L3));
-        // m_driverController.square().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L4));
-        // m_driverController.a().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L1));
-        // m_driverController.b().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L2));
-        // m_driverController.y().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3));
-        // m_driverController.x().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4));
+        // m_driverController.cross().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L1));
+        // m_driverController.circle().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L2));
+        // m_driverController.triangle().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3));
+        // m_driverController.square().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4));
+        m_driverController.a().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L1));
+        m_driverController.b().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L2));
+        m_driverController.y().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3));
+        m_driverController.x().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4));
 
         // TODO: impliment this
         // L1 - intake
@@ -84,19 +87,19 @@ public class RobotContainer {
         // Left d-pad - abort climb
 
         // Keyboard controls
-        m_swerve.setDefaultCommand(
-            SwerveCommandFactory.makeTeleop(
-                m_swerve,
-                // () -> 0,
-                // () -> 1,
-                () -> -m_keyboard.getRawAxis(0),
-                () -> -m_keyboard.getRawAxis(1),
-                () -> m_keyboard.getRawAxis(2),
-                () -> 0
-            ).onlyIf(
-                () -> DriverStation.isTeleop() || DriverStation.isTest()
-            )
-        );
+        // m_swerve.setDefaultCommand(
+        //     SwerveCommandFactory.makeTeleop(
+        //         m_swerve,
+        //         // () -> 0,
+        //         // () -> 1,
+        //         () -> -m_keyboard.getRawAxis(0),
+        //         () -> -m_keyboard.getRawAxis(1),
+        //         () -> m_keyboard.getRawAxis(2),
+        //         () -> 0
+        //     ).onlyIf(
+        //         () -> DriverStation.isTeleop() || DriverStation.isTest()
+        //     )
+        // );
     }
 
     public Command getAutonomousCommand() {
