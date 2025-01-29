@@ -11,6 +11,10 @@ import frc.robot.util.FieldConstants.CoralStationConstants.CoralStation;
 import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 
 public class AutoBuilder {
+    public static Command none() {
+        return Commands.none();
+    }
+
     public static Command testAuto(
         SwerveSubsystem swerve,
         ElevatorSubsystem elevator,

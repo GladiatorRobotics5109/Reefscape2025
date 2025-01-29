@@ -4,10 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.util.FieldConstants;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 
 import org.littletonrobotics.junction.Logger;
@@ -15,7 +11,6 @@ import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AutomatedTeleopControllerListenerCommand;
 import frc.robot.commands.ElevatorCommandFactory;
@@ -33,7 +28,7 @@ public class RobotContainer {
 
     private final CommandXboxController m_driverController;
     // private final CommandPS4Controller m_driverController;
-    private final CommandGenericHID m_keyboard;
+    // private final CommandGenericHID m_keyboard;
 
     private final CommandXboxController m_operatorController;
 
@@ -48,7 +43,9 @@ public class RobotContainer {
         m_driverController = new CommandXboxController(Constants.DriveTeamConstants.kDriveControllerPort);
         m_operatorController = new CommandXboxController(Constants.DriveTeamConstants.kOperatorControllerPort);
         // m_driverController = new CommandPS5Controller(0);
-        m_keyboard = new CommandGenericHID(0);
+        // m_keyboard = new CommandGenericHID(0);
+
+        AutoSelector.init(m_swerve, m_elevator, m_endEffector);
 
         configureBindings();
 
@@ -102,16 +99,7 @@ public class RobotContainer {
         // );
     }
 
-    public Command getAutonomousCommand() {
-        FieldConstants.ReefConstants.ReefBranch branch = FieldConstants.ReefConstants.ReefBranch.kL4G1;
-        return Commands.sequence(
-            SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(5, 1, Rotation2d.fromDegrees(0))),
-            Commands.waitSeconds(4),
-            branch.makeScoreCommand(m_swerve, m_elevator, m_endEffector)
-        );
-        //        return SwerveCommandFactory.makeSysIdTurn(m_swerve);
-        //        return AutoBuilder.testAuto(m_swerve, m_elevator, m_endEffector);
-    }
+    public Command getAutonomousCommand() { return AutoSelector.get(); }
 
     public Command getTeleopCommand() {
         return new AutomatedTeleopControllerListenerCommand(

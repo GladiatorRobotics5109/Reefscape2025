@@ -42,11 +42,11 @@ public class ElevatorIOSimTalonFX extends ElevatorIOTalonFX {
         double rotorPositionRot = Conversions.elevatorMetersToElevatorRotations(m_sim.getPositionMeters())
             * ElevatorConstants.kGearRatio;
         simState.setRawRotorPosition(rotorPositionRot);
-        followerSimState.setRawRotorPosition(-rotorPositionRot);
+        followerSimState.setRawRotorPosition(rotorPositionRot);
 
         double rotorVelRotPerSec = Conversions.elevatorMetersToElevatorRotations(m_sim.getVelocityMetersPerSecond())
             * ElevatorConstants.kGearRatio;
         simState.setRotorVelocity(rotorVelRotPerSec);
-        followerSimState.setRotorVelocity(-rotorVelRotPerSec);
+        followerSimState.setRotorVelocity(rotorVelRotPerSec);
     }
 }

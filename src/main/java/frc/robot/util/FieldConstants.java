@@ -1,6 +1,7 @@
 package frc.robot.util;
 
 import java.util.List;
+import java.util.Optional;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 
@@ -32,6 +33,17 @@ public class FieldConstants {
             One,
             Two;
 
+            public static Optional<ReefIndex> fromChar(char c) {
+                switch (c) {
+                    case '1':
+                        return Optional.of(One);
+                    case '2':
+                        return Optional.of(Two);
+                    default:
+                        return Optional.empty();
+                }
+            }
+
             public int getIndex() { return this == One ? 1 : 2; }
 
             @Override
@@ -45,6 +57,21 @@ public class FieldConstants {
             L2(kReefL2HeightMeters),
             L3(kReefL3HeightMeters),
             L4(kReefL4HeightMeters);
+
+            public static Optional<ReefHeight> fromChar(char c) {
+                switch (c) {
+                    case '1':
+                        return Optional.of(L1);
+                    case '2':
+                        return Optional.of(L2);
+                    case '3':
+                        return Optional.of(L3);
+                    case '4':
+                        return Optional.of(L4);
+                    default:
+                        return Optional.empty();
+                }
+            }
 
             private final double m_height;
 
@@ -62,6 +89,25 @@ public class FieldConstants {
             H(3),
             I(4),
             J(5);
+
+            public static Optional<ReefFace> fromChar(char c) {
+                switch (c) {
+                    case 'E':
+                        return Optional.of(E);
+                    case 'F':
+                        return Optional.of(F);
+                    case 'G':
+                        return Optional.of(G);
+                    case 'H':
+                        return Optional.of(H);
+                    case 'I':
+                        return Optional.of(I);
+                    case 'J':
+                        return Optional.of(J);
+                    default:
+                        return Optional.empty();
+                }
+            }
 
             private int m_index;
 
@@ -139,6 +185,57 @@ public class FieldConstants {
             public static final ReefBranch kL4I2 = new ReefBranch(ReefHeight.L4, ReefFace.I, ReefIndex.Two);
             public static final ReefBranch kL4J1 = new ReefBranch(ReefHeight.L4, ReefFace.J, ReefIndex.One);
             public static final ReefBranch kL4J2 = new ReefBranch(ReefHeight.L4, ReefFace.J, ReefIndex.Two);
+
+            public static final ReefBranch[] kValues = new ReefBranch[] {
+                ReefBranch.kL2E1,
+                ReefBranch.kL2E2,
+                ReefBranch.kL2F1,
+                ReefBranch.kL2F2,
+                ReefBranch.kL2G1,
+                ReefBranch.kL2G2,
+                ReefBranch.kL2H1,
+                ReefBranch.kL2H2,
+                ReefBranch.kL2I1,
+                ReefBranch.kL2I2,
+                ReefBranch.kL2J1,
+                ReefBranch.kL2J2,
+
+                ReefBranch.kL3E1,
+                ReefBranch.kL3E2,
+                ReefBranch.kL3F1,
+                ReefBranch.kL3F2,
+                ReefBranch.kL3G1,
+                ReefBranch.kL3G2,
+                ReefBranch.kL3H1,
+                ReefBranch.kL3H2,
+                ReefBranch.kL3I1,
+                ReefBranch.kL3I2,
+                ReefBranch.kL3J1,
+                ReefBranch.kL3J2,
+
+                ReefBranch.kL4E1,
+                ReefBranch.kL4E2,
+                ReefBranch.kL4F1,
+                ReefBranch.kL4F2,
+                ReefBranch.kL4G1,
+                ReefBranch.kL4G2,
+                ReefBranch.kL4H1,
+                ReefBranch.kL4H2,
+                ReefBranch.kL4I1,
+                ReefBranch.kL4I2,
+                ReefBranch.kL4J1,
+                ReefBranch.kL4J2,
+            };
+
+            public static final Optional<ReefBranch> fromString(String str) {
+                Optional<ReefHeight> height = ReefHeight.fromChar(str.charAt(1));
+                Optional<ReefFace> face = ReefFace.fromChar(str.charAt(2));
+                Optional<ReefIndex> index = ReefIndex.fromChar(str.charAt(3));
+
+                if (height.isEmpty() || face.isEmpty() || index.isEmpty()) return Optional.empty();
+
+                return Optional.of(new ReefBranch(height.get(), face.get(), index.get()));
+            }
 
             private final Translation3d m_branchPosition;
             private final PathPlannerPath m_innerPath;

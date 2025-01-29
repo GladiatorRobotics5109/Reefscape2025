@@ -280,7 +280,7 @@ public final class Constants {
             20.0,
             0.0,
             0.0,
-            25.5
+            0.06
         );
 
         /** Distance from the top face of the bottom bar of the second stage to the floor */
