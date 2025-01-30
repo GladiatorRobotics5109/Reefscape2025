@@ -371,11 +371,28 @@ public class FieldConstants {
             public String toString() {
                 return Integer.toString(getIndex());
             }
+
+            public static Optional<CoralStationIndex> fromChar(char c) {
+                return switch (c) {
+                    case '1' -> Optional.of(One);
+                    case '2' -> Optional.of(Two);
+                    case '3' -> Optional.of(Three);
+                    default -> Optional.empty();
+                };
+            }
         }
 
         public static enum CoralStationSide {
             C, // Close
-            F // Far
+            F; // Far
+
+            public static Optional<CoralStationSide> fromChar(char c) {
+                return switch (c) {
+                    case 'C' -> Optional.of(C);
+                    case 'F' -> Optional.of(F);
+                    default -> Optional.empty();
+                };
+            }
         }
 
         public static final class CoralStation {
@@ -386,6 +403,16 @@ public class FieldConstants {
             public static final CoralStation kF1 = new CoralStation(CoralStationSide.F, CoralStationIndex.One);
             public static final CoralStation kF2 = new CoralStation(CoralStationSide.F, CoralStationIndex.Two);
             public static final CoralStation kF3 = new CoralStation(CoralStationSide.F, CoralStationIndex.Three);
+
+            public static final CoralStation[] kValues = new CoralStation[] {
+                CoralStation.kC1,
+                CoralStation.kC2,
+                CoralStation.kC3,
+
+                CoralStation.kF1,
+                CoralStation.kF2,
+                CoralStation.kF3,
+            };
 
             private final CoralStationSide m_side;
             private final CoralStationIndex m_index;
@@ -430,6 +457,15 @@ public class FieldConstants {
             @Override
             public String toString() {
                 return m_side.toString() + m_index.toString();
+            }
+
+            public static Optional<CoralStation> fromString(String str) {
+                Optional<CoralStationSide> side = CoralStationSide.fromChar(str.charAt(0));
+                Optional<CoralStationIndex> index = CoralStationIndex.fromChar(str.charAt(1));
+
+                if (side.isEmpty() || index.isEmpty()) return Optional.empty();
+
+                return Optional.of(new CoralStation(side.get(), index.get()));
             }
         }
 

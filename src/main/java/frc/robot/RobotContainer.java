@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 
 import org.littletonrobotics.junction.Logger;
@@ -99,7 +101,11 @@ public class RobotContainer {
         // );
     }
 
-    public Command getAutonomousCommand() { return AutoSelector.get(); }
+    public Command getAutonomousCommand() {
+        return AutoSelector.get().beforeStarting(
+            SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(8, 8, Rotation2d.k180deg))
+        );
+    }
 
     public Command getTeleopCommand() {
         return new AutomatedTeleopControllerListenerCommand(
