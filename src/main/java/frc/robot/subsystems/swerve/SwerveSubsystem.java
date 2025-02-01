@@ -165,7 +165,6 @@ public class SwerveSubsystem extends SubsystemBase {
             (speeds, feedForward) -> drive(speeds, false),
             new PPHolonomicDriveController(SwerveConstants.kPPTranslationPID, SwerveConstants.kPPRotaitonPID),
             SwerveConstants.kPPConfig,
-            // TODO: test this
             () -> Util.getAlliance() == Alliance.Red, // Flip if red alliance
             this
         );

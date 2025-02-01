@@ -58,7 +58,6 @@ public class Conversions extends ConversionsBase {
         );
     }
 
-    // TODO: check this
     public static double elevatorMetersToElevatorRotations(double m) {
         return ConversionsBase.radiansToRotations(
             ConversionsBase.metersToRadians(m, ElevatorConstants.kSprocketRadiusMeters, 1.0)

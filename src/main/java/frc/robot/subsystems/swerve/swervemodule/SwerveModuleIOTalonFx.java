@@ -57,7 +57,6 @@ public class SwerveModuleIOTalonFx implements SwerveModuleIO {
         driveConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
         driveConfigs.CurrentLimits.SupplyCurrentLimit = SwerveModuleConstants.kDriveSupplyCurrentLimit;
         driveConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
-        // TODO: test new ratios
         driveConfigs.Feedback.SensorToMechanismRatio = SwerveModuleConstants.kDriveGearRatio.asDouble();
         // Need to convert to rations here bc TalonFX native unit is rotations
         driveConfigs.Slot0.kP = Conversions.radiansToRotations(SwerveModuleConstants.kDrivePID.kp());

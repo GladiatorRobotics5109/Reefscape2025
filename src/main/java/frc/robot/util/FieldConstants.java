@@ -316,7 +316,6 @@ public class FieldConstants {
             }
         }
 
-        // TODO: check these
         public static final double kReefDiameterMeters = Conversions.inchesToMeters(65.5);
         public static final double kReefRadiusMeters = kReefDiameterMeters / 2;
         // Distance form reef base to branch at L2 and L3

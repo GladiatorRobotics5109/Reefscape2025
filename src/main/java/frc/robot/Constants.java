@@ -66,7 +66,7 @@ public final class Constants {
             public static final int kBackRightTurnPort = 30;
 
             public static final Translation2d kModulePosFL = new Translation2d(0.290449, 0.290449);
-            public static final Translation2d kModulePosFR = new Translation2d(0.290449, -0.290449);;
+            public static final Translation2d kModulePosFR = new Translation2d(0.290449, -0.290449);
             public static final Translation2d kModulePosBL = new Translation2d(-0.290449, 0.290449);
             public static final Translation2d kModulePosBR = new Translation2d(-0.290449, -0.290449);
 
@@ -247,10 +247,9 @@ public final class Constants {
 
         public static final String kLogPath = "Subsystems/Vision";
 
-        // TODO: update this
         public static final AprilTagFieldLayout kAprilTagFieldLayout = AprilTagFieldLayout.loadField(
-            AprilTagFields.kDefaultField
-        );;
+            AprilTagFields.k2025Reefscape
+        );
     }
 
     public static final class ElevatorConstants {
