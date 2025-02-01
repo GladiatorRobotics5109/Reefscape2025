@@ -302,6 +302,7 @@ public final class Constants {
 
     public static final class EndEffectorConstants {
         // The maximum distance the chassis can be from the auto score location to score
+        public static final int kMotorPort = 69; //MAKE SURE TO CHANGE THIS!!
         public static final double kAutoScoreMaxDistMeters = 0.02;
         public static final double kAutoScoreMaxAngleRadians = Conversions.degreesToRadians(5);
         public static final double kAutoScoreMaxLinearSpeedMetersPerSecond = 0.1;
@@ -315,5 +316,10 @@ public final class Constants {
     public static final class LEDConstants {
         public static final int kCANdlePort = 60;
         public static final int kLEDCount = 10;
+    }
+
+    public static final class BallsIntakeConstants {
+        public static final double kScorePower = 0.5;
+        public static final int kMotorPort = 69;//MAKE SURE TO CHANGE THIS!!
     }
 }
