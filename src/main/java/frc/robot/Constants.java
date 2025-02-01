@@ -76,19 +76,8 @@ public final class Constants {
                 0,
                 0
             );
-            // public static final PIDConstants kDrivePID = new PIDConstants(
-            // 0.026251 * kDriveGearRatio.asDouble(), // Volts per m/s error
-            // 0,
-            // 0
-            // );
 
-            // public static final FeedforwardConstants kDriveFeedforward = new FeedforwardConstants(0.15, 9.5 / 3);
             public static final FeedforwardConstants kDriveFeedforward = new FeedforwardConstants(0.14, 6);
-            // public static final FeedforwardConstants kDriveFeedForward = new FeedforwardConstants(
-            // 0.0091035 * kDriveGearRatio.asDouble(),
-            // 0.1546 * kDriveGearRatio.asDouble(),
-            // 0.0055267 * kDriveGearRatio.asDouble()
-            // );
 
             public static final PIDConstants kTurnPID = new PIDConstants(
                 12 / Conversions.rotationsToRadians(0.01), // Volts per radian error
@@ -102,25 +91,7 @@ public final class Constants {
                 PIDConstants.kVelocityTolerance
             );
 
-            // public static final PIDConstants kTurnPID = new PIDConstants(
-            // 0.096535 * kTurnGearRatio,
-            // 0,
-            // 0,
-            // PIDConstants.kIZone,
-            // true,
-            // -Math.PI,
-            // Math.PI,
-            // PIDConstants.kPositionTolerance,
-            // PIDConstants.kVelocityTolerance
-            // );
-
             public static final FeedforwardConstants kTurnFeedforward = new FeedforwardConstants(0, 0);
-
-            // public static final FeedforwardConstants kTurnFeedforward = new FeedforwardConstants(
-            // 0,
-            // 0.24103 * kTurnGearRatio,
-            // 0.013805 * kTurnGearRatio
-            // );
 
             public static final int kDriveStatorCurrentLimit = 92;
             public static final int kDriveSupplyCurrentLimit = 40;

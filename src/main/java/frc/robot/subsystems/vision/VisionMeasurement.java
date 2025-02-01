@@ -6,7 +6,7 @@ import java.util.List;
 import edu.wpi.first.math.geometry.Pose3d;
 import frc.robot.subsystems.vision.VisionIO.VisionIOInputs;
 
-public record VisionMeasurement(Pose3d estimatedPose, double timestmap, Pose3d[] targetsUsed) {
+public record VisionMeasurement(Pose3d estimatedPose, double timestamp, Pose3d[] targetsUsed) {
     public static List<VisionMeasurement> fromInputs(VisionIOInputs inputs) {
         List<VisionMeasurement> measurements = new ArrayList<>(inputs.posees.size());
 

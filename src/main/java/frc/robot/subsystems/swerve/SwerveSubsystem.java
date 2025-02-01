@@ -298,7 +298,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public void updatePose() {
         VisionMeasurement[] measurements = RobotState.getVisionMeasurements();
         for (VisionMeasurement measurement : measurements) {
-            m_poseEstimator.addVisionMeasurement(measurement.estimatedPose().toPose2d(), measurement.timestmap());
+            m_poseEstimator.addVisionMeasurement(measurement.estimatedPose().toPose2d(), measurement.timestamp());
         }
 
         m_poseEstimator.update(m_gyro.getYaw(), getModulePositions());
