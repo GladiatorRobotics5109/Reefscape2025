@@ -24,6 +24,8 @@ public final class SwerveTeleopCommand extends Command {
         DoubleSupplier rot,
         DoubleSupplier speedModifier
     ) {
+        setName("SwerveTeleopCommand");
+
         m_swerve = swerve;
         addRequirements(m_swerve);
         m_config = config;
@@ -35,8 +37,6 @@ public final class SwerveTeleopCommand extends Command {
         m_xRateLimit = new SlewRateLimiter(20);
         m_yRateLimit = new SlewRateLimiter(20);
         m_rotRateLimit = new SlewRateLimiter(10);
-
-        setName("SwerveTeleopCommand");
     }
 
     @Override

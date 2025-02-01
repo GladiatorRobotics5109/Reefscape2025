@@ -30,7 +30,7 @@ public class AutoBuilder {
             ReefBranch.kL2E1.makeScoreCommand(swerve, elevator, endEffectorSubsystem),
             CoralStation.kC2.makeIntakeCommand(swerve, elevator, endEffectorSubsystem),
             ReefBranch.kL3I2.makeScoreCommand(swerve, elevator, endEffectorSubsystem)
-        );
+        ).withName("AutoBuilder::testAuto");
     }
 
     public static Command simpleTaxiForward(SwerveSubsystem swerve) {
@@ -38,6 +38,6 @@ public class AutoBuilder {
             SwerveCommandFactory.drive(swerve, 0.0, 1.0, 0.0, false),
             Commands.waitSeconds(1),
             SwerveCommandFactory.stopAndX(swerve)
-        );
+        ).withName("AutoBuilder::simpleTaxiForward");
     }
 }

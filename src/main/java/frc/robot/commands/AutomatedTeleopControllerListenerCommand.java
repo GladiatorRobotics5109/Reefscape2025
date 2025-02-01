@@ -33,57 +33,41 @@ public class AutomatedTeleopControllerListenerCommand extends Command {
     }
 
     private static Optional<ReefHeight> controllerButtonToReefHeight(ControllerButton b) {
-        switch (b) {
-            case POVDown:
-                return Optional.of(ReefHeight.L2);
-            case POVLeft:
-            case POVRight:
-                return Optional.of(ReefHeight.L3);
-            case POVUp:
-                return Optional.of(ReefHeight.L4);
-            default:
-                return Optional.empty();
-        }
+        return switch (b) {
+            case POVDown -> Optional.of(ReefHeight.L2);
+            case POVLeft, POVRight -> Optional.of(ReefHeight.L3);
+            case POVUp -> Optional.of(ReefHeight.L4);
+            default -> Optional.empty();
+        };
     }
 
     private static Optional<ReefFace> controllerButtonsToReefFace(ControllerButton b1, ControllerButton b2) {
         if (b1 == ControllerButton.A) {
-            switch (b2) {
-                case A:
-                    return Optional.of(ReefFace.E);
-                case X:
-                    return Optional.of(ReefFace.F);
-                case B:
-                    return Optional.of(ReefFace.J);
-                default:
-                    return Optional.empty();
-            }
+            return switch (b2) {
+                case A -> Optional.of(ReefFace.E);
+                case X -> Optional.of(ReefFace.F);
+                case B -> Optional.of(ReefFace.J);
+                default -> Optional.empty();
+            };
         }
         else if (b1 == ControllerButton.Y) {
-            switch (b2) {
-                case Y:
-                    return Optional.of(ReefFace.H);
-                case X:
-                    return Optional.of(ReefFace.G);
-                case B:
-                    return Optional.of(ReefFace.I);
-                default:
-                    return Optional.empty();
-            }
+            return switch (b2) {
+                case Y -> Optional.of(ReefFace.H);
+                case X -> Optional.of(ReefFace.G);
+                case B -> Optional.of(ReefFace.I);
+                default -> Optional.empty();
+            };
         }
 
         return Optional.empty();
     }
 
     private static Optional<ReefIndex> controllerButtonToReefIndex(ControllerButton b) {
-        switch (b) {
-            case X:
-                return Optional.of(ReefIndex.One);
-            case B:
-                return Optional.of(ReefIndex.Two);
-            default:
-                return Optional.empty();
-        }
+        return switch (b) {
+            case X -> Optional.of(ReefIndex.One);
+            case B -> Optional.of(ReefIndex.Two);
+            default -> Optional.empty();
+        };
     }
 
     private final ElevatorSubsystem m_elevator;
@@ -103,6 +87,8 @@ public class AutomatedTeleopControllerListenerCommand extends Command {
         CommandXboxController driverController,
         CommandXboxController operatorController
     ) {
+        setName("AutomatedTeleopControllerListenerCommand");
+
         m_elevator = elevator;
         m_swerve = swerve;
         m_endEffector = endEffector;

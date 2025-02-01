@@ -40,14 +40,12 @@ public class RobotContainer {
         m_elevator = new ElevatorSubsystem();
         m_endEffector = new EndEffectorSubsystem();
         RobotState.init(m_swerve, m_vision, m_elevator);
+        AutoSelector.init(m_swerve, m_elevator, m_endEffector);
 
         // m_driverController = new CommandPS4Controller(Constants.DriveTeamConstants.kDriveControllerPort);
         m_driverController = new CommandXboxController(Constants.DriveTeamConstants.kDriveControllerPort);
         m_operatorController = new CommandXboxController(Constants.DriveTeamConstants.kOperatorControllerPort);
         // m_driverController = new CommandPS5Controller(0);
-        // m_keyboard = new CommandGenericHID(0);
-
-        AutoSelector.init(m_swerve, m_elevator, m_endEffector);
 
         configureBindings();
 
@@ -79,26 +77,11 @@ public class RobotContainer {
         m_driverController.y().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3));
         m_driverController.x().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4));
 
-        // TODO: impliment this
+        // TODO: implement this
         // L1 - intake
         // R1 - outake
         // Right d-pad - climb
         // Left d-pad - abort climb
-
-        // Keyboard controls
-        // m_swerve.setDefaultCommand(
-        //     SwerveCommandFactory.makeTeleop(
-        //         m_swerve,
-        //         // () -> 0,
-        //         // () -> 1,
-        //         () -> -m_keyboard.getRawAxis(0),
-        //         () -> -m_keyboard.getRawAxis(1),
-        //         () -> m_keyboard.getRawAxis(2),
-        //         () -> 0
-        //     ).onlyIf(
-        //         () -> DriverStation.isTeleop() || DriverStation.isTest()
-        //     )
-        // );
     }
 
     public Command getAutonomousCommand() {

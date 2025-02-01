@@ -5,7 +5,6 @@ import org.littletonrobotics.junction.Logger;
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.PeriodicUtil;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.ElevatorConstants;
@@ -49,10 +48,4 @@ public class RobotState {
         Logger.recordOutput(ElevatorConstants.kLogPath + "/currentPositionMeters", getElevatorCurrentPositionMeters());
         Logger.recordOutput(ElevatorConstants.kLogPath + "/desiredPositionMeters", getElevatorDesiredPositionMeters());
     }
-
-    public static record SwerveSetpoint(Pose2d position, Rotation2d heading) {}
-
-    public static record ElevatorSetpoint(double positionMeters) {}
-
-    public static record RobotSetpoint(SwerveSetpoint swerveSetpoint, ElevatorSetpoint elevatorSetpoint) {}
 }
