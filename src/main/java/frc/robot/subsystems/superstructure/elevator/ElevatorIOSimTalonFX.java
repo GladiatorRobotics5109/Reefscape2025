@@ -29,7 +29,7 @@ public class ElevatorIOSimTalonFX extends ElevatorIOTalonFX {
     }
 
     @Override
-    public void updateSim() {
+    public void periodic() {
         TalonFXSimState simState = m_motor.getSimState();
         TalonFXSimState followerSimState = m_followerMotor.getSimState();
 

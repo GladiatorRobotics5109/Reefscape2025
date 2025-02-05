@@ -13,11 +13,11 @@ import org.littletonrobotics.junction.Logger;
 
 public class ElevatorCommandFactory {
     public static Command toElevatorRelativeHeight(ElevatorSubsystem elevator, DoubleSupplier positionMeters) {
-        return elevator.runOnce(() -> elevator.setDesiredPositionElevatorRelative(positionMeters.getAsDouble()));
+        return elevator.runOnce(() -> elevator.setDesiredPositionElevator(positionMeters.getAsDouble()));
     }
 
     public static Command toReefHeight(ElevatorSubsystem elevator, ReefHeight height) {
-        return elevator.runOnce(() -> elevator.setDesiredPositionEndEffectorRelative(height));
+        return elevator.runOnce(() -> elevator.setDesiredPositionEndEffector(height));
     }
 
     public static Command toReefBranch(ElevatorSubsystem elevator, ReefBranch branch) {

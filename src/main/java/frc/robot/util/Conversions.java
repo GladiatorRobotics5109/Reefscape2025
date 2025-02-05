@@ -64,6 +64,10 @@ public class Conversions extends ConversionsBase {
         );
     }
 
+    public static double elevatorMetersToElevatorRadians(double m) {
+        return ConversionsBase.metersToRadians(m, ElevatorConstants.kSprocketRadiusMeters, 1.0);
+    }
+
     public static double elevatorRotationsToElevatorMeters(double rot) {
         return ConversionsBase.radiansToMeters(
             ConversionsBase.rotationsToRadians(rot),

@@ -1,5 +1,8 @@
 package frc.robot.subsystems.superstructure.elevator;
 
+import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
@@ -24,7 +27,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final LoggedMechanismLigament2d m_mechElevator;
     private final LoggedMechanismLigament2d m_mechEndEffector;
 
+    private final ProfiledPIDController m_pid;
+    private final ElevatorFeedforward m_feedforward;
+
+    private final boolean m_useMotorPID;
+
     private double m_desiredPositionMeters;
+    private boolean m_hasDesiredPosition;
 
     public ElevatorSubsystem() {
         switch (Constants.kCurrentMode) {
@@ -66,31 +75,47 @@ public class ElevatorSubsystem extends SubsystemBase {
         );
 
         m_desiredPositionMeters = 0.0;
+
+        m_pid = new ProfiledPIDController(
+            ElevatorConstants.kPID.kp(),
+            ElevatorConstants.kPID.ki(),
+            ElevatorConstants.kPID.kd(),
+            new TrapezoidProfile.Constraints(
+                ElevatorConstants.kElevatorCruiseVelocityRadPerSec,
+                ElevatorConstants.kElevatorAccelerationRadPerSecPerSec
+            )
+        );
+
+        m_feedforward = ElevatorConstants.kFeedForward.getElevatorFeedforward();
+
+        m_useMotorPID = ElevatorConstants.kUseMotorPID;
     }
 
     public void setVoltage(double volts) {
+        m_hasDesiredPosition = false;
         m_io.setVoltage(volts);
     }
 
-    public void setDesiredPositionElevatorRelative(double positionMeters) {
+    public void setDesiredPositionElevator(double positionMeters) {
+        m_hasDesiredPosition = true;
         m_desiredPositionMeters = MathUtil.clamp(positionMeters, 0.0, ElevatorConstants.kElevatorMaxPositionMeters);
         m_io.setPosition(Conversions.elevatorMetersToElevatorRotations(m_desiredPositionMeters));
     }
 
-    public void setDesiredPositionEndEffectorRelative(double positionMeters) {
-        setDesiredPositionElevatorRelative(Conversions.endEffectorMetersToElevatorMeters(positionMeters));
+    public void setDesiredPositionEndEffector(double positionMeters) {
+        setDesiredPositionElevator(Conversions.endEffectorMetersToElevatorMeters(positionMeters));
     }
 
-    public void setDesiredPositionEndEffectorRelative(ReefHeight height) {
-        setDesiredPositionEndEffectorRelative(height.getHeight());
+    public void setDesiredPositionEndEffector(ReefHeight height) {
+        setDesiredPositionEndEffector(height.getHeight());
     }
 
-    public double getCurrentPositionElevatorRelative() {
+    public double getCurrentPositionElevator() {
         return Conversions.elevatorRotationsToElevatorMeters(m_inputs.positionRad);
     }
 
-    public double getCurrentPositionEndEffectorRelative() {
-        return Conversions.endEffectorMetersToElevatorMeters(getCurrentPositionElevatorRelative());
+    public double getCurrentPositionEndEffector() {
+        return Conversions.endEffectorMetersToElevatorMeters(getCurrentPositionElevator());
     }
 
     public double getDesiredPositionElevatorRelative() { return m_desiredPositionMeters; }
@@ -98,7 +123,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     public boolean atDesiredPosition() {
         return MathUtil.isNear(
             getDesiredPositionElevatorRelative(),
-            getCurrentPositionElevatorRelative(),
+            getCurrentPositionElevator(),
             ElevatorConstants.kPositionToleranceMeters
         );
     }
@@ -111,16 +136,24 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        m_io.updateSim();
+        m_io.periodic();
         m_io.updateInputs(m_inputs);
         Logger.processInputs(ElevatorConstants.kLogPath, m_inputs);
 
         if (DriverStation.isDisabled()) {
-            m_io.setVoltage(0);
+            setVoltage(0);
+        }
+        else if (m_hasDesiredPosition && m_useMotorPID) {
+            m_io.setVoltage(
+                m_pid.calculate(
+                    m_inputs.positionRad,
+                    Conversions.elevatorMetersToElevatorRadians(m_desiredPositionMeters)
+                ) + m_feedforward.calculate(m_pid.getSetpoint().velocity)
+            );
         }
 
         // Update mechanism
-        m_mechElevator.setLength(getCurrentPositionElevatorRelative());
+        m_mechElevator.setLength(getCurrentPositionElevator());
         Logger.recordOutput(ElevatorConstants.kLogPath + "/Mechanism", m_mech);
     }
 }

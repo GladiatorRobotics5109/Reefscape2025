@@ -31,5 +31,5 @@ public interface ElevatorIO {
 
     default void setVoltage(double volts) {}
 
-    default void updateSim() {}
+    default void periodic() {}
 }

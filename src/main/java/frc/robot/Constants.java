@@ -230,6 +230,8 @@ public final class Constants {
         public static final boolean kInvertMotor = true;
         public static final int kFollowerPort = 21;
 
+        public static final boolean kUseMotorPID = false;
+
         public static final boolean kUseFOC = true;
 
         public static final double kSupplyCurrentLimit = 40.0;
@@ -240,10 +242,10 @@ public final class Constants {
 
         public static final double kElevatorMaxPositionMeters = Conversions.inchesToMeters(69.736220);
 
-        public static final double kUpLimitMotorRotations = Conversions.elevatorMetersToElevatorRotations(
+        public static final double kForwardSoftLimit = Conversions.elevatorMetersToElevatorRotations(
             kElevatorMaxPositionMeters
         );
-        public static final double kDownLimitMotorRotations = 0.0;
+        public static final double kReverseSoftLimit = 0.0;
 
         public static final PIDConstants kPID = new PIDConstants(20, 0.0, 0.0);
         public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(
@@ -251,6 +253,10 @@ public final class Constants {
             0.0,
             0.0,
             0.06
+        );
+        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1);
+        public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
+            10
         );
 
         /** Distance from the top face of the bottom bar of the second stage to the floor */

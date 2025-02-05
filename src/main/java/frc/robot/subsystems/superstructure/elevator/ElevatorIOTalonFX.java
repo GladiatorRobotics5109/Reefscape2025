@@ -19,6 +19,7 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.util.Conversions;
 
 public class ElevatorIOTalonFX implements ElevatorIO {
     protected final TalonFX m_motor;
@@ -72,13 +73,21 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         configs.Slot0.kA = ElevatorConstants.kFeedForward.ka();
 
         configs.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-        configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = ElevatorConstants.kUpLimitMotorRotations;
+        configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = ElevatorConstants.kForwardSoftLimit;
         configs.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-        configs.SoftwareLimitSwitch.ReverseSoftLimitThreshold = ElevatorConstants.kDownLimitMotorRotations;
+        configs.SoftwareLimitSwitch.ReverseSoftLimitThreshold = ElevatorConstants.kReverseSoftLimit;
 
         configs.MotorOutput.Inverted = ElevatorConstants.kInvertMotor
             ? InvertedValue.CounterClockwise_Positive
             : InvertedValue.Clockwise_Positive;
+
+        configs.MotionMagic.MotionMagicCruiseVelocity = Conversions.radiansToRotations(
+            ElevatorConstants.kElevatorCruiseVelocityRadPerSec
+        );
+        configs.MotionMagic.MotionMagicAcceleration = Conversions.radiansToRotations(
+            ElevatorConstants.kElevatorAccelerationRadPerSecPerSec
+        );
+
         m_motor.getConfigurator().apply(configs);
         m_followerMotor.getConfigurator().apply(configs);
 

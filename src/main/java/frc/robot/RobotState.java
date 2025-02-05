@@ -35,7 +35,7 @@ public class RobotState {
 
     public static ChassisSpeeds getSwerveCurrentChassisSpeeds() { return s_swerve.getCurrentChassisSpeeds(); }
 
-    public static double getElevatorCurrentPositionMeters() { return s_elevator.getCurrentPositionElevatorRelative(); }
+    public static double getElevatorCurrentPositionMeters() { return s_elevator.getCurrentPositionElevator(); }
 
     public static double getElevatorDesiredPositionMeters() { return s_elevator.getDesiredPositionElevatorRelative(); }
 
