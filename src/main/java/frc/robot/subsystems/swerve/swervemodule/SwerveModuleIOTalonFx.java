@@ -55,9 +55,14 @@ public class SwerveModuleIOTalonFx implements SwerveModuleIO {
         TalonFXConfiguration driveConfigs = new TalonFXConfiguration();
         driveConfigs.CurrentLimits.StatorCurrentLimit = SwerveModuleConstants.kDriveStatorCurrentLimit;
         driveConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
-        driveConfigs.CurrentLimits.SupplyCurrentLimit = SwerveModuleConstants.kDriveSupplyCurrentLimit;
+        driveConfigs.CurrentLimits.SupplyCurrentLimit = SwerveModuleConstants.kDriveSupplyCurrentLowerLimit;
+        // Should be able to get away w ~1 second
+        driveConfigs.CurrentLimits.SupplyCurrentLowerTime = 1.0;
+        driveConfigs.CurrentLimits.SupplyCurrentLowerLimit = SwerveModuleConstants.kDriveSupplyCurrentLimit;
         driveConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
+        
         driveConfigs.Feedback.SensorToMechanismRatio = SwerveModuleConstants.kDriveGearRatio.asDouble();
+        
         // Need to convert to rations here bc TalonFX native unit is rotations
         driveConfigs.Slot0.kP = Conversions.radiansToRotations(SwerveModuleConstants.kDrivePID.kp());
         driveConfigs.Slot0.kI = Conversions.radiansToRotations(SwerveModuleConstants.kDrivePID.ki());
@@ -66,12 +71,15 @@ public class SwerveModuleIOTalonFx implements SwerveModuleIO {
         driveConfigs.Slot0.kS = Conversions.radiansToRotations(SwerveModuleConstants.kDriveFeedforward.ks());
         driveConfigs.Slot0.kV = Conversions.radiansToRotations(SwerveModuleConstants.kDriveFeedforward.kv());
         driveConfigs.Slot0.kA = Conversions.radiansToRotations(SwerveModuleConstants.kDriveFeedforward.ka());
+        
         m_drive.getConfigurator().apply(driveConfigs);
 
         TalonFXConfiguration turnConfigs = new TalonFXConfiguration();
         turnConfigs.CurrentLimits.SupplyCurrentLimit = SwerveModuleConstants.kTurnSupplyCurrentLimit;
         turnConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
+        
         turnConfigs.Feedback.SensorToMechanismRatio = SwerveModuleConstants.kTurnGearRatio;
+        
         turnConfigs.ClosedLoopGeneral.ContinuousWrap = true;
         // Need to convert to rations here bc TalonFX native unit is rotations
         turnConfigs.Slot0.kP = Conversions.radiansToRotations(SwerveModuleConstants.kTurnPID.kp());
@@ -81,6 +89,7 @@ public class SwerveModuleIOTalonFx implements SwerveModuleIO {
         turnConfigs.Slot0.kS = Conversions.radiansToRotations(SwerveModuleConstants.kTurnFeedforward.ks());
         turnConfigs.Slot0.kV = Conversions.radiansToRotations(SwerveModuleConstants.kTurnFeedforward.kv());
         turnConfigs.Slot0.kA = Conversions.radiansToRotations(SwerveModuleConstants.kTurnFeedforward.ka());
+        
         m_turn.getConfigurator().apply(turnConfigs);
 
         m_driveVelocity = new VelocityVoltage(0);

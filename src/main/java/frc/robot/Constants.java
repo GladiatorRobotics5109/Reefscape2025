@@ -94,7 +94,8 @@ public final class Constants {
             public static final FeedforwardConstants kTurnFeedforward = new FeedforwardConstants(0, 0);
 
             public static final int kDriveStatorCurrentLimit = 92;
-            public static final int kDriveSupplyCurrentLimit = 40;
+            public static final int kDriveSupplyCurrentLowerLimit = 40;
+            public static final int kDriveSupplyCurrentLimit = 60;
 
             public static final int kTurnSupplyCurrentLimit = 30;
 
@@ -142,7 +143,7 @@ public final class Constants {
                 SwerveModuleConstants.kUseFOC
                     ? DCMotor.getKrakenX60Foc(1).withReduction(SwerveModuleConstants.kDriveGearRatio.asDouble())
                     : DCMotor.getKrakenX60(1).withReduction(SwerveModuleConstants.kDriveGearRatio.asDouble()),
-                SwerveModuleConstants.kDriveSupplyCurrentLimit,
+                SwerveModuleConstants.kDriveSupplyCurrentLowerLimit,
                 1
             ),
             SwerveModuleConstants.kModulePosFL,
