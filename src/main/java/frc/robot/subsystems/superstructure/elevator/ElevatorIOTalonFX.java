@@ -62,20 +62,24 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
         configs.Feedback.SensorToMechanismRatio = ElevatorConstants.kGearRatio;
 
-        configs.Slot0.kP = ElevatorConstants.kPID.kp();
-        configs.Slot0.kI = ElevatorConstants.kPID.ki();
-        configs.Slot0.kD = ElevatorConstants.kPID.kd();
+        configs.Slot0.kP = Conversions.radiansToRotations(ElevatorConstants.kPID.kp());
+        configs.Slot0.kI = Conversions.radiansToRotations(ElevatorConstants.kPID.ki());
+        configs.Slot0.kD = Conversions.radiansToRotations(ElevatorConstants.kPID.kd());
         configs.Slot0.GravityType = GravityTypeValue.Elevator_Static;
         configs.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;
-        configs.Slot0.kG = ElevatorConstants.kFeedForward.kg();
-        configs.Slot0.kS = ElevatorConstants.kFeedForward.ks();
-        configs.Slot0.kV = ElevatorConstants.kFeedForward.kv();
-        configs.Slot0.kA = ElevatorConstants.kFeedForward.ka();
+        configs.Slot0.kG = Conversions.radiansToRotations(ElevatorConstants.kFeedForward.kg());
+        configs.Slot0.kS = Conversions.radiansToRotations(ElevatorConstants.kFeedForward.ks());
+        configs.Slot0.kV = Conversions.radiansToRotations(ElevatorConstants.kFeedForward.kv());
+        configs.Slot0.kA = Conversions.radiansToRotations(ElevatorConstants.kFeedForward.ka());
 
         configs.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-        configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = ElevatorConstants.kForwardSoftLimit;
+        configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Conversions.radiansToRotations(
+            ElevatorConstants.kForwardSoftLimitRad
+        );
         configs.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-        configs.SoftwareLimitSwitch.ReverseSoftLimitThreshold = ElevatorConstants.kReverseSoftLimit;
+        configs.SoftwareLimitSwitch.ReverseSoftLimitThreshold = Conversions.radiansToRotations(
+            ElevatorConstants.kReverseSoftLimitRad
+        );
 
         configs.MotorOutput.Inverted = ElevatorConstants.kInvertMotor
             ? InvertedValue.CounterClockwise_Positive

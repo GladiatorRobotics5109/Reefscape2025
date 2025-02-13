@@ -18,9 +18,9 @@ public class ElevatorIOSparkMax implements ElevatorIO {
     public ElevatorIOSparkMax(int motorPort, int followerPort) {
         SparkMaxConfig motorConfig = new SparkMaxConfig();
         motorConfig.smartCurrentLimit((int)ElevatorConstants.kSupplyCurrentLimit);
-        motorConfig.softLimit.forwardSoftLimit(ElevatorConstants.kForwardSoftLimit);
+        motorConfig.softLimit.forwardSoftLimit(ElevatorConstants.kForwardSoftLimitRad);
         motorConfig.softLimit.forwardSoftLimitEnabled(true);
-        motorConfig.softLimit.reverseSoftLimit(ElevatorConstants.kReverseSoftLimit);
+        motorConfig.softLimit.reverseSoftLimit(ElevatorConstants.kReverseSoftLimitRad);
         motorConfig.softLimit.reverseSoftLimitEnabled(true);
 
         m_motor = new SparkMax(motorPort, MotorType.kBrushless);

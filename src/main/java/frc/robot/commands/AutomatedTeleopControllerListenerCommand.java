@@ -127,7 +127,7 @@ public class AutomatedTeleopControllerListenerCommand extends Command {
         m_driverController.leftBumper().onTrue(Commands.runOnce(() -> {
             if (m_queuedBranch.isEmpty())
                 return;
-            m_queuedBranch.get().makeScoreCommand(m_swerve, m_elevator, m_endEffector).onlyWhile(
+            AutoBuilder.makeScoreCommand(m_queuedBranch.get(), m_swerve, m_elevator, m_endEffector).onlyWhile(
                 m_driverController.rightBumper().negate()
             ).alongWith(
                 ControllerRumbleCommand.makeLinearDecay(

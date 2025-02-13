@@ -3,6 +3,7 @@ package frc.robot.subsystems.superstructure.elevator;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
@@ -64,13 +65,21 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_mech = new LoggedMechanism2d(0, 0);
         m_mechRoot = m_mech.getRoot("Base", 0, ElevatorConstants.kElevatorBaseHeightMeters);
         m_mechElevator = m_mechRoot.append(
-            new LoggedMechanismLigament2d("Elevator", ElevatorConstants.kElevatorBaseHeightMeters, 90)
+            new LoggedMechanismLigament2d(
+                "Elevator",
+                ElevatorConstants.kElevatorBaseHeightMeters,
+                90,
+                6,
+                new Color8Bit(0, 0, 0)
+            )
         );
         m_mechEndEffector = m_mechElevator.append(
             new LoggedMechanismLigament2d(
                 "EndEffector",
                 ElevatorConstants.kEndEffectorHeightMeters - ElevatorConstants.kElevatorBaseHeightMeters,
-                0
+                0,
+                3,
+                new Color8Bit(255, 0, 0)
             )
         );
 
@@ -102,6 +111,9 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_io.setPosition(Conversions.elevatorMetersToElevatorRotations(m_desiredPositionMeters));
     }
 
+    /**
+     * Sets the desired height of the end effector measured from the floor
+     */
     public void setDesiredPositionEndEffector(double positionMeters) {
         setDesiredPositionElevator(Conversions.endEffectorMetersToElevatorMeters(positionMeters));
     }
@@ -111,18 +123,26 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public double getCurrentPositionElevator() {
-        return Conversions.elevatorRotationsToElevatorMeters(m_inputs.positionRad);
+        return Conversions.elevatorRadiansToElevatorMeters(m_inputs.positionRad);
     }
 
     public double getCurrentPositionEndEffector() {
         return Conversions.endEffectorMetersToElevatorMeters(getCurrentPositionElevator());
     }
 
-    public double getDesiredPositionElevatorRelative() { return m_desiredPositionMeters; }
+    public double getCurrentVelocity() {
+        return Conversions.elevatorRadiansToElevatorMeters(m_inputs.velocityRadPerSec);
+    }
+
+    public double getDesiredPositionElevator() { return m_desiredPositionMeters; }
+
+    public double getDesiredPositionElevatorRad() {
+        return Conversions.elevatorMetersToElevatorRadians(m_desiredPositionMeters);
+    }
 
     public boolean atDesiredPosition() {
         return MathUtil.isNear(
-            getDesiredPositionElevatorRelative(),
+            getDesiredPositionElevator(),
             getCurrentPositionElevator(),
             ElevatorConstants.kPositionToleranceMeters
         );
@@ -143,12 +163,25 @@ public class ElevatorSubsystem extends SubsystemBase {
         if (DriverStation.isDisabled()) {
             setVoltage(0);
         }
-        else if (m_hasDesiredPosition && m_useMotorPID) {
+        else if (m_hasDesiredPosition && !m_useMotorPID) {
+            double pidOut = m_pid.calculate(
+                m_inputs.positionRad,
+                Conversions.elevatorMetersToElevatorRadians(m_desiredPositionMeters)
+            );
+
+            TrapezoidProfile.State desiredState = m_pid.getSetpoint();
+
             m_io.setVoltage(
-                m_pid.calculate(
-                    m_inputs.positionRad,
-                    Conversions.elevatorMetersToElevatorRadians(m_desiredPositionMeters)
-                ) + m_feedforward.calculate(m_pid.getSetpoint().velocity)
+                pidOut + m_feedforward.calculate(desiredState.velocity)
+            );
+
+            Logger.recordOutput(
+                ElevatorConstants.kLogPath + "/MotionProfile/DesiredPositionRad",
+                desiredState.position
+            );
+            Logger.recordOutput(
+                ElevatorConstants.kLogPath + "/MotionProfile/DesiredVelocityRadPerSec",
+                desiredState.velocity
             );
         }
 

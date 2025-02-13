@@ -80,12 +80,12 @@ public class AutoSelector {
         int coralIndex = 0;
         for (int i = 0; i < commands.length; i++) {
             if ((i + 1) % 2 == 1) {
-                commands[i] = reefBranches.get(reefIndex).makeScoreCommand(swerve, elevator, endEffector);
+                commands[i] = AutoBuilder.makeScoreCommand(reefBranches.get(reefIndex), swerve, elevator, endEffector);
                 reefIndex++;
                 continue;
             }
 
-            commands[i] = coralStations.get(coralIndex).makeIntakeCommand(swerve, elevator, endEffector);
+            commands[i] = AutoBuilder.makeIntakeCommand(coralStations.get(coralIndex), swerve, elevator, endEffector);
             coralIndex++;
         }
 

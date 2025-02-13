@@ -54,5 +54,25 @@ public class ElevatorCommandFactory {
             routine.dynamic(SysIdRoutine.Direction.kReverse),
             Commands.print("Finished!")
         );
+
+        //        final double kVoltageRampRate = 0.1;
+        //        final String kLogPath = ElevatorConstants.kLogPath + "/Sysid";
+        //
+        //        Timer timer = new Timer();
+        //
+        //        double appliedVolts = 0.0;
+        //
+        //        return new FunctionalCommand(
+        //            timer::restart,
+        //            () -> {
+        //                appliedVolts = timer.get() * kVoltageRampRate;
+        //                elevator.setVoltage(appliedVolts);
+        //            },
+        //            (interrupted) -> {
+        //                Logger.recordOutput();
+        //            },
+        //            () -> elevator.getCurrentVelocity() > Conversions.inchesToMeters(0.1),
+        //            elevator
+        //        );
     }
 }

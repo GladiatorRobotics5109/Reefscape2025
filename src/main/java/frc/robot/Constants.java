@@ -13,6 +13,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -238,38 +239,46 @@ public final class Constants {
         public static final double kSupplyCurrentLimit = 40.0;
         public static final double kStatorCurrentLimit = 1.75 * kSupplyCurrentLimit;
 
-        public static final double kGearRatio = 20;
+        public static final double kGearRatio = 12;
         public static final double kSprocketRadiusMeters = Conversions.inchesToMeters(0.819);
 
         public static final double kElevatorMaxPositionMeters = Conversions.inchesToMeters(69.736220);
 
-        public static final double kForwardSoftLimit = Conversions.elevatorMetersToElevatorRotations(
+        public static final double kForwardSoftLimitRad = Conversions.elevatorMetersToElevatorRadians(
             kElevatorMaxPositionMeters
         );
-        public static final double kReverseSoftLimit = 0.0;
+        public static final double kReverseSoftLimitRad = 0.0;
 
-        public static final PIDConstants kPID = new PIDConstants(20, 0.0, 0.0);
+        public static final PIDConstants kPID = new PIDConstants(
+            0.1, // V / rad
+            0.0,
+            0.0
+        );
         public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(
-            20.0,
+            0.5,
+            0.0, // V / rad
             0.0,
-            0.0,
-            0.06
+            0.27 // V
         );
         public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1);
-        public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
-            10
-        );
+        public static final double kElevatorAccelerationRadPerSecPerSec = 30;
+
+        /** Distance between belly pan and elevator base */
+        public static final double kBellyPanToElevatorBaseMeters = Conversions.inchesToMeters(3);
 
         /** Distance from the top face of the bottom bar of the second stage to the floor */
         public static final double kElevatorBaseHeightMeters = SwerveModuleConstants.kWheelRadiusMeters
-            + Conversions.inchesToMeters(2);
+            + kBellyPanToElevatorBaseMeters;
+
+        // TODO: Verify this
         /**
          * Distance from the center of the leading edge of the coral to the floor when the elevator is at its starting
          * configuration
          */
         public static final double kEndEffectorHeightMeters = kElevatorBaseHeightMeters
-            + Conversions.inchesToMeters(25)
-            + FieldConstants.CoralConstants.kCoralOuterRadiusMeters;
+            + EndEffectorConstants.kEndEffectorLengthMeters
+            + FieldConstants.CoralConstants.kCoralOuterRadiusMeters
+                * EndEffectorConstants.kAngle.minus(Rotation2d.kCCW_Pi_2).getSin();
 
         public static final double kPositionToleranceMeters = Conversions.inchesToMeters(1);
 
@@ -278,6 +287,12 @@ public final class Constants {
     }
 
     public static final class EndEffectorConstants {
+        /**
+         * Length of end effector measured from bottom of the poly carb to the top edge of the bottom plane that the
+         * coral rests on
+         */
+        public static final double kEndEffectorLengthMeters = Conversions.inchesToMeters(11.967);
+
         public static final int kMotorPort = 69; //MAKE SURE TO CHANGE THIS!!
 
         // The maximum distance the chassis can be from the auto score location to score
@@ -285,6 +300,9 @@ public final class Constants {
         public static final double kAutoScoreMaxAngleRadians = Conversions.degreesToRadians(5);
         public static final double kAutoScoreMaxLinearSpeedMetersPerSecond = 0.1;
         public static final double kAutoScoreMaxAngularSpeedRadiansPerSecond = Conversions.degreesToRadians(10);
+
+        // Angle of coral measured from the horizontal
+        public static final Rotation2d kAngle = Rotation2d.fromDegrees(55);
 
         public static final double kScoreTimeoutSeconds = 2;
 

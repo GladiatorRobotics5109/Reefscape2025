@@ -145,7 +145,7 @@ public final class Paths {
             branchPos.plus(
                 new Translation2d(SwerveConstants.kFrameHeight / 2 + Constants.kBumperWidthMeters, faceAngle)
             ),
-            new Translation2d(0.8, faceAngle),
+            new Translation2d(0.4, faceAngle),
             faceAngle.plus(Rotation2d.k180deg),
             SwerveConstants.kPPReefInnerPathConstraints
         );
@@ -166,7 +166,7 @@ public final class Paths {
 
         return generatePathAlongVector(
             facePos.plus(new Translation2d(SwerveConstants.kFrameHeight / 2 + Constants.kBumperWidthMeters, faceAngle)),
-            new Translation2d(0.8, faceAngle),
+            new Translation2d(0.4, faceAngle),
             faceAngle,
             SwerveConstants.kPPCoralStationInnerPathConstraints
         );

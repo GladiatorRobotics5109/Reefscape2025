@@ -3,8 +3,6 @@ package frc.robot.util;
 import java.util.List;
 import java.util.Optional;
 
-import edu.wpi.first.wpilibj2.command.Commands;
-
 import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -17,15 +15,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.SwerveConstants;
-import frc.robot.commands.ElevatorCommandFactory;
-import frc.robot.commands.EndEffectorCommandFactory;
-import frc.robot.commands.SuperstructureCommandFactory;
-import frc.robot.commands.SwerveCommandFactory;
-import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
-import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
-import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 public class FieldConstants {
     public static final class ReefConstants {
@@ -248,26 +237,7 @@ public class FieldConstants {
                 m_height = height;
                 m_index = index;
 
-                // I'm very sorry for this...
-                m_branchPosition = new Translation3d(getAllianceReefPos()).plus(
-                    new Translation3d(face.getReefRelativeFacePosition())
-                ).plus(
-                    new Translation3d(
-                        kReefBranchDistMeters / 2,
-                        new Rotation3d(
-                            m_face.getFaceAngleFieldRelative().plus(
-                                Util.getAlliance()
-                                    == Alliance.Blue
-                                        ? (m_index == ReefIndex.One
-                                            ? Rotation2d.fromDegrees(90)
-                                            : Rotation2d.fromDegrees(-90))
-                                        : (m_index == ReefIndex.One
-                                            ? Rotation2d.fromDegrees(-90)
-                                            : Rotation2d.fromDegrees(90))
-                            )
-                        )
-                    )
-                ).plus(new Translation3d(0, 0, height.getHeight()));
+                m_branchPosition = getBranchPosition(m_height, m_face, m_index);
 
                 m_innerPath = Paths.getReefInnerPath(face, index);
             }
@@ -290,18 +260,6 @@ public class FieldConstants {
 
             public Translation3d getBranchPosition() { return m_branchPosition; }
 
-            public Command makeScoreCommand(
-                SwerveSubsystem swerve,
-                ElevatorSubsystem elevator,
-                EndEffectorSubsystem endEffector
-            ) {
-                // return SwerveCommandFactory.driveToReefScore(swerve, this);
-                return Commands.parallel(
-                    SwerveCommandFactory.driveToReefScore(swerve, this),
-                    SuperstructureCommandFactory.autoScore(elevator, endEffector, this)
-                ).withName(this + " Score Command");
-            }
-
             public PathPlannerPath getInnerPath() { return m_innerPath; }
 
             public ReefHeight getHeight() { return m_height; }
@@ -313,6 +271,34 @@ public class FieldConstants {
             @Override
             public String toString() {
                 return m_height.toString() + m_face.toString() + m_index.getIndex();
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (o == null) return false;
+                if (o.getClass() != this.getClass()) return false;
+
+                final ReefBranch other = (ReefBranch)o;
+                return this.getBranchPosition().equals(other.getBranchPosition());
+            }
+
+            private Translation3d getBranchPosition(ReefHeight height, ReefFace face, ReefIndex index) {
+                // Face position
+                Translation3d position = new Translation3d(getAllianceReefPos()).plus(
+                    new Translation3d(face.getReefRelativeFacePosition())
+                ).plus(new Translation3d(0.0, 0.0, height.getHeight()));
+
+                Rotation2d toIndex = face.getFaceAngleFieldRelative();
+                if (face == ReefFace.E || face == ReefFace.I || face == ReefFace.J) {
+                    toIndex = toIndex.plus(index == ReefIndex.One ? Rotation2d.kCW_90deg : Rotation2d.kCCW_90deg);
+                }
+                else {
+                    toIndex = toIndex.plus(index == ReefIndex.One ? Rotation2d.kCCW_90deg : Rotation2d.kCW_90deg);
+                }
+
+                position = position.plus(new Translation3d(kReefBranchDistMeters / 2, new Rotation3d(toIndex)));
+
+                return position;
             }
         }
 
@@ -438,24 +424,18 @@ public class FieldConstants {
 
             public PathPlannerPath getInnerPath() { return Paths.getCoralStationInnerPath(this); }
 
-            public Command makeIntakeCommand(
-                SwerveSubsystem swerve,
-                ElevatorSubsystem elevator,
-                EndEffectorSubsystem endEffector
-            ) {
-                return Commands.parallel(
-                    SwerveCommandFactory.driveToPoseThenFollowPath(
-                        SwerveConstants.kPPPathFindConstraints,
-                        getInnerPath()
-                    ),
-                    ElevatorCommandFactory.toHome(elevator),
-                    EndEffectorCommandFactory.intake(endEffector)
-                );
-            }
-
             @Override
             public String toString() {
                 return m_side.toString() + m_index.toString();
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (o == null) return false;
+                if (o.getClass() != this.getClass()) return false;
+
+                final CoralStation other = (CoralStation)o;
+                return this.getPosition().equals(other.getPosition());
             }
 
             public static Optional<CoralStation> fromString(String str) {
