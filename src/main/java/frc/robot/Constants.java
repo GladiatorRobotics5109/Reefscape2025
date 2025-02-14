@@ -255,10 +255,10 @@ public final class Constants {
             0.0
         );
         public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(
-            0.5,
-            0.0, // V / rad
+            0.6,
+            0.22, // V / rad
             0.0,
-            0.27 // V
+            0.13 // V
         );
         public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1);
         public static final double kElevatorAccelerationRadPerSecPerSec = 30;

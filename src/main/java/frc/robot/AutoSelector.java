@@ -1,26 +1,35 @@
 package frc.robot;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.AutoBuilder;
+import frc.robot.commands.ElevatorCommandFactory;
+import frc.robot.commands.SwerveCommandFactory;
+import frc.robot.commands.WheelRadiusCharacterizationCommand;
+import frc.robot.commands.WheelRadiusCharacterizationCommand.Direction;
+import frc.robot.subsystems.leds.LEDSubsystem;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
-import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 import frc.robot.util.FieldConstants.CoralStationConstants.CoralStation;
+import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class AutoSelector {
     private static LoggedDashboardChooser<Command> s_autoChooser;
     private static List<LoggedDashboardChooser<String>> s_reefBranches;
     private static List<LoggedDashboardChooser<String>> s_coralStations;
 
-    public static void init(SwerveSubsystem swerve, ElevatorSubsystem elevator, EndEffectorSubsystem endEffector) {
+    public static void init(
+        SwerveSubsystem swerve,
+        ElevatorSubsystem elevator,
+        EndEffectorSubsystem endEffector,
+        LEDSubsystem leds
+    ) {
         s_autoChooser = new LoggedDashboardChooser<>("AutoChooser");
         s_reefBranches = new ArrayList<>();
         s_reefBranches.add(new LoggedDashboardChooser<>("Branch_1"));
@@ -43,19 +52,28 @@ public class AutoSelector {
             }
         }
 
-        s_autoChooser.addDefaultOption("None", AutoBuilder.none());
-        s_autoChooser.addOption("SimpleTaxi", AutoBuilder.simpleTaxiForward(swerve));
-        s_autoChooser.addOption("Test", AutoBuilder.testAuto(swerve, elevator, endEffector));
+        s_autoChooser.addDefaultOption("Comp_None", AutoBuilder.none());
+        s_autoChooser.addOption("Comp_SimpleTaxi", AutoBuilder.simpleTaxiForward(swerve));
         s_autoChooser.addOption(
-            "CustomizableAuto",
-            Commands.runOnce(() -> buildCustomAuto(swerve, elevator, endEffector).schedule())
+            "Comp_CustomizableAuto",
+            Commands.runOnce(() -> buildCustomAuto(swerve, elevator, endEffector, leds).schedule())
         );
+
+        s_autoChooser.addOption("Test", AutoBuilder.testAuto(swerve, elevator, endEffector, leds));
+        s_autoChooser.addOption(
+            "SysId_WheelRadius",
+            new WheelRadiusCharacterizationCommand(swerve, Direction.COUNTER_CLOCKWISE)
+        );
+        s_autoChooser.addOption("SysId_SwerveDrive", SwerveCommandFactory.makeSysIdDrive(swerve));
+        s_autoChooser.addOption("SysId_SwerveTurn", SwerveCommandFactory.makeSysIdTurn(swerve));
+        s_autoChooser.addOption("SysId_Elevator", ElevatorCommandFactory.makeSysId(elevator));
     }
 
     private static Command buildCustomAuto(
         SwerveSubsystem swerve,
         ElevatorSubsystem elevator,
-        EndEffectorSubsystem endEffector
+        EndEffectorSubsystem endEffector,
+        LEDSubsystem leds
     ) {
         List<ReefBranch> reefBranches = new ArrayList<>();
 
@@ -80,7 +98,13 @@ public class AutoSelector {
         int coralIndex = 0;
         for (int i = 0; i < commands.length; i++) {
             if ((i + 1) % 2 == 1) {
-                commands[i] = AutoBuilder.makeScoreCommand(reefBranches.get(reefIndex), swerve, elevator, endEffector);
+                commands[i] = AutoBuilder.makeAutoScoreCommand(
+                    reefBranches.get(reefIndex),
+                    swerve,
+                    elevator,
+                    endEffector,
+                    leds
+                );
                 reefIndex++;
                 continue;
             }

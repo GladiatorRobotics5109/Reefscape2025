@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotState;
+import frc.robot.subsystems.leds.LEDSubsystem;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
@@ -16,29 +17,33 @@ public class AutoDecideScoreCommand extends Command {
     private final SwerveSubsystem m_swerve;
     private final ElevatorSubsystem m_elevator;
     private final EndEffectorSubsystem m_endEffector;
+    private final LEDSubsystem m_leds;
 
     public AutoDecideScoreCommand(
         ReefHeight height,
         SwerveSubsystem swerve,
         ElevatorSubsystem elevator,
-        EndEffectorSubsystem endEffector
+        EndEffectorSubsystem endEffector,
+        LEDSubsystem leds
     ) {
-        setName("AutoDecideScoreCommand");
-        addRequirements(swerve, elevator, endEffector);
-
         m_height = height;
         m_swerve = swerve;
         m_elevator = elevator;
         m_endEffector = endEffector;
+        m_leds = leds;
+
+        setName("AutoDecideScoreCommand");
+        addRequirements(m_swerve, m_elevator, m_endEffector, m_leds);
     }
 
     @Override
     public void initialize() {
-        m_scoreCommand = AutoBuilder.makeScoreCommand(
+        m_scoreCommand = AutoBuilder.makeAutoScoreCommand(
             findClosestBranchAtHeight(m_height),
             m_swerve,
             m_elevator,
-            m_endEffector
+            m_endEffector,
+            m_leds
         );
 
         m_scoreCommand.initialize();

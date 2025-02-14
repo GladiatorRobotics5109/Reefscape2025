@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class ControllerRumbleCommand extends Command {
-    public static Command makeLinearDecay(
+    public static Command linearDecayCommand(
         double startValue,
         RumbleType type,
         double lengthSeconds,

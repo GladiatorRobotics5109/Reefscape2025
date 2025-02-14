@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.RobotState;
+import frc.robot.subsystems.leds.LEDSubsystem;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
@@ -19,7 +20,8 @@ public class AutoBuilder {
     public static Command testAuto(
         SwerveSubsystem swerve,
         ElevatorSubsystem elevator,
-        EndEffectorSubsystem endEffectorSubsystem
+        EndEffectorSubsystem endEffectorSubsystem,
+        LEDSubsystem leds
     ) {
         //        return Commands.sequence(
         //            SwerveCommandFactory.setPosition(swerve, () -> new Pose2d(8.5, 7.6, Rotation2d.fromDegrees(180))),
@@ -34,17 +36,17 @@ public class AutoBuilder {
         //        ).withName("AutoBuilder::testAuto");
 
         return Commands.sequence(
-            makeAutoDecideScoreCommand(ReefHeight.L4, swerve, elevator, endEffectorSubsystem),
+            makeAutoDecideScoreCommand(ReefHeight.L4, swerve, elevator, endEffectorSubsystem, leds),
             makeIntakeCommand(CoralStation.kC3, swerve, elevator, endEffectorSubsystem),
-            makeAutoDecideScoreCommand(ReefHeight.L4, swerve, elevator, endEffectorSubsystem),
+            makeAutoDecideScoreCommand(ReefHeight.L4, swerve, elevator, endEffectorSubsystem, leds),
             makeIntakeCommand(CoralStation.kC3, swerve, elevator, endEffectorSubsystem),
-            makeAutoDecideScoreCommand(ReefHeight.L4, swerve, elevator, endEffectorSubsystem),
+            makeAutoDecideScoreCommand(ReefHeight.L4, swerve, elevator, endEffectorSubsystem, leds),
             makeIntakeCommand(CoralStation.kC3, swerve, elevator, endEffectorSubsystem),
-            makeAutoDecideScoreCommand(ReefHeight.L4, swerve, elevator, endEffectorSubsystem),
+            makeAutoDecideScoreCommand(ReefHeight.L4, swerve, elevator, endEffectorSubsystem, leds),
             makeIntakeCommand(CoralStation.kC3, swerve, elevator, endEffectorSubsystem),
-            makeAutoDecideScoreCommand(ReefHeight.L4, swerve, elevator, endEffectorSubsystem),
+            makeAutoDecideScoreCommand(ReefHeight.L4, swerve, elevator, endEffectorSubsystem, leds),
             makeIntakeCommand(CoralStation.kC3, swerve, elevator, endEffectorSubsystem),
-            makeAutoDecideScoreCommand(ReefHeight.L4, swerve, elevator, endEffectorSubsystem)
+            makeAutoDecideScoreCommand(ReefHeight.L4, swerve, elevator, endEffectorSubsystem, leds)
         );
     }
 
@@ -56,16 +58,18 @@ public class AutoBuilder {
         ).withName("AutoBuilder::simpleTaxiForward");
     }
 
-    public static Command makeScoreCommand(
+    public static Command makeAutoScoreCommand(
         ReefBranch branch,
         SwerveSubsystem swerve,
         ElevatorSubsystem elevator,
-        EndEffectorSubsystem endEffector
+        EndEffectorSubsystem endEffector,
+        LEDSubsystem leds
     ) {
         return Commands.parallel(
             SwerveCommandFactory.driveToReefScore(swerve, branch),
             SuperstructureCommandFactory.autoScore(elevator, endEffector, branch)
-        ).finallyDo(() -> RobotState.addScoredBranch(branch)).withName(branch + " Score Command");
+        ).andThen(LEDCommandFactory.goodThingHappenedCommand(leds)).finallyDo(() -> RobotState.addScoredBranch(branch))
+            .withName(branch + " Score Command");
     }
 
     public static Command makeIntakeCommand(
@@ -88,8 +92,9 @@ public class AutoBuilder {
         ReefHeight height,
         SwerveSubsystem swerve,
         ElevatorSubsystem elevator,
-        EndEffectorSubsystem endEffector
+        EndEffectorSubsystem endEffector,
+        LEDSubsystem leds
     ) {
-        return new AutoDecideScoreCommand(height, swerve, elevator, endEffector);
+        return new AutoDecideScoreCommand(height, swerve, elevator, endEffector, leds);
     }
 }

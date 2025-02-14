@@ -1,4 +1,4 @@
-package frc.robot.subsystems.leds;
+package frc.robot.commands;
 
 import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.StrobeAnimation;
@@ -7,16 +7,17 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotState;
+import frc.robot.subsystems.leds.LEDSubsystem;
 
-public class LEDControllers {
-    public static class RGBController extends Command {
+public class LEDCommandFactory {
+    public static class LEDRGBCommand extends Command {
         private final LEDSubsystem m_leds;
 
         private final double m_brightness;
         private final double m_speed;
         private final boolean m_reverse;
 
-        public RGBController(LEDSubsystem leds, double brightness, double speed, boolean reverse) {
+        public LEDRGBCommand(LEDSubsystem leds, double brightness, double speed, boolean reverse) {
             m_leds = leds;
             addRequirements(m_leds);
 
@@ -33,12 +34,12 @@ public class LEDControllers {
         }
     }
 
-    public static class FieldRelativeRGBController extends Command {
+    public static class LEDFieldRelativeRGBCommand extends Command {
         private final LEDSubsystem m_leds;
 
         private final Rotation2d m_headingOffset;
 
-        public FieldRelativeRGBController(LEDSubsystem leds, Rotation2d headingOffset) {
+        public LEDFieldRelativeRGBCommand(LEDSubsystem leds, Rotation2d headingOffset) {
             m_leds = leds;
             addRequirements(m_leds);
 
@@ -59,13 +60,13 @@ public class LEDControllers {
         }
     }
 
-    public static class StrobeController extends Command {
+    public static class LEDStrobeCommand extends Command {
         private final LEDSubsystem m_leds;
 
         private final Color m_clr;
         private final double m_speed;
 
-        public StrobeController(LEDSubsystem leds, Color clr, double speed) {
+        public LEDStrobeCommand(LEDSubsystem leds, Color clr, double speed) {
             m_leds = leds;
 
             m_clr = clr;
@@ -85,6 +86,13 @@ public class LEDControllers {
                 )
             );
         }
+    }
+
+    public static Command goodThingHappenedCommand(LEDSubsystem leds) {
+        final double kStrobeLength = 0.1;
+        final int kNumStrobes = 3;
+
+        return new LEDStrobeCommand(leds, Color.kGreen, kStrobeLength).withTimeout(kNumStrobes * kStrobeLength);
     }
 
     private static int getColorR(Color clr) { return (int)(255 * clr.red); }
