@@ -59,11 +59,12 @@ public class RobotState {
     public static Set<ReefBranch> getScoredBranches() { return s_scoredBranches; }
 
     public static void log() {
-        Logger.recordOutput(SwerveConstants.kLogPath + "/currentPose", getSwervePose());
-        Logger.recordOutput(SwerveConstants.kLogPath + "/currentModuleStates", getSwerveModuleStates());
+        Logger.recordOutput(SwerveConstants.kLogPath + "/CurrentPose", getSwervePose());
+        Logger.recordOutput(SwerveConstants.kLogPath + "/CurrentModuleStates", getSwerveModuleStates());
 
-        Logger.recordOutput(ElevatorConstants.kLogPath + "/currentPositionMeters", getElevatorCurrentPositionMeters());
-        Logger.recordOutput(ElevatorConstants.kLogPath + "/desiredPositionMeters", getElevatorDesiredPositionMeters());
+        Logger.recordOutput(ElevatorConstants.kLogPath + "/CurrentPositionMeters", getElevatorCurrentPositionMeters());
+        Logger.recordOutput(ElevatorConstants.kLogPath + "/DesiredPositionMeters", getElevatorDesiredPositionMeters());
+        Logger.recordOutput(ElevatorConstants.kLogPath + "/AtDesiredPosition", getElevatorAtDesiredPosition());
 
         Logger.recordOutput(
             "ScoredBranches",

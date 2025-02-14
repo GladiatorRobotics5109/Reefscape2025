@@ -38,6 +38,7 @@ public final class Constants {
     public static final double kJoystickDeadzone = 0.15;
 
     public static final double kBumperWidthMeters = Conversions.inchesToMeters(3.25);
+    public static final double kChassisLengthMeters = Conversions.inchesToMeters(29);
 
     public static final class DriveTeamConstants {
         public static final int kDriveControllerPort = 0;
@@ -66,10 +67,10 @@ public final class Constants {
             public static final int kBackRightDrivePort = 3;
             public static final int kBackRightTurnPort = 30;
 
-            public static final Translation2d kModulePosFL = new Translation2d(0.290449, 0.290449);
-            public static final Translation2d kModulePosFR = new Translation2d(0.290449, -0.290449);
-            public static final Translation2d kModulePosBL = new Translation2d(-0.290449, 0.290449);
-            public static final Translation2d kModulePosBR = new Translation2d(-0.290449, -0.290449);
+            public static final Translation2d kModulePosFL = new Translation2d(0.283989, 0.283989);
+            public static final Translation2d kModulePosFR = new Translation2d(0.283989, -0.283989);
+            public static final Translation2d kModulePosBL = new Translation2d(-0.283989, 0.283989);
+            public static final Translation2d kModulePosBR = new Translation2d(-0.283989, -0.283989);
 
             // Units in module space not motor space
             public static final PIDConstants kDrivePID = new PIDConstants(
@@ -250,15 +251,15 @@ public final class Constants {
         public static final double kReverseSoftLimitRad = 0.0;
 
         public static final PIDConstants kPID = new PIDConstants(
-            0.1, // V / rad
+            5.0, // V / rad
             0.0,
             0.0
         );
         public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(
-            0.6,
-            0.22, // V / rad
+            0.2,
+            0.22,
             0.0,
-            0.13 // V
+            0.25 // V
         );
         public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1);
         public static final double kElevatorAccelerationRadPerSecPerSec = 30;
@@ -283,7 +284,7 @@ public final class Constants {
         public static final double kPositionToleranceMeters = Conversions.inchesToMeters(1);
 
         // The distance from the center of the reef that the elevator will be allowed to autonomously extend
-        public static final double kAutoElevatorExtendRequiredDistanceMeters = 3.0;
+        public static final double kAutoElevatorExtendRequiredDistanceMeters = 4.5;
     }
 
     public static final class EndEffectorConstants {

@@ -1,10 +1,16 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants;
+import frc.robot.RobotState;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
+import frc.robot.util.Conversions;
 import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
+import org.littletonrobotics.junction.Logger;
 
 public class SuperstructureCommandFactory {
     public static Command autoScore(
@@ -14,25 +20,29 @@ public class SuperstructureCommandFactory {
     ) {
         return Commands.sequence(
             ElevatorCommandFactory.autoToReefBranch(elevator, branch),
-            // Commands.waitUntil(() -> {
-            // Pose2d currentPose = RobotState.getSwervePose();
-            // ChassisSpeeds currentSpeeds = RobotState.getSwerveCurrentChassisSpeeds();
-            // double currentSpeed = Math.hypot(currentSpeeds.vxMetersPerSecond, currentSpeeds.vyMetersPerSecond);
-            // Pose2d branchPose = branch.getSwerveTargetPoseInner();
+            Commands.waitUntil(() -> {
+                // Elevator at position
+                boolean elevatorAtDesiredPosition = elevator.atDesiredPosition();
 
-            // return currentPose.getTranslation().getDistance(
-            // branchPose.getTranslation()
-            // ) < Constants.EndEffectorConstants.kAutoScoreMaxDistMeters &&
-            // MathUtil.isNear(
-            // currentPose.getRotation().getRadians(),
-            // branchPose.getRotation().getRadians(),
-            // Constants.EndEffectorConstants.kAutoScoreMaxAngleRadians
-            // ) &&
-            // currentSpeed < Constants.EndEffectorConstants.kAutoScoreMaxLinearSpeedMetersPerSecond &&
-            // currentSpeeds.omegaRadiansPerSecond < Constants.EndEffectorConstants.kAutoScoreMaxAngularSpeedRadiansPerSecond
-            // &&
-            // elevator.atDesiredPositionMeters();
-            // }),
+                // Robot is close enough to branch
+                Translation2d currentPos = RobotState.getSwervePose().getTranslation();
+                Translation2d branchPos = branch.getBranchPosition().toTranslation2d();
+                boolean withinRadius = currentPos.getDistance(branchPos)
+                    - (Constants.kBumperWidthMeters + Constants.kChassisLengthMeters)
+                    <= Conversions.inchesToMeters(3);
+
+                // Robot is moving slow enough
+                ChassisSpeeds currentSpeeds = RobotState.getSwerveCurrentChassisSpeeds();
+                double currentSpeed = Math.hypot(currentSpeeds.vxMetersPerSecond, currentSpeeds.vyMetersPerSecond);
+                boolean withinSpeedLimit = currentSpeed <= Conversions.inchesToMeters(3);
+
+                boolean shouldScore = elevatorAtDesiredPosition && withinRadius && withinSpeedLimit;
+                Logger.recordOutput("SuperstructureAutoScore/ElevatorAtDesiredPosition", elevatorAtDesiredPosition);
+                Logger.recordOutput("SuperstructureAutoScore/WithinRadius", withinRadius);
+                Logger.recordOutput("SuperstructureAutoScore/WithinSpeedLimit", withinSpeedLimit);
+                Logger.recordOutput("SuperstructureAutoScore/ShouldScore", shouldScore);
+                return shouldScore;
+            }).withTimeout(5),
             EndEffectorCommandFactory.scoreWithTimeout(endEffectorSubsystem)
         );
     }

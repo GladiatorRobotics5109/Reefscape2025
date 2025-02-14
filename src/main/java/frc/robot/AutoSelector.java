@@ -58,8 +58,13 @@ public class AutoSelector {
             "Comp_CustomizableAuto",
             Commands.runOnce(() -> buildCustomAuto(swerve, elevator, endEffector, leds).schedule())
         );
+        s_autoChooser.addOption(
+            "Comp_PP_B6_L4G2_Leave",
+            AutoBuilder.auto_PP_B6_L4G2_Leave(swerve, elevator, endEffector, leds)
+        );
 
         s_autoChooser.addOption("Test", AutoBuilder.testAuto(swerve, elevator, endEffector, leds));
+
         s_autoChooser.addOption(
             "SysId_WheelRadius",
             new WheelRadiusCharacterizationCommand(swerve, Direction.COUNTER_CLOCKWISE)

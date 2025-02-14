@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
@@ -11,6 +12,7 @@ import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.util.FieldConstants.CoralStationConstants.CoralStation;
 import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
+import frc.robot.util.Paths;
 
 public class AutoBuilder {
     public static Command none() {
@@ -56,6 +58,28 @@ public class AutoBuilder {
             Commands.waitSeconds(1),
             SwerveCommandFactory.stopAndX(swerve)
         ).withName("AutoBuilder::simpleTaxiForward");
+    }
+
+    public static Command auto_PP_B6_L4G2_Leave(
+        SwerveSubsystem swerve,
+        ElevatorSubsystem elevator,
+        EndEffectorSubsystem endEffector,
+        LEDSubsystem leds
+    ) {
+        final PathPlannerPath kToReef = Paths.ppPaths.get("B_6-R_G2");
+        final PathPlannerPath kLeave = Paths.ppPaths.get("R_G2-Leave");
+        final ReefBranch kBranch = ReefBranch.kL4G2;
+
+        return Commands.sequence(
+            Commands.parallel(
+                SwerveCommandFactory.followPath(swerve, kToReef),
+                SuperstructureCommandFactory.autoScore(elevator, endEffector, kBranch)
+            ),
+            Commands.parallel(
+                SwerveCommandFactory.followPath(swerve, kLeave),
+                ElevatorCommandFactory.toHome(elevator)
+            )
+        );
     }
 
     public static Command makeAutoScoreCommand(

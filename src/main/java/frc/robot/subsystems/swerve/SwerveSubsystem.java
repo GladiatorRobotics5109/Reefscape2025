@@ -1,9 +1,5 @@
 package frc.robot.subsystems.swerve;
 
-import java.util.List;
-
-import org.littletonrobotics.junction.Logger;
-
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.loggedgyro.LoggedGyro;
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.loggedgyro.LoggedGyroIO;
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.loggedgyro.LoggedGyroIOPigeon;
@@ -11,7 +7,6 @@ import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.lo
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.PathPlannerLogging;
-
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,14 +17,17 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotState;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.RobotState;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModule;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModuleIO;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModuleIOSimTalonFx;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModuleIOTalonFx;
 import frc.robot.subsystems.vision.VisionMeasurement;
 import frc.robot.util.Util;
+import org.littletonrobotics.junction.Logger;
+
+import java.util.List;
 
 public class SwerveSubsystem extends SubsystemBase {
     private final SwerveModule m_moduleFL;
@@ -155,7 +153,7 @@ public class SwerveSubsystem extends SubsystemBase {
             m_kinematics,
             m_gyro.getYaw(),
             getModulePositions(),
-            new Pose2d()
+            SwerveConstants.kStartingPose
         );
 
         AutoBuilder.configure(

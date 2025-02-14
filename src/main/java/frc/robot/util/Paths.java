@@ -1,20 +1,11 @@
 package frc.robot.util;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.littletonrobotics.junction.Logger;
-
-import com.pathplanner.lib.path.GoalEndState;
-import com.pathplanner.lib.path.IdealStartingState;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.Waypoint;
-
+import com.pathplanner.lib.path.*;
+import com.pathplanner.lib.util.FileVersionException;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.util.FieldConstants.CoralStationConstants;
@@ -23,6 +14,14 @@ import frc.robot.util.FieldConstants.CoralStationConstants.CoralStationIndex;
 import frc.robot.util.FieldConstants.CoralStationConstants.CoralStationSide;
 import frc.robot.util.FieldConstants.ReefConstants.ReefFace;
 import frc.robot.util.FieldConstants.ReefConstants.ReefIndex;
+import org.json.simple.parser.ParseException;
+import org.littletonrobotics.junction.Logger;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public final class Paths {
     private static record ReefFaceAndIndex(ReefFace face, ReefIndex index) {
@@ -39,6 +38,8 @@ public final class Paths {
         }
     }
 
+    public static Map<String, PathPlannerPath> ppPaths;
+
     private static Map<ReefFaceAndIndex, PathPlannerPath> s_reefPaths = new HashMap<>();
     private static Map<CoralStationSideAndIndex, PathPlannerPath> s_coralPaths = new HashMap<>();
 
@@ -48,6 +49,26 @@ public final class Paths {
         if (s_hasInit)
             return;
 
+        // Load paths
+        ppPaths = new HashMap<>();
+        try {
+            ppPaths.put("B_6-R_G2", PathPlannerPath.fromPathFile("B_6-R_G2"));
+            ppPaths.put("R_G2-Leave", PathPlannerPath.fromPathFile("R_G2-Leave"));
+        }
+        catch (FileNotFoundException e) {
+            DriverStation.reportError("Failed to find path file!\n" + e.getCause(), e.getStackTrace());
+        }
+        catch (IOException e) {
+            DriverStation.reportError("Failed to read path file!\n" + e.getCause(), e.getStackTrace());
+        }
+        catch (ParseException e) {
+            DriverStation.reportError("Failed to parse path JSON!\n" + e.getCause(), e.getStackTrace());
+        }
+        catch (FileVersionException e) {
+            DriverStation.reportError("Unexpected path version!\n" + e.getCause(), e.getStackTrace());
+        }
+
+        // Generate paths
         // A lil jank but it works so...
         // I'll make this happen during compile-time a some point too
         ReefFace[] faces = ReefFace.values();
