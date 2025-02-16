@@ -11,25 +11,37 @@ public class EndEffectorSubsystem extends SubsystemBase {
     //    private final SparkMax m_leftMotor = new SparkMax(0, MotorType.kBrushless);
     //    private final SparkMax m_rightMotor = new SparkMax(0, MotorType.kBrushless);
 
-    public void setPower(double leftVolts, double rightVolts) {
+    public void setVoltage(double leftVolts, double rightVolts) {
 
     }
 
-    public void setPower(double volts) {
-        setPower(volts, volts);
+    public void setVoltage(double volts) {
+        setVoltage(volts, volts);
     }
 
     //outtake power setter
     public void setScore() {
-        setPower(EndEffectorConstants.kScoreVoltage);
+        setVoltage(EndEffectorConstants.kScoreVoltage);
+    }
+
+    public void setIntake() {
+        setVoltage(EndEffectorConstants.kIntakeVoltage);
+    }
+
+    public void setIntakeSlow() {
+        setVoltage(EndEffectorConstants.kIntakeSlowVoltage);
     }
 
     public void stop() {
-        setPower(0);
+        setVoltage(0);
     }
 
     public boolean hasCoral() {
         // TODO: implement this
+        return false;
+    }
+
+    public boolean hasLeadingEdgeCoral() {
         return false;
     }
 

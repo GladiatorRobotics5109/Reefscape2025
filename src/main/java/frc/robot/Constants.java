@@ -155,14 +155,10 @@ public final class Constants {
         );
 
         public static final PathConstraints kPPPathFindConstraints = new PathConstraints(
-            Units.MetersPerSecond.of(2),
-            Units.MetersPerSecondPerSecond.of(2),
+            Units.MetersPerSecond.of(2.5),
+            Units.MetersPerSecondPerSecond.of(3),
             Units.RotationsPerSecond.of(1.5),
-            Units.RotationsPerSecondPerSecond.of(2)
-            // Units.MetersPerSecond.of(0.5),
-            // Units.MetersPerSecondPerSecond.of(2),
-            // Units.RotationsPerSecond.of(0.5),
-            // Units.RotationsPerSecondPerSecond.of(2)
+            Units.RotationsPerSecondPerSecond.of(3)
         );
 
         public static final PathConstraints kPPReefInnerPathConstraints = new PathConstraints(
@@ -308,6 +304,8 @@ public final class Constants {
         public static final double kScoreTimeoutSeconds = 2;
 
         public static final double kScoreVoltage = 6;
+        public static final double kIntakeVoltage = 6;
+        public static final double kIntakeSlowVoltage = 2;
     }
 
     public static final class BallsIntakeConstants {

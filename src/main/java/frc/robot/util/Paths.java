@@ -53,7 +53,13 @@ public final class Paths {
         ppPaths = new HashMap<>();
         try {
             ppPaths.put("B_6-R_G2", PathPlannerPath.fromPathFile("B_6-R_G2"));
+
             ppPaths.put("R_G2-Leave", PathPlannerPath.fromPathFile("R_G2-Leave"));
+            ppPaths.put("R_G2-C_F3", PathPlannerPath.fromPathFile("R_G2-C_F3"));
+
+            ppPaths.put("R_G1-Leave", PathPlannerPath.fromPathFile("R_G1-Leave"));
+
+            ppPaths.put("C_F3-R_G1", PathPlannerPath.fromPathFile("C_F3-R_G1"));
         }
         catch (FileNotFoundException e) {
             DriverStation.reportError("Failed to find path file!\n" + e.getCause(), e.getStackTrace());

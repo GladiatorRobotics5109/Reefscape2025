@@ -43,7 +43,7 @@ public class RobotContainer {
         m_endEffector = new EndEffectorSubsystem();
         m_leds = new LEDSubsystem();
         RobotState.init(m_swerve, m_vision, m_elevator);
-        AutoSelector.init(m_swerve, m_elevator, m_endEffector, m_leds);
+        AutoChooser.init(m_swerve, m_elevator, m_endEffector, m_leds);
 
         m_driverController = new CommandXboxController(Constants.DriveTeamConstants.kDriveControllerPort);
         m_operatorController = new CommandXboxController(Constants.DriveTeamConstants.kOperatorControllerPort);
@@ -99,7 +99,7 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return AutoSelector.get().beforeStarting(
+        return AutoChooser.get().beforeStarting(
             SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(8, 8, Rotation2d.k180deg))
         );
     }
