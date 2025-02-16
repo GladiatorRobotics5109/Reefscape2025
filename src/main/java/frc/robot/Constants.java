@@ -222,7 +222,7 @@ public final class Constants {
         public static final String kLogPath = "Subsystems/Vision";
 
         public static final AprilTagFieldLayout kAprilTagFieldLayout = AprilTagFieldLayout.loadField(
-            AprilTagFields.k2025Reefscape
+            AprilTagFields.k2025ReefscapeWelded // Peachtree uses Welded
         );
     }
 
