@@ -16,4 +16,9 @@ public class EndEffectorCommandFactory {
     public static Command scoreWithTimeout(EndEffectorSubsystem endEffector) {
         return score(endEffector).withTimeout(EndEffectorConstants.kScoreTimeoutSeconds);
     }
+
+    // TOOD: implement this
+    public static Command intake(EndEffectorSubsystem endEffector) {
+        return Commands.none();
+    }
 }

@@ -4,34 +4,35 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.util.FieldConstants;
+import frc.robot.commands.*;
+import frc.robot.subsystems.leds.LEDSubsystem;
+import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
+
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.AutomatedTeleopControllerListenerCommand;
-import frc.robot.commands.ElevatorCommandFactory;
-import frc.robot.commands.SwerveCommandFactory;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
-import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
-import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 
 public class RobotContainer {
     private final SwerveSubsystem m_swerve;
     private final VisionSubsystem m_vision;
     private final ElevatorSubsystem m_elevator;
     private final EndEffectorSubsystem m_endEffector;
+    private final LEDSubsystem m_leds;
 
     private final CommandXboxController m_driverController;
-    // private final CommandPS4Controller m_driverController;
-    // private final CommandGenericHID m_keyboard;
 
     private final CommandXboxController m_operatorController;
 
@@ -40,13 +41,12 @@ public class RobotContainer {
         m_vision = new VisionSubsystem();
         m_elevator = new ElevatorSubsystem();
         m_endEffector = new EndEffectorSubsystem();
+        m_leds = new LEDSubsystem();
         RobotState.init(m_swerve, m_vision, m_elevator);
+        AutoSelector.init(m_swerve, m_elevator, m_endEffector, m_leds);
 
-        // m_driverController = new CommandPS4Controller(Constants.DriveTeamConstants.kDriveControllerPort);
         m_driverController = new CommandXboxController(Constants.DriveTeamConstants.kDriveControllerPort);
         m_operatorController = new CommandXboxController(Constants.DriveTeamConstants.kOperatorControllerPort);
-        // m_driverController = new CommandPS5Controller(0);
-        // m_keyboard = new CommandGenericHID(0);
 
         configureBindings();
 
@@ -62,44 +62,45 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        m_swerve.setDefaultCommand(SwerveCommandFactory.makeTeleop(m_swerve, m_driverController));
+        m_swerve.setDefaultCommand(
+            SwerveCommandFactory.makeTeleop(m_swerve, m_driverController).onlyWhile(
+                () -> DriverStation.isTeleop() || DriverStation.isTest()
+            )
+        );
 
         // Elevator setpoints
-        // m_driverController.cross().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L1));
-        // m_driverController.circle().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L2));
-        // m_driverController.triangle().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L3));
-        // m_driverController.square().onTrue(ElevatorCommandFactory.toPosition(m_elevator, ReefHeight.L4));
+        // m_driverController.cross().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L1));
+        // m_driverController.circle().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L2));
+        // m_driverController.triangle().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3));
+        // m_driverController.square().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4));
         m_driverController.a().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L1));
         m_driverController.b().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L2));
         m_driverController.y().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3));
         m_driverController.x().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4));
 
-        // TODO: impliment this
+        m_driverController.leftBumper().debounce(0.5, DebounceType.kRising).onTrue(
+            Commands.parallel(
+                AutoBuilder.makeAutoDecideScoreCommand(ReefHeight.L4, m_swerve, m_elevator, m_endEffector, m_leds),
+                ControllerRumbleCommand.linearDecayCommand(
+                    1.0,
+                    RumbleType.kBothRumble,
+                    1.5,
+                    new GenericHID[] { m_driverController.getHID(), m_operatorController.getHID() }
+                ),
+                LEDCommandFactory.goodThingHappenedCommand(m_leds)
+            )
+        );
+
+        // TODO: implement this
         // L1 - intake
-        // R1 - outake
+        // R1 - outtake
         // Right d-pad - climb
         // Left d-pad - abort climb
-
-        // Keyboard controls
-        // m_swerve.setDefaultCommand(
-        // SwerveComSmandFactory.makeTeleop(
-        // m_swerve,
-        // // () -> 0,
-        // // () -> 1,
-        // () -> m_keyboard.getRawAxis(0),
-        // () -> -m_keyboard.getRawAxis(1),
-        // () -> m_keyboard.getRawAxis(2),
-        // () -> 0
-        // )
-        // );
     }
 
     public Command getAutonomousCommand() {
-        ReefBranch branch = FieldConstants.ReefConstants.ReefBranch.kL4F1;
-        return Commands.sequence(
-            SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(5, 1, Rotation2d.fromDegrees(0))),
-            Commands.waitSeconds(4),
-            branch.makeScoreCommand(m_swerve, m_elevator, m_endEffector)
+        return AutoSelector.get().beforeStarting(
+            SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(8, 8, Rotation2d.k180deg))
         );
     }
 
@@ -108,6 +109,7 @@ public class RobotContainer {
             m_elevator,
             m_swerve,
             m_endEffector,
+            m_leds,
             m_driverController,
             m_operatorController
         );

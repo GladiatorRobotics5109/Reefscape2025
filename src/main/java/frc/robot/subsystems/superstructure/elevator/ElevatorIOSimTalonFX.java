@@ -3,41 +3,50 @@ package frc.robot.subsystems.superstructure.elevator;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.system.plant.LinearSystemId;
-import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.util.Conversions;
 
 public class ElevatorIOSimTalonFX extends ElevatorIOTalonFX {
-    private final DCMotorSim m_sim;
+    private final ElevatorSim m_sim;
 
     public ElevatorIOSimTalonFX(int motorPort, int followerPort, boolean useFOC) {
         super(motorPort, followerPort, useFOC);
 
-        // TODO: find correct MOI
-        m_sim = new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(
-                useFOC ? DCMotor.getKrakenX60Foc(1) : DCMotor.getKrakenX60(1),
-                0.002,
-                ElevatorConstants.kGearRatio
-            ),
-            useFOC ? DCMotor.getKrakenX60Foc(1) : DCMotor.getKrakenX60(1)
+        m_sim = new ElevatorSim(
+            DCMotor.getKrakenX60Foc(2),
+            ElevatorConstants.kGearRatio,
+            Conversions.poundsToKilograms(20),
+            ElevatorConstants.kSprocketRadiusMeters,
+            0.0,
+            ElevatorConstants.kElevatorMaxPositionMeters,
+            true,
+            0.0,
+            0.0,
+            0.0
         );
     }
 
     @Override
-    public void updateSim() {
+    public void periodic() {
         TalonFXSimState simState = m_motor.getSimState();
+        TalonFXSimState followerSimState = m_followerMotor.getSimState();
 
         simState.setSupplyVoltage(12);
+        followerSimState.setSupplyVoltage(12);
 
         m_sim.setInputVoltage(simState.getMotorVoltage());
         m_sim.update(Constants.kLoopPeriodSecs);
 
-        simState.setRawRotorPosition(m_sim.getAngularPositionRotations() * ElevatorConstants.kGearRatio);
-        simState.setRotorVelocity(
-            Conversions.radiansToRotations(m_sim.getAngularVelocityRadPerSec() * ElevatorConstants.kGearRatio)
-        );
+        double rotorPositionRot = Conversions.elevatorMetersToElevatorRotations(m_sim.getPositionMeters())
+            * ElevatorConstants.kGearRatio;
+        simState.setRawRotorPosition(rotorPositionRot);
+        followerSimState.setRawRotorPosition(rotorPositionRot);
+
+        double rotorVelRotPerSec = Conversions.elevatorMetersToElevatorRotations(m_sim.getVelocityMetersPerSecond())
+            * ElevatorConstants.kGearRatio;
+        simState.setRotorVelocity(rotorVelRotPerSec);
+        followerSimState.setRotorVelocity(rotorVelRotPerSec);
     }
 }

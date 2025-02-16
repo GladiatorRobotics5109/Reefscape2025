@@ -1,9 +1,5 @@
 package frc.robot.subsystems.swerve;
 
-import java.util.List;
-
-import org.littletonrobotics.junction.Logger;
-
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.loggedgyro.LoggedGyro;
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.loggedgyro.LoggedGyroIO;
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.loggedgyro.LoggedGyroIOPigeon;
@@ -11,7 +7,6 @@ import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.lo
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.PathPlannerLogging;
-
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,14 +17,17 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotState;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.RobotState;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModule;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModuleIO;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModuleIOSimTalonFx;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModuleIOTalonFx;
 import frc.robot.subsystems.vision.VisionMeasurement;
 import frc.robot.util.Util;
+import org.littletonrobotics.junction.Logger;
+
+import java.util.List;
 
 public class SwerveSubsystem extends SubsystemBase {
     private final SwerveModule m_moduleFL;
@@ -155,7 +153,7 @@ public class SwerveSubsystem extends SubsystemBase {
             m_kinematics,
             m_gyro.getYaw(),
             getModulePositions(),
-            new Pose2d()
+            SwerveConstants.kStartingPose
         );
 
         AutoBuilder.configure(
@@ -165,7 +163,6 @@ public class SwerveSubsystem extends SubsystemBase {
             (speeds, feedForward) -> drive(speeds, false),
             new PPHolonomicDriveController(SwerveConstants.kPPTranslationPID, SwerveConstants.kPPRotaitonPID),
             SwerveConstants.kPPConfig,
-            // TODO: test this
             () -> Util.getAlliance() == Alliance.Red, // Flip if red alliance
             this
         );
@@ -185,19 +182,17 @@ public class SwerveSubsystem extends SubsystemBase {
 
     /**
      *
-     * @param vx
-     *            velocity in m/s
-     * @param vy
-     *            velocity in m/s
-     * @param vrot
-     *            rotational velocity in rad/s
+     * @param vx velocity in m/s
+     * @param vy velocity in m/s
+     * @param vrot rotational velocity in rad/s
      * @param fieldRelative
      */
     public void drive(double vx, double vy, double vrot, boolean fieldRelative) {
-        Rotation2d headingOffset = Util.getAlliance() == Alliance.Red ? Rotation2d.fromDegrees(0)
-            : Rotation2d.fromDegrees(180);
+        Rotation2d headingOffset = Util.getAlliance() == Alliance.Red
+            ? Rotation2d.fromDegrees(180)
+            : Rotation2d.fromDegrees(0);
         ChassisSpeeds desiredSpeeds = fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(vy, vx, vrot, getHeading().plus(headingOffset))
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, getHeading().plus(headingOffset))
             : new ChassisSpeeds(vx, vy, vrot);
         desiredSpeeds = ChassisSpeeds.discretize(desiredSpeeds, Constants.kLoopPeriodSecs);
 
@@ -213,16 +208,33 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void drive(ChassisSpeeds speeds, boolean fieldRelative) {
-        drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false);
+        drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, fieldRelative);
     }
 
-    public Pose2d getPose() {
-        return m_poseEstimator.getEstimatedPosition();
+    public void stopAndX() {
+        SwerveModuleState flBr = new SwerveModuleState(0.0, Rotation2d.fromDegrees(45));
+        SwerveModuleState frBL = new SwerveModuleState(0.0, Rotation2d.fromDegrees(-45));
+
+        m_moduleFL.setDesiredState(flBr, false);
+        m_moduleFR.setDesiredState(frBL, false);
+        m_moduleBL.setDesiredState(frBL, false);
+        m_moduleBR.setDesiredState(flBr, false);
+
+        Logger.recordOutput(
+            SwerveConstants.kLogPath
+                + "/desiredModuleStates",
+            new SwerveModuleState[] {
+                flBr,
+                frBL,
+                frBL,
+                flBr
+            }
+        );
     }
 
-    public Rotation2d getHeading() {
-        return getPose().getRotation();
-    }
+    public Pose2d getPose() { return m_poseEstimator.getEstimatedPosition(); }
+
+    public Rotation2d getHeading() { return getPose().getRotation(); }
 
     public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {
@@ -239,6 +251,15 @@ public class SwerveSubsystem extends SubsystemBase {
             m_moduleFR.getState(),
             m_moduleBL.getState(),
             m_moduleBR.getState()
+        };
+    }
+
+    public double[] getModuleTurnVelocities() {
+        return new double[] {
+            m_moduleFL.getTurnVelocityRadPerSec(),
+            m_moduleFR.getTurnVelocityRadPerSec(),
+            m_moduleBL.getTurnVelocityRadPerSec(),
+            m_moduleBR.getTurnVelocityRadPerSec(),
         };
     }
 
@@ -266,9 +287,7 @@ public class SwerveSubsystem extends SubsystemBase {
         };
     }
 
-    public ChassisSpeeds getCurrentChassisSpeeds() {
-        return m_kinematics.toChassisSpeeds(getModuleStates());
-    }
+    public ChassisSpeeds getCurrentChassisSpeeds() { return m_kinematics.toChassisSpeeds(getModuleStates()); }
 
     public void setPosition(Pose2d pose) {
         m_poseEstimator.resetPosition(m_gyro.getYaw(), getModulePositions(), pose);
@@ -276,8 +295,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void updatePose() {
         VisionMeasurement[] measurements = RobotState.getVisionMeasurements();
-        for (var measurement : measurements) {
-            m_poseEstimator.addVisionMeasurement(measurement.estimatedPose().toPose2d(), measurement.timestmap());
+        for (VisionMeasurement measurement : measurements) {
+            m_poseEstimator.addVisionMeasurement(measurement.estimatedPose().toPose2d(), measurement.timestamp());
         }
 
         m_poseEstimator.update(m_gyro.getYaw(), getModulePositions());

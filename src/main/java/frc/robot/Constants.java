@@ -13,6 +13,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -23,6 +24,7 @@ import frc.robot.Constants.SwerveConstants.SwerveModuleConstants;
 import frc.robot.util.Conversions;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.util.FieldConstants;
 
 public final class Constants {
     public static final Mode kCurrentMode = Mode.SIM;
@@ -36,6 +38,7 @@ public final class Constants {
     public static final double kJoystickDeadzone = 0.15;
 
     public static final double kBumperWidthMeters = Conversions.inchesToMeters(3.25);
+    public static final double kChassisLengthMeters = Conversions.inchesToMeters(29);
 
     public static final class DriveTeamConstants {
         public static final int kDriveControllerPort = 0;
@@ -64,10 +67,10 @@ public final class Constants {
             public static final int kBackRightDrivePort = 3;
             public static final int kBackRightTurnPort = 30;
 
-            public static final Translation2d kModulePosFL = new Translation2d(0.290449, 0.290449);
-            public static final Translation2d kModulePosFR = new Translation2d(0.290449, -0.290449);;
-            public static final Translation2d kModulePosBL = new Translation2d(-0.290449, 0.290449);
-            public static final Translation2d kModulePosBR = new Translation2d(-0.290449, -0.290449);
+            public static final Translation2d kModulePosFL = new Translation2d(0.283989, 0.283989);
+            public static final Translation2d kModulePosFR = new Translation2d(0.283989, -0.283989);
+            public static final Translation2d kModulePosBL = new Translation2d(-0.283989, 0.283989);
+            public static final Translation2d kModulePosBR = new Translation2d(-0.283989, -0.283989);
 
             // Units in module space not motor space
             public static final PIDConstants kDrivePID = new PIDConstants(
@@ -75,19 +78,8 @@ public final class Constants {
                 0,
                 0
             );
-            // public static final PIDConstants kDrivePID = new PIDConstants(
-            // 0.026251 * kDriveGearRatio.asDouble(), // Volts per m/s error
-            // 0,
-            // 0
-            // );
 
-            // public static final FeedforwardConstants kDriveFeedforward = new FeedforwardConstants(0.15, 9.5 / 3);
             public static final FeedforwardConstants kDriveFeedforward = new FeedforwardConstants(0.14, 6);
-            // public static final FeedforwardConstants kDriveFeedForward = new FeedforwardConstants(
-            // 0.0091035 * kDriveGearRatio.asDouble(),
-            // 0.1546 * kDriveGearRatio.asDouble(),
-            // 0.0055267 * kDriveGearRatio.asDouble()
-            // );
 
             public static final PIDConstants kTurnPID = new PIDConstants(
                 12 / Conversions.rotationsToRadians(0.01), // Volts per radian error
@@ -101,28 +93,11 @@ public final class Constants {
                 PIDConstants.kVelocityTolerance
             );
 
-            // public static final PIDConstants kTurnPID = new PIDConstants(
-            // 0.096535 * kTurnGearRatio,
-            // 0,
-            // 0,
-            // PIDConstants.kIZone,
-            // true,
-            // -Math.PI,
-            // Math.PI,
-            // PIDConstants.kPositionTolerance,
-            // PIDConstants.kVelocityTolerance
-            // );
-
             public static final FeedforwardConstants kTurnFeedforward = new FeedforwardConstants(0, 0);
 
-            // public static final FeedforwardConstants kTurnFeedforward = new FeedforwardConstants(
-            // 0,
-            // 0.24103 * kTurnGearRatio,
-            // 0.013805 * kTurnGearRatio
-            // );
-
             public static final int kDriveStatorCurrentLimit = 92;
-            public static final int kDriveSupplyCurrentLimit = 40;
+            public static final int kDriveSupplyCurrentLowerLimit = 40;
+            public static final int kDriveSupplyCurrentLimit = 60;
 
             public static final int kTurnSupplyCurrentLimit = 30;
 
@@ -140,7 +115,7 @@ public final class Constants {
         public static final Pose2d kStartingPose = new Pose2d();
         public static final String kLogPath = "Subsystems/Swerve";
         public static final double kFrameWidth = Conversions.inchesToMeters(29);
-        public static final double kFrameHeight = kFrameWidth;
+        public static final double kFrameHeight = Conversions.inchesToMeters(29);
         public static final double kDriveBaseRadiusMeters = Math.hypot(kFrameWidth, kFrameHeight);
 
         public static final com.pathplanner.lib.config.PIDConstants kPPTranslationPID = new com.pathplanner.lib.config.PIDConstants(
@@ -159,7 +134,7 @@ public final class Constants {
             52.0,
             5.0,
             // Conversions.poundsToKilograms(112),
-            // // Fix rough esimate
+            // // Fix rough estimate
             // (1 / 12) * Conversions.poundsToKilograms(112)
             // * (Math.pow(SwerveModuleConstants.kModulePosFL.getX(), 2)
             // + Math.pow(SwerveModuleConstants.kModulePosFL.getY(), 2)),
@@ -170,7 +145,7 @@ public final class Constants {
                 SwerveModuleConstants.kUseFOC
                     ? DCMotor.getKrakenX60Foc(1).withReduction(SwerveModuleConstants.kDriveGearRatio.asDouble())
                     : DCMotor.getKrakenX60(1).withReduction(SwerveModuleConstants.kDriveGearRatio.asDouble()),
-                SwerveModuleConstants.kDriveSupplyCurrentLimit,
+                SwerveModuleConstants.kDriveSupplyCurrentLowerLimit,
                 1
             ),
             SwerveModuleConstants.kModulePosFL,
@@ -197,6 +172,8 @@ public final class Constants {
             Units.RotationsPerSecondPerSecond.of(2)
         );
 
+        public static final PathConstraints kPPCoralStationInnerPathConstraints = kPPReefInnerPathConstraints;
+
         public static final SwerveDriveConfiguration kTeleopConfig = new SwerveDriveConfiguration(
             SwerveModuleConstants.kDriveMaxFreeSpeed,
             Units.MetersPerSecond.of(0.5),
@@ -208,13 +185,27 @@ public final class Constants {
 
         // Provides a way to describe the configuration of the swerve subsystem (like drive speeds) with values that may
         // change throughout a match (like auto -> teleop)
-        public static final record SwerveDriveConfiguration(LinearVelocity defaultDriveSpeed, LinearVelocity modifiedDriveSpeed, AngularVelocity defaultRotationSpeed, AngularVelocity modifiedRotationSpeed, boolean fieldRelative) {
+        public static final record SwerveDriveConfiguration(
+            LinearVelocity defaultDriveSpeed,
+            LinearVelocity modifiedDriveSpeed,
+            AngularVelocity defaultRotationSpeed,
+            AngularVelocity modifiedRotationSpeed,
+            boolean fieldRelative
+        ) {
             public double evalDriveSpeed(double t) {
-                return MathUtil.interpolate(defaultDriveSpeed.in(Units.MetersPerSecond), modifiedDriveSpeed.in(Units.MetersPerSecond), t);
+                return MathUtil.interpolate(
+                    defaultDriveSpeed.in(Units.MetersPerSecond),
+                    modifiedDriveSpeed.in(Units.MetersPerSecond),
+                    t
+                );
             }
 
             public double evalRotationSpeed(double t) {
-                return MathUtil.interpolate(defaultRotationSpeed.in(Units.RadiansPerSecond), modifiedRotationSpeed.in(Units.RadiansPerSecond), t);
+                return MathUtil.interpolate(
+                    defaultRotationSpeed.in(Units.RadiansPerSecond),
+                    modifiedRotationSpeed.in(Units.RadiansPerSecond),
+                    t
+                );
             }
         }
     }
@@ -230,58 +221,102 @@ public final class Constants {
 
         public static final String kLogPath = "Subsystems/Vision";
 
-        // TODO: update this
         public static final AprilTagFieldLayout kAprilTagFieldLayout = AprilTagFieldLayout.loadField(
-            AprilTagFields.kDefaultField
-        );;
+            AprilTagFields.k2025ReefscapeWelded // Peachtree uses Welded
+        );
     }
 
     public static final class ElevatorConstants {
         public static final String kLogPath = "Subsystems/Elevator";
 
         public static final int kMotorPort = 20;
-        public static final boolean kInvertMotor = false;
+        public static final boolean kInvertMotor = true;
         public static final int kFollowerPort = 21;
+
+        public static final boolean kUseMotorPID = false;
 
         public static final boolean kUseFOC = true;
 
         public static final double kSupplyCurrentLimit = 40.0;
         public static final double kStatorCurrentLimit = 1.75 * kSupplyCurrentLimit;
 
-        public static final double kGearRatio = 20;
+        public static final double kGearRatio = 12;
         public static final double kSprocketRadiusMeters = Conversions.inchesToMeters(0.819);
 
-        public static final double kElevatorMinLengthMeters = Conversions.inchesToMeters(37.236);
-        public static final double kElevatorMaxLengthMeters = Conversions.inchesToMeters(69.736220);
-        public static final double kElevatorMaxLengthChangeMeters = kElevatorMaxLengthMeters - kElevatorMinLengthMeters;
+        public static final double kElevatorMaxPositionMeters = Conversions.inchesToMeters(69.736220);
 
-        public static final double kUpLimitMotorRotations = Conversions.elevatorPositionToRotations(
-            kElevatorMaxLengthChangeMeters
+        public static final double kForwardSoftLimitRad = Conversions.elevatorMetersToElevatorRadians(
+            kElevatorMaxPositionMeters
         );
-        public static final double kDownLimitMotorRotations = 0.0;
+        public static final double kReverseSoftLimitRad = 0.0;
 
-        public static final PIDConstants kPID = new PIDConstants(5, 0.0, 0.0);
-        public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(0.0, 0.0, 0.0, 6.0);
+        public static final PIDConstants kPID = new PIDConstants(
+            5.0, // V / rad
+            0.0,
+            0.0
+        );
+        public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(
+            0.2,
+            0.22,
+            0.0,
+            0.25 // V
+        );
+        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1);
+        public static final double kElevatorAccelerationRadPerSecPerSec = 30;
 
-        // Height of the base of elevator from the floor
+        /** Distance between belly pan and elevator base */
+        public static final double kBellyPanToElevatorBaseMeters = Conversions.inchesToMeters(3);
+
+        /** Distance from the top face of the bottom bar of the second stage to the floor */
         public static final double kElevatorBaseHeightMeters = SwerveModuleConstants.kWheelRadiusMeters
-            + Conversions.inchesToMeters(2);
+            + kBellyPanToElevatorBaseMeters;
+
+        // TODO: Verify this
+        /**
+         * Distance from the center of the leading edge of the coral to the floor when the elevator is at its starting
+         * configuration
+         */
         public static final double kEndEffectorHeightMeters = kElevatorBaseHeightMeters
-            + Conversions.inchesToMeters(25);
+            + EndEffectorConstants.kEndEffectorLengthMeters
+            + FieldConstants.CoralConstants.kCoralOuterRadiusMeters
+                * EndEffectorConstants.kAngle.minus(Rotation2d.kCCW_Pi_2).getSin();
+
+        public static final double kPositionToleranceMeters = Conversions.inchesToMeters(1);
 
         // The distance from the center of the reef that the elevator will be allowed to autonomously extend
-        public static final double kAutoElevatorExtendRequiredDistanceMeters = 3.0;
+        public static final double kAutoElevatorExtendRequiredDistanceMeters = 4.5;
     }
 
     public static final class EndEffectorConstants {
+        /**
+         * Length of end effector measured from bottom of the poly carb to the top edge of the bottom plane that the
+         * coral rests on
+         */
+        public static final double kEndEffectorLengthMeters = Conversions.inchesToMeters(11.967);
+
+        public static final int kMotorPort = 69; //MAKE SURE TO CHANGE THIS!!
+
         // The maximum distance the chassis can be from the auto score location to score
         public static final double kAutoScoreMaxDistMeters = 0.02;
         public static final double kAutoScoreMaxAngleRadians = Conversions.degreesToRadians(5);
         public static final double kAutoScoreMaxLinearSpeedMetersPerSecond = 0.1;
         public static final double kAutoScoreMaxAngularSpeedRadiansPerSecond = Conversions.degreesToRadians(10);
 
+        // Angle of coral measured from the horizontal
+        public static final Rotation2d kAngle = Rotation2d.fromDegrees(55);
+
         public static final double kScoreTimeoutSeconds = 2;
 
         public static final double kScoreVoltage = 6;
+    }
+
+    public static final class BallsIntakeConstants {
+        public static final double kScorePower = 0.5;
+        public static final int kMotorPort = 69; //MAKE SURE TO CHANGE THIS!!
+    }
+
+    public static final class LEDConstants {
+        public static final int kCANdlePort = 60;
+        public static final int kLEDCount = 10;
     }
 }

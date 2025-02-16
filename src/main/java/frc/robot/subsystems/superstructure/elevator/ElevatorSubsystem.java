@@ -1,5 +1,9 @@
 package frc.robot.subsystems.superstructure.elevator;
 
+import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
@@ -22,8 +26,15 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final LoggedMechanism2d m_mech;
     private final LoggedMechanismRoot2d m_mechRoot;
     private final LoggedMechanismLigament2d m_mechElevator;
+    private final LoggedMechanismLigament2d m_mechEndEffector;
+
+    private final ProfiledPIDController m_pid;
+    private final ElevatorFeedforward m_feedforward;
+
+    private final boolean m_useMotorPID;
 
     private double m_desiredPositionMeters;
+    private boolean m_hasDesiredPosition;
 
     public ElevatorSubsystem() {
         switch (Constants.kCurrentMode) {
@@ -54,53 +65,90 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_mech = new LoggedMechanism2d(0, 0);
         m_mechRoot = m_mech.getRoot("Base", 0, ElevatorConstants.kElevatorBaseHeightMeters);
         m_mechElevator = m_mechRoot.append(
-            new LoggedMechanismLigament2d("Elevator", ElevatorConstants.kElevatorMinLengthMeters, 90)
+            new LoggedMechanismLigament2d(
+                "Elevator",
+                ElevatorConstants.kElevatorBaseHeightMeters,
+                90,
+                6,
+                new Color8Bit(0, 0, 0)
+            )
+        );
+        m_mechEndEffector = m_mechElevator.append(
+            new LoggedMechanismLigament2d(
+                "EndEffector",
+                ElevatorConstants.kEndEffectorHeightMeters - ElevatorConstants.kElevatorBaseHeightMeters,
+                0,
+                3,
+                new Color8Bit(255, 0, 0)
+            )
         );
 
         m_desiredPositionMeters = 0.0;
+
+        m_pid = new ProfiledPIDController(
+            ElevatorConstants.kPID.kp(),
+            ElevatorConstants.kPID.ki(),
+            ElevatorConstants.kPID.kd(),
+            new TrapezoidProfile.Constraints(
+                ElevatorConstants.kElevatorCruiseVelocityRadPerSec,
+                ElevatorConstants.kElevatorAccelerationRadPerSecPerSec
+            )
+        );
+
+        m_feedforward = ElevatorConstants.kFeedForward.getElevatorFeedforward();
+
+        m_useMotorPID = ElevatorConstants.kUseMotorPID;
     }
 
     public void setVoltage(double volts) {
+        m_hasDesiredPosition = false;
         m_io.setVoltage(volts);
     }
 
-    public void setTargetHeightElevatorRelative(double positionMeters) {
-        m_desiredPositionMeters = positionMeters;
-        m_io.setPosition(Conversions.elevatorPositionToRotations(positionMeters));
+    public void setDesiredPositionElevator(double positionMeters) {
+        m_hasDesiredPosition = true;
+        m_desiredPositionMeters = MathUtil.clamp(positionMeters, 0.0, ElevatorConstants.kElevatorMaxPositionMeters);
+        m_io.setPosition(Conversions.elevatorMetersToElevatorRotations(m_desiredPositionMeters));
     }
 
-    public void setTargetHeightFieldRelative(double heightMeters) {
-        setTargetHeightElevatorRelative(
-            heightMeters + ElevatorConstants.kElevatorBaseHeightMeters + ElevatorConstants.kElevatorMinLengthMeters
-        );
+    /**
+     * Sets the desired height of the end effector measured from the floor
+     */
+    public void setDesiredPositionEndEffector(double positionMeters) {
+        setDesiredPositionElevator(Conversions.endEffectorMetersToElevatorMeters(positionMeters));
     }
 
-    public void setTargetHeightFieldRelative(ReefHeight height) {
-        setTargetHeightFieldRelative(height.getHeight());
+    public void setDesiredPositionEndEffector(ReefHeight height) {
+        setDesiredPositionEndEffector(height.getHeight());
     }
 
-    public double getCurrentHeightElevatorRelativeMeters() {
-        return Conversions.elevatorRotationsToElevatorPosition(m_inputs.positionRad);
+    public double getCurrentPositionElevator() {
+        return Conversions.elevatorRadiansToElevatorMeters(m_inputs.positionRad);
     }
 
-    public double getCurrentHeightFieldRelativeMeters() {
-        return getCurrentHeightElevatorRelativeMeters() + ElevatorConstants.kElevatorBaseHeightMeters
-            + ElevatorConstants.kElevatorMinLengthMeters;
+    public double getCurrentPositionEndEffector() {
+        return Conversions.endEffectorMetersToElevatorMeters(getCurrentPositionElevator());
     }
 
-    public double getDesiredPositionElevatorRelativeMeters() {
-        return m_desiredPositionMeters;
+    public double getCurrentVelocity() {
+        return Conversions.elevatorRadiansToElevatorMeters(m_inputs.velocityRadPerSec);
     }
 
-    public boolean atDesiredPositionMeters() {
+    public double getDesiredPositionElevator() { return m_desiredPositionMeters; }
+
+    public double getDesiredPositionElevatorRad() {
+        return Conversions.elevatorMetersToElevatorRadians(m_desiredPositionMeters);
+    }
+
+    public boolean atDesiredPosition() {
         return MathUtil.isNear(
-            getDesiredPositionElevatorRelativeMeters(),
-            getCurrentHeightElevatorRelativeMeters(),
-            Conversions.inchesToMeters(1)
+            getDesiredPositionElevator(),
+            getCurrentPositionElevator(),
+            ElevatorConstants.kPositionToleranceMeters
         );
     }
 
-    public boolean isWithinRadius() {
+    public boolean canAutoExtend() {
         return RobotState.getSwervePose().getTranslation().getDistance(
             FieldConstants.ReefConstants.getAllianceReefPos()
         ) < ElevatorConstants.kAutoElevatorExtendRequiredDistanceMeters;
@@ -108,18 +156,37 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        m_io.updateSim();
+        m_io.periodic();
         m_io.updateInputs(m_inputs);
         Logger.processInputs(ElevatorConstants.kLogPath, m_inputs);
 
         if (DriverStation.isDisabled()) {
-            m_io.setVoltage(0);
+            setVoltage(0);
+        }
+        else if (m_hasDesiredPosition && !m_useMotorPID) {
+            double pidOut = m_pid.calculate(
+                m_inputs.positionRad,
+                Conversions.elevatorMetersToElevatorRadians(m_desiredPositionMeters)
+            );
+
+            TrapezoidProfile.State desiredState = m_pid.getSetpoint();
+
+            m_io.setVoltage(
+                pidOut + m_feedforward.calculate(desiredState.velocity)
+            );
+
+            Logger.recordOutput(
+                ElevatorConstants.kLogPath + "/MotionProfile/DesiredPositionRad",
+                desiredState.position
+            );
+            Logger.recordOutput(
+                ElevatorConstants.kLogPath + "/MotionProfile/DesiredVelocityRadPerSec",
+                desiredState.velocity
+            );
         }
 
-        // Update mech
-        m_mechElevator.setLength(
-            getCurrentHeightElevatorRelativeMeters() + ElevatorConstants.kElevatorMinLengthMeters
-        );
+        // Update mechanism
+        m_mechElevator.setLength(getCurrentPositionElevator());
         Logger.recordOutput(ElevatorConstants.kLogPath + "/Mechanism", m_mech);
     }
 }

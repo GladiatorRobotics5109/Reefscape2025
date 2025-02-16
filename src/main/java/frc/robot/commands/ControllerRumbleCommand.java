@@ -9,15 +9,18 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class ControllerRumbleCommand extends Command {
-    public static
-        ControllerRumbleCommand
-        makeLinearDecay(double startValue, RumbleType type, double lengthSeconds, GenericHID[] targets) {
+    public static Command linearDecayCommand(
+        double startValue,
+        RumbleType type,
+        double lengthSeconds,
+        GenericHID[] targets
+    ) {
         return new ControllerRumbleCommand(
             (Double t) -> MathUtil.interpolate(startValue, 0.0, t / lengthSeconds),
             type,
             lengthSeconds,
             targets
-        );
+        ).withName("ControllerRumbleCommand/LinearDecay");
     }
 
     private final Function<Double, Double> m_valueSupplier;
@@ -33,13 +36,13 @@ public class ControllerRumbleCommand extends Command {
         double lengthSeconds,
         GenericHID[] targets
     ) {
+        setName("ControllerRumbleCommand");
+
         m_valueSupplier = valueSupplier;
         m_type = type;
         m_lengthSeconds = lengthSeconds;
         m_timer = new Timer();
         m_targets = targets;
-
-        setName("AutomatedTeleopCommand");
     }
 
     @Override
@@ -57,7 +60,5 @@ public class ControllerRumbleCommand extends Command {
     }
 
     @Override
-    public boolean isFinished() {
-        return m_timer.hasElapsed(m_lengthSeconds);
-    }
+    public boolean isFinished() { return m_timer.hasElapsed(m_lengthSeconds); }
 }

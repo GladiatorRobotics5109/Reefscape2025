@@ -1,8 +1,7 @@
 package frc.robot.util;
 
 import java.util.List;
-
-import edu.wpi.first.wpilibj2.command.Commands;
+import java.util.Optional;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -16,12 +15,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.SuperstructureCommandFactory;
-import frc.robot.commands.SwerveCommandFactory;
-import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
-import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
-import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 public class FieldConstants {
     public static final class ReefConstants {
@@ -29,9 +22,18 @@ public class FieldConstants {
             One,
             Two;
 
-            public int getIndex() {
-                return this == One ? 1 : 2;
+            public static Optional<ReefIndex> fromChar(char c) {
+                switch (c) {
+                    case '1':
+                        return Optional.of(One);
+                    case '2':
+                        return Optional.of(Two);
+                    default:
+                        return Optional.empty();
+                }
             }
+
+            public int getIndex() { return this == One ? 1 : 2; }
 
             @Override
             public String toString() {
@@ -40,10 +42,25 @@ public class FieldConstants {
         }
 
         public static enum ReefHeight {
-            L1(0.0), // TOOD: Fix this
+            L1(kReefL1HeightMeters),
             L2(kReefL2HeightMeters),
             L3(kReefL3HeightMeters),
             L4(kReefL4HeightMeters);
+
+            public static Optional<ReefHeight> fromChar(char c) {
+                switch (c) {
+                    case '1':
+                        return Optional.of(L1);
+                    case '2':
+                        return Optional.of(L2);
+                    case '3':
+                        return Optional.of(L3);
+                    case '4':
+                        return Optional.of(L4);
+                    default:
+                        return Optional.empty();
+                }
+            }
 
             private final double m_height;
 
@@ -51,9 +68,7 @@ public class FieldConstants {
                 m_height = heightMeters;
             }
 
-            public double getHeight() {
-                return m_height;
-            }
+            public double getHeight() { return m_height; }
         }
 
         public static enum ReefFace {
@@ -63,6 +78,25 @@ public class FieldConstants {
             H(3),
             I(4),
             J(5);
+
+            public static Optional<ReefFace> fromChar(char c) {
+                switch (c) {
+                    case 'E':
+                        return Optional.of(E);
+                    case 'F':
+                        return Optional.of(F);
+                    case 'G':
+                        return Optional.of(G);
+                    case 'H':
+                        return Optional.of(H);
+                    case 'I':
+                        return Optional.of(I);
+                    case 'J':
+                        return Optional.of(J);
+                    default:
+                        return Optional.empty();
+                }
+            }
 
             private int m_index;
 
@@ -80,9 +114,7 @@ public class FieldConstants {
                 return Rotation2d.fromDegrees(60 * -m_index).plus(Rotation2d.k180deg);
             }
 
-            public Rotation2d getSwerveTargetHeading() {
-                return getFaceAngleFieldRelative().plus(Rotation2d.k180deg);
-            }
+            public Rotation2d getSwerveTargetHeading() { return getFaceAngleFieldRelative().plus(Rotation2d.k180deg); }
 
             public Rotation2d getSwerveTargetHeadingBlueAlliance() {
                 return getFaceAngleFieldRelativeBlueAlliance().plus(Rotation2d.k180deg);
@@ -100,21 +132,7 @@ public class FieldConstants {
                 return new Translation2d(kReefRadiusMeters, getFaceAngleFieldRelative());
             }
 
-            public int getIndex() {
-                return m_index;
-            }
-
-            // @Override
-            // public String toString() {
-            // switch (m_index) {
-            // case 0: "E",
-            // F(1),
-            // G(2),
-            // H(3),
-            // I(4),
-            // J(5);
-            // }
-            // }
+            public int getIndex() { return m_index; }
         }
 
         public static class ReefBranch {
@@ -157,6 +175,57 @@ public class FieldConstants {
             public static final ReefBranch kL4J1 = new ReefBranch(ReefHeight.L4, ReefFace.J, ReefIndex.One);
             public static final ReefBranch kL4J2 = new ReefBranch(ReefHeight.L4, ReefFace.J, ReefIndex.Two);
 
+            public static final ReefBranch[] kValues = new ReefBranch[] {
+                ReefBranch.kL2E1,
+                ReefBranch.kL2E2,
+                ReefBranch.kL2F1,
+                ReefBranch.kL2F2,
+                ReefBranch.kL2G1,
+                ReefBranch.kL2G2,
+                ReefBranch.kL2H1,
+                ReefBranch.kL2H2,
+                ReefBranch.kL2I1,
+                ReefBranch.kL2I2,
+                ReefBranch.kL2J1,
+                ReefBranch.kL2J2,
+
+                ReefBranch.kL3E1,
+                ReefBranch.kL3E2,
+                ReefBranch.kL3F1,
+                ReefBranch.kL3F2,
+                ReefBranch.kL3G1,
+                ReefBranch.kL3G2,
+                ReefBranch.kL3H1,
+                ReefBranch.kL3H2,
+                ReefBranch.kL3I1,
+                ReefBranch.kL3I2,
+                ReefBranch.kL3J1,
+                ReefBranch.kL3J2,
+
+                ReefBranch.kL4E1,
+                ReefBranch.kL4E2,
+                ReefBranch.kL4F1,
+                ReefBranch.kL4F2,
+                ReefBranch.kL4G1,
+                ReefBranch.kL4G2,
+                ReefBranch.kL4H1,
+                ReefBranch.kL4H2,
+                ReefBranch.kL4I1,
+                ReefBranch.kL4I2,
+                ReefBranch.kL4J1,
+                ReefBranch.kL4J2,
+            };
+
+            public static final Optional<ReefBranch> fromString(String str) {
+                Optional<ReefHeight> height = ReefHeight.fromChar(str.charAt(1));
+                Optional<ReefFace> face = ReefFace.fromChar(str.charAt(2));
+                Optional<ReefIndex> index = ReefIndex.fromChar(str.charAt(3));
+
+                if (height.isEmpty() || face.isEmpty() || index.isEmpty()) return Optional.empty();
+
+                return Optional.of(new ReefBranch(height.get(), face.get(), index.get()));
+            }
+
             private final Translation3d m_branchPosition;
             private final PathPlannerPath m_innerPath;
             private final ReefFace m_face;
@@ -168,23 +237,7 @@ public class FieldConstants {
                 m_height = height;
                 m_index = index;
 
-                // I'm very sorry for this...
-                m_branchPosition = new Translation3d(getAllianceReefPos()).plus(
-                    new Translation3d(face.getReefRelativeFacePosition())
-                ).plus(
-                    new Translation3d(
-                        kReefBranchDistMeters / 2,
-                        new Rotation3d(
-                            m_face.getFaceAngleFieldRelative().plus(
-                                Util.getAlliance() == Alliance.Blue
-                                    ? (m_index == ReefIndex.One ? Rotation2d.fromDegrees(90)
-                                        : Rotation2d.fromDegrees(-90))
-                                    : (m_index == ReefIndex.One ? Rotation2d.fromDegrees(-90)
-                                        : Rotation2d.fromDegrees(90))
-                            )
-                        )
-                    )
-                ).plus(new Translation3d(0, 0, height.getHeight()));
+                m_branchPosition = getBranchPosition(m_height, m_face, m_index);
 
                 m_innerPath = Paths.getReefInnerPath(face, index);
             }
@@ -205,53 +258,63 @@ public class FieldConstants {
                 );
             }
 
-            public Translation3d getBranchPosition() {
-                return m_branchPosition;
-            }
+            public Translation3d getBranchPosition() { return m_branchPosition; }
 
-            public
-                Command
-                makeScoreCommand(SwerveSubsystem swerve, ElevatorSubsystem elevator, EndEffectorSubsystem endEffector) {
-                // return SwerveCommandFactory.driveToReefScore(swerve, this);
-                return Commands.parallel(
-                    SwerveCommandFactory.driveToReefScore(swerve, this),
-                    SuperstructureCommandFactory.autoScore(elevator, endEffector, this)
-                ).withName(this + " Score Command");
-            }
+            public PathPlannerPath getInnerPath() { return m_innerPath; }
 
-            public PathPlannerPath getInnerPath() {
-                return m_innerPath;
-            }
+            public ReefHeight getHeight() { return m_height; }
 
-            public ReefHeight getHeight() {
-                return m_height;
-            }
+            public ReefFace getFace() { return m_face; }
 
-            public ReefFace getFace() {
-                return m_face;
-            }
-
-            public ReefIndex getIndex() {
-                return m_index;
-            }
+            public ReefIndex getIndex() { return m_index; }
 
             @Override
             public String toString() {
                 return m_height.toString() + m_face.toString() + m_index.getIndex();
             }
+
+            @Override
+            public boolean equals(Object o) {
+                if (o == null) return false;
+                if (o.getClass() != this.getClass()) return false;
+
+                final ReefBranch other = (ReefBranch)o;
+                return this.getBranchPosition().equals(other.getBranchPosition());
+            }
+
+            private Translation3d getBranchPosition(ReefHeight height, ReefFace face, ReefIndex index) {
+                // Face position
+                Translation3d position = new Translation3d(getAllianceReefPos()).plus(
+                    new Translation3d(face.getReefRelativeFacePosition())
+                ).plus(new Translation3d(0.0, 0.0, height.getHeight()));
+
+                Rotation2d toIndex = face.getFaceAngleFieldRelative();
+                if (face == ReefFace.E || face == ReefFace.I || face == ReefFace.J) {
+                    toIndex = toIndex.plus(index == ReefIndex.One ? Rotation2d.kCW_90deg : Rotation2d.kCCW_90deg);
+                }
+                else {
+                    toIndex = toIndex.plus(index == ReefIndex.One ? Rotation2d.kCCW_90deg : Rotation2d.kCW_90deg);
+                }
+
+                position = position.plus(new Translation3d(kReefBranchDistMeters / 2, new Rotation3d(toIndex)));
+
+                return position;
+            }
         }
 
-        // TODO: check these
         public static final double kReefDiameterMeters = Conversions.inchesToMeters(65.5);
         public static final double kReefRadiusMeters = kReefDiameterMeters / 2;
         // Distance form reef base to branch at L2 and L3
         public static final double kReefL2L3InsetMeters = Conversions.inchesToMeters(1 + (5 / 8));
         public static final double kReefL4InsetMeters = Conversions.inchesToMeters(1 + (1 / 8));
+
+        public static final double kReefL1HeightMeters = Conversions.feetToMeters(1) + Conversions.inchesToMeters(6);
         public static final double kReefL2HeightMeters = Conversions.feetToMeters(2)
             + Conversions.inchesToMeters(7 + (7 / 8));
         public static final double kReefL3HeightMeters = Conversions.feetToMeters(3)
             + Conversions.inchesToMeters(11 + (5 / 8));
         public static final double kReefL4HeightMeters = Conversions.feetToMeters(6);
+
         // Distance between branch centers
         public static final double kReefBranchDistMeters = Conversions.inchesToMeters(13);
         public static final double kReefBranchDiameterMeters = Conversions.inchesToMeters(1.6);
@@ -287,19 +350,34 @@ public class FieldConstants {
                 m_index = index;
             }
 
-            public int getIndex() {
-                return m_index;
-            }
+            public int getIndex() { return m_index; }
 
             @Override
             public String toString() {
                 return Integer.toString(getIndex());
             }
+
+            public static Optional<CoralStationIndex> fromChar(char c) {
+                return switch (c) {
+                    case '1' -> Optional.of(One);
+                    case '2' -> Optional.of(Two);
+                    case '3' -> Optional.of(Three);
+                    default -> Optional.empty();
+                };
+            }
         }
 
         public static enum CoralStationSide {
             C, // Close
-            F // Far
+            F; // Far
+
+            public static Optional<CoralStationSide> fromChar(char c) {
+                return switch (c) {
+                    case 'C' -> Optional.of(C);
+                    case 'F' -> Optional.of(F);
+                    default -> Optional.empty();
+                };
+            }
         }
 
         public static final class CoralStation {
@@ -310,6 +388,16 @@ public class FieldConstants {
             public static final CoralStation kF1 = new CoralStation(CoralStationSide.F, CoralStationIndex.One);
             public static final CoralStation kF2 = new CoralStation(CoralStationSide.F, CoralStationIndex.Two);
             public static final CoralStation kF3 = new CoralStation(CoralStationSide.F, CoralStationIndex.Three);
+
+            public static final CoralStation[] kValues = new CoralStation[] {
+                CoralStation.kC1,
+                CoralStation.kC2,
+                CoralStation.kC3,
+
+                CoralStation.kF1,
+                CoralStation.kF2,
+                CoralStation.kF3,
+            };
 
             private final CoralStationSide m_side;
             private final CoralStationIndex m_index;
@@ -323,20 +411,40 @@ public class FieldConstants {
                     (2 - m_index.getIndex()) * (kCoralStationOpeningWidthMeters / 3),
                     getAllianceSideCoralStationFaceAngle(side).plus(Rotation2d.fromDegrees(90))
                 );
-                m_position = getAllianceCoralStationPos(side).plus(indexOffset);
+                m_position = getBlueCoralStationPos(side).getTranslation().plus(indexOffset);
             }
 
-            public Translation2d getPosition() {
-                return m_position;
-            }
+            public Translation2d getPosition() { return m_position; }
 
-            public Rotation2d getFaceAngle() {
-                return getAllianceSideCoralStationFaceAngle(m_side);
-            }
+            public Rotation2d getFaceAngle() { return getAllianceSideCoralStationFaceAngle(m_side); }
+
+            public CoralStationSide getSide() { return m_side; }
+
+            public CoralStationIndex getIndex() { return m_index; }
+
+            public PathPlannerPath getInnerPath() { return Paths.getCoralStationInnerPath(this); }
 
             @Override
             public String toString() {
                 return m_side.toString() + m_index.toString();
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (o == null) return false;
+                if (o.getClass() != this.getClass()) return false;
+
+                final CoralStation other = (CoralStation)o;
+                return this.getPosition().equals(other.getPosition());
+            }
+
+            public static Optional<CoralStation> fromString(String str) {
+                Optional<CoralStationSide> side = CoralStationSide.fromChar(str.charAt(0));
+                Optional<CoralStationIndex> index = CoralStationIndex.fromChar(str.charAt(1));
+
+                if (side.isEmpty() || index.isEmpty()) return Optional.empty();
+
+                return Optional.of(new CoralStation(side.get(), index.get()));
             }
         }
 
@@ -351,31 +459,49 @@ public class FieldConstants {
         public static final Rotation2d kCoralStationCloseFaceAngle = Rotation2d.fromDegrees(54);
         public static final Rotation2d kCoralStationFarFaceAngle = Rotation2d.fromDegrees(-54);
 
-        public static final Translation2d kBlueCloseCoralStationPos = new Translation2d();
-        public static final Translation2d kBlueFarCoralStationPos = new Translation2d();
-        public static final Translation2d kRedCloseCoralStationPos = new Translation2d();
-        public static final Translation2d kRedFarCoralStationPos = new Translation2d();
+        public static final Pose2d kBlueCloseCoralStationPose = new Pose2d(
+            Conversions.inchesToMeters(33.526),
+            Conversions.inchesToMeters(25.824),
+            kCoralStationCloseFaceAngle
+        );
+        public static final Pose2d kBlueFarCoralStationPose = new Pose2d(
+            Conversions.inchesToMeters(33.526),
+            Conversions.inchesToMeters(291.176),
+            kCoralStationFarFaceAngle
+        );
 
-        public static final Translation2d getBlueCoralStaionPos(CoralStationSide side) {
-            return side == CoralStationSide.C ? kBlueCloseCoralStationPos : kBlueFarCoralStationPos;
+        public static final Pose2d getBlueCoralStationPos(CoralStationSide side) {
+            return side == CoralStationSide.C ? kBlueCloseCoralStationPose : kBlueFarCoralStationPose;
         }
 
-        public static final Translation2d getAllianceCoralStationPos(CoralStationSide side) {
-            return Util.getAlliance() == Alliance.Blue
-                ? (side == CoralStationSide.C ? kBlueCloseCoralStationPos : kBlueFarCoralStationPos)
-                : (side == CoralStationSide.C ? kRedCloseCoralStationPos : kRedFarCoralStationPos);
-        }
+        // public static final Pose2d getAllianceCoralStationPos(CoralStationSide side) {
+        // return Util.getAlliance() == Alliance.Blue
+        // ? (side == CoralStationSide.C ? kBlueCloseCoralStationPos : kBlueFarCoralStationPos)
+        // : (side == CoralStationSide.C ? kRedCloseCoralStationPos : kRedFarCoralStationPos);
+        // }
 
         public static final Rotation2d getAllianceSideCoralStationFaceAngle(CoralStationSide side) {
-            Rotation2d offset = Util.getAlliance() == Alliance.Blue ? Rotation2d.fromDegrees(0)
+            Rotation2d offset = Util.getAlliance() == Alliance.Blue
+                ? Rotation2d.fromDegrees(0)
                 : Rotation2d.fromDegrees(90);
             Rotation2d angle = side == CoralStationSide.C ? kCoralStationCloseFaceAngle : kCoralStationFarFaceAngle;
 
             return angle.plus(offset);
         }
 
-        public static final Rotation2d getBlueSideCoralStationFaceAngle(CoralStationSide side) {
+        public static final Rotation2d getCoralStationFaceAngleBlueAlliance(CoralStationSide side) {
             return side == CoralStationSide.C ? kCoralStationCloseFaceAngle : kCoralStationFarFaceAngle;
         }
+    }
+
+    public static final class CoralConstants {
+        public static final double kCoralLengthMeters = Conversions.inchesToMeters(11 + (7 / 8));
+
+        public static final double kCoralInnerDiameterMeters = Conversions.inchesToMeters(4);
+        public static final double kCoralInnerRadiusMeters = kCoralInnerDiameterMeters / 2;
+
+        public static final double kCoralOuterDiameterMeters = kCoralInnerDiameterMeters
+            + Conversions.inchesToMeters(0.5);
+        public static final double kCoralOuterRadiusMeters = kCoralOuterDiameterMeters / 2;
     }
 }

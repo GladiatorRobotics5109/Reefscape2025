@@ -73,22 +73,15 @@ public class SwerveModule {
         m_io.setTurnVoltage(volts);
     }
 
-    public Rotation2d getTurnAngle() {
-        // return m_desiredState.angle;
-        return m_currentState.angle;
-    }
+    public Rotation2d getTurnAngle() { return m_currentState.angle; }
 
-    public SwerveModuleState getState() {
-        return m_currentState;
-    }
+    public double getTurnVelocityRadPerSec() { return m_inputs.turnVelocityRadPerSec; }
 
-    public SwerveModulePosition getPosition() {
-        return m_currentPosition;
-    }
+    public SwerveModuleState getState() { return m_currentState; }
 
-    public double getDrivePositionRads() {
-        return m_inputs.drivePositionRad;
-    }
+    public SwerveModulePosition getPosition() { return m_currentPosition; }
+
+    public double getDrivePositionRads() { return m_inputs.drivePositionRad; }
 
     public void periodic() {
         m_io.periodic();
@@ -119,9 +112,7 @@ public class SwerveModule {
                         )
                 );
                 m_io.setTurnVoltage(
-                    m_turnFeedforward.calculate(
-                        m_desiredState.angle.getRadians()
-                    )
+                    m_turnFeedforward.calculate(m_desiredState.angle.getRadians())
                         + m_turnPID.calculate(m_currentState.angle.getRadians(), m_desiredState.angle.getRadians())
                 );
             }

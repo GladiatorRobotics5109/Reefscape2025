@@ -26,11 +26,7 @@ public class SwerveModuleIOSimTalonFx extends SwerveModuleIOTalonFx {
         );
 
         m_turnSim = new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(
-                DCMotor.getKrakenX60(1),
-                0.004,
-                SwerveModuleConstants.kTurnGearRatio
-            ),
+            LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60(1), 0.004, SwerveModuleConstants.kTurnGearRatio),
             DCMotor.getKrakenX60(1)
         );
 
@@ -63,20 +59,24 @@ public class SwerveModuleIOSimTalonFx extends SwerveModuleIOTalonFx {
         m_turnSim.update(Constants.kLoopPeriodSecs);
 
         driveSimState.setRawRotorPosition(
-            m_driveSim.getAngularPositionRotations() * SwerveModuleConstants.kDriveGearRatio.asDouble()
+            m_driveSim.getAngularPositionRotations()
+                * SwerveModuleConstants.kDriveGearRatio.asDouble()
         );
         driveSimState.setRotorVelocity(
             Conversions.radiansToRotations(
-                m_driveSim.getAngularVelocityRadPerSec() * SwerveModuleConstants.kDriveGearRatio.asDouble()
+                m_driveSim.getAngularVelocityRadPerSec()
+                    * SwerveModuleConstants.kDriveGearRatio.asDouble()
             )
         );
 
         turnSimState.setRawRotorPosition(
-            m_turnSim.getAngularPositionRotations() * SwerveModuleConstants.kTurnGearRatio
+            m_turnSim.getAngularPositionRotations()
+                * SwerveModuleConstants.kTurnGearRatio
         );
         turnSimState.setRotorVelocity(
             Conversions.radiansToRotations(
-                m_turnSim.getAngularVelocityRadPerSec() * SwerveModuleConstants.kTurnGearRatio
+                m_turnSim.getAngularVelocityRadPerSec()
+                    * SwerveModuleConstants.kTurnGearRatio
             )
         );
     }

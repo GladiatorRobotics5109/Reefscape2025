@@ -13,22 +13,23 @@ import org.littletonrobotics.junction.Logger;
 
 public class ElevatorCommandFactory {
     public static Command toElevatorRelativeHeight(ElevatorSubsystem elevator, DoubleSupplier positionMeters) {
-        return elevator.runOnce(() -> elevator.setTargetHeightElevatorRelative(positionMeters.getAsDouble()));
+        return elevator.runOnce(() -> elevator.setDesiredPositionElevator(positionMeters.getAsDouble()));
     }
 
     public static Command toReefHeight(ElevatorSubsystem elevator, ReefHeight height) {
-        return elevator.runOnce(() -> elevator.setTargetHeightFieldRelative(height));
+        return elevator.runOnce(() -> elevator.setDesiredPositionEndEffector(height));
     }
 
     public static Command toReefBranch(ElevatorSubsystem elevator, ReefBranch branch) {
-        return ElevatorCommandFactory.toReefHeight(
-            elevator,
-            branch.getHeight()
-        );
+        return ElevatorCommandFactory.toReefHeight(elevator, branch.getHeight());
+    }
+
+    public static Command toHome(ElevatorSubsystem elevator) {
+        return toElevatorRelativeHeight(elevator, () -> 0.0);
     }
 
     public static Command autoToReefBranch(ElevatorSubsystem elevator, ReefBranch branch) {
-        return Commands.waitUntil(elevator::isWithinRadius).withTimeout(2).andThen(toReefBranch(elevator, branch));
+        return Commands.waitUntil(elevator::canAutoExtend).withTimeout(2).andThen(toReefBranch(elevator, branch));
     }
 
     public static Command debugControllerAxis(ElevatorSubsystem elevator, DoubleSupplier axis) {
@@ -43,11 +44,7 @@ public class ElevatorCommandFactory {
                 null,
                 (state) -> Logger.recordOutput("SysIdTestState", state.toString())
             ),
-            new SysIdRoutine.Mechanism(
-                voltage -> elevator.setVoltage(voltage.in(Units.Volts)),
-                null,
-                elevator
-            )
+            new SysIdRoutine.Mechanism(voltage -> elevator.setVoltage(voltage.in(Units.Volts)), null, elevator)
         );
 
         return Commands.sequence(
@@ -57,5 +54,25 @@ public class ElevatorCommandFactory {
             routine.dynamic(SysIdRoutine.Direction.kReverse),
             Commands.print("Finished!")
         );
+
+        //        final double kVoltageRampRate = 0.1;
+        //        final String kLogPath = ElevatorConstants.kLogPath + "/Sysid";
+        //
+        //        Timer timer = new Timer();
+        //
+        //        double appliedVolts = 0.0;
+        //
+        //        return new FunctionalCommand(
+        //            timer::restart,
+        //            () -> {
+        //                appliedVolts = timer.get() * kVoltageRampRate;
+        //                elevator.setVoltage(appliedVolts);
+        //            },
+        //            (interrupted) -> {
+        //                Logger.recordOutput();
+        //            },
+        //            () -> elevator.getCurrentVelocity() > Conversions.inchesToMeters(0.1),
+        //            elevator
+        //        );
     }
 }
