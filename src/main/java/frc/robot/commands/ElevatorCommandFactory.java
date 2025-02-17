@@ -32,16 +32,20 @@ public class ElevatorCommandFactory {
         return Commands.waitUntil(elevator::canAutoExtend).withTimeout(2).andThen(toReefBranch(elevator, branch));
     }
 
-    public static Command debugControllerAxis(ElevatorSubsystem elevator, DoubleSupplier axis) {
-        return elevator.run(() -> elevator.setVoltage(axis.getAsDouble() * 2));
+    public static Command debugControllerAxis(
+        ElevatorSubsystem elevator,
+        DoubleSupplier upAxis,
+        DoubleSupplier downAxis
+    ) {
+        return elevator.run(() -> elevator.setVoltage((upAxis.getAsDouble() * 1) - (downAxis.getAsDouble() * 1)));
     }
 
     public static Command makeSysId(ElevatorSubsystem elevator) {
         var routine = new SysIdRoutine(
             new SysIdRoutine.Config(
                 null,
-                null,
-                null,
+                Units.Volts.of(3),
+                Units.Second.of(1),
                 (state) -> Logger.recordOutput("SysIdTestState", state.toString())
             ),
             new SysIdRoutine.Mechanism(voltage -> elevator.setVoltage(voltage.in(Units.Volts)), null, elevator)
@@ -55,24 +59,21 @@ public class ElevatorCommandFactory {
             Commands.print("Finished!")
         );
 
-        //        final double kVoltageRampRate = 0.1;
-        //        final String kLogPath = ElevatorConstants.kLogPath + "/Sysid";
-        //
-        //        Timer timer = new Timer();
-        //
-        //        double appliedVolts = 0.0;
-        //
-        //        return new FunctionalCommand(
-        //            timer::restart,
-        //            () -> {
-        //                appliedVolts = timer.get() * kVoltageRampRate;
-        //                elevator.setVoltage(appliedVolts);
-        //            },
-        //            (interrupted) -> {
-        //                Logger.recordOutput();
-        //            },
-        //            () -> elevator.getCurrentVelocity() > Conversions.inchesToMeters(0.1),
-        //            elevator
-        //        );
+        // final double kVoltageRampRate = 0.005;
+        // final String kLogPath = ElevatorConstants.kLogPath + "/Sysid";
+
+        // Timer timer = new Timer();
+
+        // return new FunctionalCommand(() -> {
+        //     elevator.setVoltage(0.0);
+        //     timer.restart();
+        // }, () -> {
+        //     double appliedVolts = timer.get() * kVoltageRampRate;
+        //     Logger.recordOutput(kLogPath + "/AppliedVolts", appliedVolts);
+        //     Logger.recordOutput(kLogPath + "/CurrentVelocity", elevator.getCurrentVelocity());
+        //     elevator.setVoltage(appliedVolts);
+        // }, (interrupted) -> {
+        //     elevator.setVoltage(0.0);
+        // }, () -> elevator.getCurrentVelocity() > Conversions.elevatorRadiansToElevatorMeters(1.0), elevator);
     }
 }

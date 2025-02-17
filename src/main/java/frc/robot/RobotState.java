@@ -10,7 +10,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionMeasurement;
@@ -59,8 +58,8 @@ public class RobotState {
     public static Set<ReefBranch> getScoredBranches() { return s_scoredBranches; }
 
     public static void log() {
-        Logger.recordOutput(SwerveConstants.kLogPath + "/CurrentPose", getSwervePose());
-        Logger.recordOutput(SwerveConstants.kLogPath + "/CurrentModuleStates", getSwerveModuleStates());
+        // Logger.recordOutput(SwerveConstants.kLogPath + "/CurrentPose", getSwervePose());
+        // Logger.recordOutput(SwerveConstants.kLogPath + "/CurrentModuleStates", getSwerveModuleStates());
 
         Logger.recordOutput(ElevatorConstants.kLogPath + "/CurrentPositionMeters", getElevatorCurrentPositionMeters());
         Logger.recordOutput(ElevatorConstants.kLogPath + "/DesiredPositionMeters", getElevatorDesiredPositionMeters());

@@ -27,7 +27,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.util.FieldConstants;
 
 public final class Constants {
-    public static final Mode kCurrentMode = Mode.SIM;
+    public static final Mode kCurrentMode = Mode.REAL;
 
     public static final Alliance kDefaultAlliance = Alliance.Blue;
 
@@ -241,24 +241,26 @@ public final class Constants {
 
         public static final double kElevatorMaxPositionMeters = Conversions.inchesToMeters(69.736220);
 
-        public static final double kForwardSoftLimitRad = Conversions.elevatorMetersToElevatorRadians(
-            kElevatorMaxPositionMeters
-        );
-        public static final double kReverseSoftLimitRad = 0.0;
+        public static final double kForwardSoftLimitRad = 30.0;
+        public static final double kReverseSoftLimitRad = 0.2;
 
         public static final PIDConstants kPID = new PIDConstants(
-            5.0, // V / rad
+            0.1, // V / rad
             0.0,
             0.0
         );
         public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(
-            0.2,
-            0.22,
+            0.1,
+            0.23,
             0.0,
-            0.25 // V
+            0.07 // V
         );
-        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1);
-        public static final double kElevatorAccelerationRadPerSecPerSec = 30;
+        // public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1);
+        // public static final double kElevatorAccelerationRadPerSecPerSec = 30;
+        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1.25);
+        public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
+            4
+        );
 
         /** Distance between belly pan and elevator base */
         public static final double kBellyPanToElevatorBaseMeters = Conversions.inchesToMeters(3);

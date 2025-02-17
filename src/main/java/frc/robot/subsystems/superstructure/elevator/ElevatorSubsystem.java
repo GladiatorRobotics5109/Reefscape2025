@@ -39,11 +39,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     public ElevatorSubsystem() {
         switch (Constants.kCurrentMode) {
             case REAL:
-                m_io = new ElevatorIOTalonFX(
-                    ElevatorConstants.kMotorPort,
-                    ElevatorConstants.kFollowerPort,
-                    ElevatorConstants.kUseFOC
-                );
+                m_io = new ElevatorIOSparkMax(ElevatorConstants.kMotorPort, ElevatorConstants.kFollowerPort);
 
                 break;
             case SIM:
@@ -108,7 +104,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void setDesiredPositionElevator(double positionMeters) {
         m_hasDesiredPosition = true;
         m_desiredPositionMeters = MathUtil.clamp(positionMeters, 0.0, ElevatorConstants.kElevatorMaxPositionMeters);
-        m_io.setPosition(Conversions.elevatorMetersToElevatorRotations(m_desiredPositionMeters));
+        if (m_useMotorPID)
+            m_io.setPosition(Conversions.elevatorMetersToElevatorRadians(m_desiredPositionMeters));
     }
 
     /**

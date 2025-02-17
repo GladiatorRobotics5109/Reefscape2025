@@ -71,5 +71,6 @@
     "vrot",
     "WPILOG"
   ],
-  "java.debug.settings.onBuildFailureProceed": true
+  "java.debug.settings.onBuildFailureProceed": true,
+  "wpilib.autoStartRioLog": false
 }
