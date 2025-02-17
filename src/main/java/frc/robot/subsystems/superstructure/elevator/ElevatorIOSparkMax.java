@@ -6,6 +6,8 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.util.Conversions;
 
@@ -18,10 +20,15 @@ public class ElevatorIOSparkMax implements ElevatorIO {
     public ElevatorIOSparkMax(int motorPort, int followerPort) {
         SparkMaxConfig motorConfig = new SparkMaxConfig();
         motorConfig.smartCurrentLimit((int)ElevatorConstants.kSupplyCurrentLimit);
-        motorConfig.softLimit.forwardSoftLimit(ElevatorConstants.kForwardSoftLimitRad);
+        motorConfig.softLimit.forwardSoftLimit(Conversions.radiansToRotations(ElevatorConstants.kForwardSoftLimitRad));
         motorConfig.softLimit.forwardSoftLimitEnabled(true);
-        motorConfig.softLimit.reverseSoftLimit(ElevatorConstants.kReverseSoftLimitRad);
+        motorConfig.softLimit.reverseSoftLimit(Conversions.radiansToRotations(ElevatorConstants.kReverseSoftLimitRad));
         motorConfig.softLimit.reverseSoftLimitEnabled(true);
+
+        motorConfig.encoder.positionConversionFactor(1 / ElevatorConstants.kGearRatio);
+
+        motorConfig.idleMode(IdleMode.kBrake);
+        motorConfig.inverted(ElevatorConstants.kInvertMotor);
 
         m_motor = new SparkMax(motorPort, MotorType.kBrushless);
         m_motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -32,6 +39,7 @@ public class ElevatorIOSparkMax implements ElevatorIO {
         m_follower.configure(followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         m_encoder = m_motor.getEncoder();
+        m_encoder.setPosition(0.0);
     }
 
     public void updateInputs(ElevatorIOInputs inputs) {

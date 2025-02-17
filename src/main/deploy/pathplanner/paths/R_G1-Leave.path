@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.258681967057307,
-        "y": 5.055737499648025
+        "x": 4.986054486960453,
+        "y": 5.224579404293459
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.4186665102422875,
-        "y": 5.894880545934707
+        "x": 5.146039030145433,
+        "y": 6.063722450580141
       },
       "isLocked": false,
-      "linkedName": "R_G2"
+      "linkedName": "R_G1"
     },
     {
       "anchor": {
@@ -38,7 +38,7 @@
     {
       "name": "NearReef",
       "minWaypointRelativePos": 0.0,
-      "maxWaypointRelativePos": 0.0548172757475082,
+      "maxWaypointRelativePos": 0.04609634551495008,
       "constraints": {
         "maxVelocity": 0.5,
         "maxAcceleration": 3.0,

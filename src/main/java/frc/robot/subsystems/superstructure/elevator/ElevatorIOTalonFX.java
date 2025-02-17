@@ -165,8 +165,8 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     }
 
     @Override
-    public void setPosition(double positionRot) {
-        m_motor.setControl(m_positionVoltage.withPosition(positionRot));
+    public void setPosition(double positionRad) {
+        m_motor.setControl(m_positionVoltage.withPosition(Conversions.radiansToRotations(positionRad)));
     }
 
     @Override

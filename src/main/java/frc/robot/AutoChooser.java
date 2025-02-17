@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class AutoSelector {
+public class AutoChooser {
     private static LoggedDashboardChooser<Command> s_autoChooser;
     private static List<LoggedDashboardChooser<String>> s_reefBranches;
     private static List<LoggedDashboardChooser<String>> s_coralStations;
@@ -59,8 +59,12 @@ public class AutoSelector {
             Commands.runOnce(() -> buildCustomAuto(swerve, elevator, endEffector, leds).schedule())
         );
         s_autoChooser.addOption(
-            "Comp_PP_B6_L4G2_Leave",
+            "Comp_PP-B_6-R_L4G2-Leave",
             AutoBuilder.auto_PP_B6_L4G2_Leave(swerve, elevator, endEffector, leds)
+        );
+        s_autoChooser.addOption(
+            "Comp_PP-B_6-R_L4G2-C_F3-R_L4G1-Leave",
+            AutoBuilder.auto_PP_B6_L4G2_F3_L4G1_Leave(swerve, elevator, endEffector, leds)
         );
 
         s_autoChooser.addOption("Test", AutoBuilder.testAuto(swerve, elevator, endEffector, leds));

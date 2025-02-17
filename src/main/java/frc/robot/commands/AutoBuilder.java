@@ -73,7 +73,40 @@ public class AutoBuilder {
         return Commands.sequence(
             Commands.parallel(
                 SwerveCommandFactory.followPath(swerve, kToReef),
-                SuperstructureCommandFactory.autoScore(elevator, endEffector, kBranch)
+                SuperstructureCommandFactory.autoScore(elevator, endEffector, leds, kBranch)
+            ),
+            Commands.parallel(
+                SwerveCommandFactory.followPath(swerve, kLeave),
+                ElevatorCommandFactory.toHome(elevator)
+            )
+        );
+    }
+
+    public static Command auto_PP_B6_L4G2_F3_L4G1_Leave(
+        SwerveSubsystem swerve,
+        ElevatorSubsystem elevator,
+        EndEffectorSubsystem endEffector,
+        LEDSubsystem leds
+    ) {
+        final PathPlannerPath kToReef1 = Paths.ppPaths.get("B_6-R_G2");
+        final PathPlannerPath kToCoral = Paths.ppPaths.get("R_G2-C_F3");
+        final PathPlannerPath kToReef2 = Paths.ppPaths.get("C_F3-R_G1");
+        final PathPlannerPath kLeave = Paths.ppPaths.get("R_G1-Leave");
+        final ReefBranch kBranch1 = ReefBranch.kL4G2;
+        final ReefBranch kBranch2 = ReefBranch.kL4G1;
+
+        return Commands.sequence(
+            Commands.parallel(
+                SwerveCommandFactory.followPath(swerve, kToReef1),
+                SuperstructureCommandFactory.autoScore(elevator, endEffector, leds, kBranch1)
+            ),
+            Commands.parallel(
+                SwerveCommandFactory.followPath(swerve, kToCoral),
+                SuperstructureCommandFactory.intake(elevator, endEffector)
+            ),
+            Commands.parallel(
+                SwerveCommandFactory.followPath(swerve, kToReef2),
+                SuperstructureCommandFactory.autoScore(elevator, endEffector, leds, kBranch2)
             ),
             Commands.parallel(
                 SwerveCommandFactory.followPath(swerve, kLeave),
@@ -91,7 +124,7 @@ public class AutoBuilder {
     ) {
         return Commands.parallel(
             SwerveCommandFactory.driveToReefScore(swerve, branch),
-            SuperstructureCommandFactory.autoScore(elevator, endEffector, branch)
+            SuperstructureCommandFactory.autoScore(elevator, endEffector, leds, branch)
         ).andThen(LEDCommandFactory.goodThingHappenedCommand(leds)).finallyDo(() -> RobotState.addScoredBranch(branch))
             .withName(branch + " Score Command");
     }

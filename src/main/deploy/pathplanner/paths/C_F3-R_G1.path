@@ -3,42 +3,42 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.258681967057307,
-        "y": 5.055737499648025
+        "x": 1.6679387082372574,
+        "y": 7.407830653402915
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.4186665102422875,
-        "y": 5.894880545934707
+        "x": 4.052145088664712,
+        "y": 7.289863290142651
       },
       "isLocked": false,
-      "linkedName": "R_G2"
+      "linkedName": "C_F3"
     },
     {
       "anchor": {
-        "x": 5.457839610315184,
-        "y": 7.2760950373939
+        "x": 4.986054486960453,
+        "y": 5.224579404293459
       },
       "prevControl": {
-        "x": 5.472731335902377,
-        "y": 6.939466844025084
+        "x": 5.2800382383540105,
+        "y": 6.006516901435127
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "R_G1"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.14783463266384764,
+      "waypointRelativePos": 0.7042763157894742,
       "rotationDegrees": -119.99999999999999
     }
   ],
   "constraintZones": [
     {
-      "name": "NearReef",
-      "minWaypointRelativePos": 0.0,
-      "maxWaypointRelativePos": 0.0548172757475082,
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.8367940199335551,
+      "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 0.5,
         "maxAcceleration": 3.0,
@@ -60,14 +60,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 179.5005475744208
+    "velocity": 0.0,
+    "rotation": -119.99999999999999
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": -54.0
   },
   "useDefaultConstraints": true
 }

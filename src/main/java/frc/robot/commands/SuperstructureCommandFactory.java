@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.RobotState;
+import frc.robot.subsystems.leds.LEDSubsystem;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
 import frc.robot.util.Conversions;
@@ -16,6 +17,7 @@ public class SuperstructureCommandFactory {
     public static Command autoScore(
         ElevatorSubsystem elevator,
         EndEffectorSubsystem endEffectorSubsystem,
+        LEDSubsystem leds,
         ReefBranch branch
     ) {
         return Commands.sequence(
@@ -43,7 +45,15 @@ public class SuperstructureCommandFactory {
                 Logger.recordOutput("SuperstructureAutoScore/ShouldScore", shouldScore);
                 return shouldScore;
             }).withTimeout(5),
-            EndEffectorCommandFactory.scoreWithTimeout(endEffectorSubsystem)
+            EndEffectorCommandFactory.scoreWithTimeout(endEffectorSubsystem),
+            LEDCommandFactory.goodThingHappenedCommand(leds)
+        );
+    }
+
+    public static Command intake(ElevatorSubsystem elevator, EndEffectorSubsystem endEffector) {
+        return Commands.parallel(
+            ElevatorCommandFactory.toHome(elevator),
+            EndEffectorCommandFactory.intake(endEffector)
         );
     }
 }
