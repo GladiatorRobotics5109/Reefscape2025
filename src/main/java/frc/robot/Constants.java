@@ -286,13 +286,26 @@ public final class Constants {
     }
 
     public static final class EndEffectorConstants {
+        public static final String kLogPath = "Subsystems/EndEffector";
+
         /**
          * Length of end effector measured from bottom of the poly carb to the top edge of the bottom plane that the
          * coral rests on
          */
         public static final double kEndEffectorLengthMeters = Conversions.inchesToMeters(11.967);
 
-        public static final int kMotorPort = 69; //MAKE SURE TO CHANGE THIS!!
+        public static final int kLeftPort = 50;
+        public static final int kRightPort = 51;
+
+        public static final int kCoralSensorPort = 0;
+        public static final int kCoralSensorLeadingPort = 1;
+
+        public static final double kSupplyCurrentLimit = 40;
+        public static final double kStatorCurrentLimit = 1.75 * kSupplyCurrentLimit;
+
+        public static final double kGearRatio = 12;
+
+        public static final boolean kInvertMotor = false;
 
         // The maximum distance the chassis can be from the auto score location to score
         public static final double kAutoScoreMaxDistMeters = 0.02;

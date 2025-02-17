@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -10,6 +8,8 @@ import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 import org.littletonrobotics.junction.Logger;
+
+import java.util.function.DoubleSupplier;
 
 public class ElevatorCommandFactory {
     public static Command toElevatorRelativeHeight(ElevatorSubsystem elevator, DoubleSupplier positionMeters) {
@@ -53,8 +53,11 @@ public class ElevatorCommandFactory {
 
         return Commands.sequence(
             routine.quasistatic(SysIdRoutine.Direction.kForward),
+            Commands.waitSeconds(1),
             routine.quasistatic(SysIdRoutine.Direction.kReverse),
+            Commands.waitSeconds(1),
             routine.dynamic(SysIdRoutine.Direction.kForward),
+            Commands.waitSeconds(1),
             routine.dynamic(SysIdRoutine.Direction.kReverse),
             Commands.print("Finished!")
         );

@@ -5,29 +5,26 @@ import org.littletonrobotics.junction.AutoLog;
 public interface EndEffectorIO {
     @AutoLog
     public static class EndEffectorIOInputs {
-        public double positionRad = 0.0;
-        public double velocityRadPerSec = 0.0;
-        public double accelerationRadPerSecPerSec = 0.0;
+        public double leftPositionRad = 0.0;
+        public double leftVelocityRadPerSec = 0.0;
 
-        public double motorTempCelsius = 0.0;
-        public double motorAppliedVolts = 0.0;
-        public double motorSupplyVoltage = 0.0;
-        public double motorStatorCurrentAmps = 0.0;
-        public double motorSupplyCurrentAmps = 0.0;
+        public double leftTempCelsius = 0.0;
+        public double leftAppliedVolts = 0.0;
+        public double leftSupplyVoltage = 0.0;
+        public double leftStatorCurrentAmps = 0.0;
+        public double leftSupplyCurrentAmps = 0.0;
 
-        public double followerMotorTempCelsius = 0.0;
-        public double followerMotorAppliedVolts = 0.0;
-        public double followerMotorSupplyVoltage = 0.0;
-        public double followerMotorStatorCurrentAmps = 0.0;
-        public double followerMotorSupplyCurrentAmps = 0.0;
-        
+        public double rightPositionRad = 0.0;
+        public double rightVelocityRadPerSec = 0.0;
+
+        public double rightTempCelsius = 0.0;
+        public double rightAppliedVolts = 0.0;
+        public double rightSupplyVoltage = 0.0;
+        public double rightStatorCurrentAmps = 0.0;
+        public double rightSupplyCurrentAmps = 0.0;
     }
 
     default void updateInputs(EndEffectorIOInputs inputs) {}
 
-    
-
-    default void setVoltage(double volts) {}
-
-    default void updateSim() {}
+    default void setVoltage(double leftVolts, double rightVolts) {}
 }
