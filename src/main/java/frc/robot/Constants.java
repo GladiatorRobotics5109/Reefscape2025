@@ -58,14 +58,14 @@ public final class Constants {
             public static final double kWheelRadiusMeters = 0.0472659347214289;
 
             // TODO: get correct ports
-            public static final int kFrontLeftDrivePort = 2;
-            public static final int kFrontLeftTurnPort = 5;
-            public static final int kFrontRightDrivePort = 4;
-            public static final int kFrontRightTurnPort = 40;
-            public static final int kBackLeftDrivePort = 1;
-            public static final int kBackLeftTurnPort = 22;
-            public static final int kBackRightDrivePort = 3;
-            public static final int kBackRightTurnPort = 30;
+            public static final int kFrontLeftDrivePort = 10;
+            public static final int kFrontLeftTurnPort = 20;
+            public static final int kFrontRightDrivePort = 11;
+            public static final int kFrontRightTurnPort = 21;
+            public static final int kBackLeftDrivePort = 13;
+            public static final int kBackLeftTurnPort = 23;
+            public static final int kBackRightDrivePort = 12;
+            public static final int kBackRightTurnPort = 22;
 
             public static final Translation2d kModulePosFL = new Translation2d(0.283989, 0.283989);
             public static final Translation2d kModulePosFR = new Translation2d(0.283989, -0.283989);
