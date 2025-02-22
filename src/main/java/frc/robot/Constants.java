@@ -105,20 +105,19 @@ public final class Constants {
             public static final int kTurnSupplyCurrentLimit = 30;
 
             public static final LinearVelocity kDriveMaxFreeSpeed = Units.FeetPerSecond.of(12.9);
-            // TODO: verify this
-            public static final AngularVelocity kTurnMaxRotationSpeed = Units.RotationsPerSecond.of(2);
         }
 
         public static final int kPigeonPort = 40;
 
         public static final boolean kTeleopFieldRelative = true;
 
-        public static final double kOdometryFrequencyHz = 50;
         public static final Pose2d kStartingPose = new Pose2d();
         public static final String kLogPath = "Subsystems/Swerve";
         public static final double kFrameWidth = Conversions.inchesToMeters(29);
         public static final double kFrameHeight = Conversions.inchesToMeters(29);
-        public static final double kDriveBaseRadiusMeters = Math.hypot(kFrameWidth, kFrameHeight);
+        public static final double kDriveBaseRadiusMeters = SwerveModuleConstants.kModulePosFL.getDistance(
+            Translation2d.kZero
+        );
 
         public static final com.pathplanner.lib.config.PIDConstants kPPTranslationPID = new com.pathplanner.lib.config.PIDConstants(
             5,
@@ -133,8 +132,8 @@ public final class Constants {
 
         // TODO: replace with correct values
         public static final RobotConfig kPPConfig = new RobotConfig(
-            52.0,
-            5.0,
+            47.17360648,
+            4.2659057746, // (1 / 12) * mass * (length^2 + width^2)
             // Conversions.poundsToKilograms(112),
             // // Fix rough estimate
             // (1 / 12) * Conversions.poundsToKilograms(112)
