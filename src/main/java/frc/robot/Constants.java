@@ -60,12 +60,16 @@ public final class Constants {
             // TODO: get correct ports
             public static final int kFrontLeftDrivePort = 10;
             public static final int kFrontLeftTurnPort = 20;
+            public static final int kFrontLeftEncoderPort = 30;
             public static final int kFrontRightDrivePort = 11;
             public static final int kFrontRightTurnPort = 21;
+            public static final int kFrontRightEncoderPort = 31;
             public static final int kBackLeftDrivePort = 13;
             public static final int kBackLeftTurnPort = 23;
+            public static final int kBackLeftEncoderPort = 33;
             public static final int kBackRightDrivePort = 12;
             public static final int kBackRightTurnPort = 22;
+            public static final int kBackRightEncoderPort = 32;
 
             public static final Translation2d kModulePosFL = new Translation2d(0.283989, 0.283989);
             public static final Translation2d kModulePosFR = new Translation2d(0.283989, -0.283989);
@@ -106,8 +110,7 @@ public final class Constants {
             public static final AngularVelocity kTurnMaxRotationSpeed = Units.RotationsPerSecond.of(2);
         }
 
-        // TODO: change this
-        public static final int kPigeonPort = 10;
+        public static final int kPigeonPort = 40;
 
         public static final boolean kTeleopFieldRelative = true;
 
@@ -241,8 +244,8 @@ public final class Constants {
 
         public static final double kElevatorMaxPositionMeters = Conversions.inchesToMeters(69.736220);
 
-        public static final double kForwardSoftLimitRad = 30.0;
-        public static final double kReverseSoftLimitRad = 0.2;
+        public static final double kForwardSoftLimitRad = 29.5;
+        public static final double kReverseSoftLimitRad = 0.1;
 
         public static final PIDConstants kPID = new PIDConstants(
             0.1, // V / rad

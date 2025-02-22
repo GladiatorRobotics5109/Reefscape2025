@@ -10,6 +10,7 @@ import frc.robot.subsystems.leds.LEDSubsystem;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -32,7 +33,7 @@ public class RobotContainer {
     private final CommandXboxController m_operatorController;
 
     public RobotContainer() {
-        // m_swerve = new SwerveSubsystem();
+        m_swerve = new SwerveSubsystem();
         // m_vision = new VisionSubsystem();
         m_elevator = new ElevatorSubsystem();
         // m_endEffector = new EndEffectorSubsystem();
@@ -81,18 +82,18 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        m_elevator.setDefaultCommand(
-            ElevatorCommandFactory.debugControllerAxis(
-                m_elevator,
-                m_driverController::getRightTriggerAxis,
-                m_driverController::getLeftTriggerAxis
-            )
-        );
-        // m_swerve.setDefaultCommand(
-        //     SwerveCommandFactory.makeTeleop(m_swerve, m_driverController).onlyWhile(
-        //         () -> DriverStation.isTeleop() || DriverStation.isTest()
+        // m_elevator.setDefaultCommand(
+        //     ElevatorCommandFactory.debugControllerAxis(
+        //         m_elevator,
+        //         m_driverController::getRightTriggerAxis,
+        //         m_driverController::getLeftTriggerAxis
         //     )
         // );
+        m_swerve.setDefaultCommand(
+            SwerveCommandFactory.makeTeleop(m_swerve, m_driverController).onlyWhile(
+                () -> DriverStation.isTeleop() || DriverStation.isTest()
+            )
+        );
 
         // Elevator setpoints
         // m_driverController.cross().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L1));
