@@ -1,14 +1,13 @@
 package frc.robot.subsystems.vision;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.vision.VisionIO.VisionIOInputs;
+import org.littletonrobotics.junction.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class VisionSubsystem extends SubsystemBase {
     private VisionIO[] m_ios;

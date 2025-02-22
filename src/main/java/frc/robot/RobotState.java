@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation3d;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 import org.littletonrobotics.junction.Logger;
 
@@ -58,8 +59,8 @@ public class RobotState {
     public static Set<ReefBranch> getScoredBranches() { return s_scoredBranches; }
 
     public static void log() {
-        // Logger.recordOutput(SwerveConstants.kLogPath + "/CurrentPose", getSwervePose());
-        // Logger.recordOutput(SwerveConstants.kLogPath + "/CurrentModuleStates", getSwerveModuleStates());
+        Logger.recordOutput(SwerveConstants.kLogPath + "/CurrentPose", getSwervePose());
+        Logger.recordOutput(SwerveConstants.kLogPath + "/CurrentModuleStates", getSwerveModuleStates());
 
         Logger.recordOutput(ElevatorConstants.kLogPath + "/CurrentPositionMeters", getElevatorCurrentPositionMeters());
         Logger.recordOutput(ElevatorConstants.kLogPath + "/DesiredPositionMeters", getElevatorDesiredPositionMeters());

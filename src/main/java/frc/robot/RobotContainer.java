@@ -4,21 +4,24 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.commands.*;
-import frc.robot.subsystems.leds.LEDSubsystem;
-
-import org.littletonrobotics.junction.Logger;
-
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.AutoBuilder;
+import frc.robot.commands.AutomatedTeleopControllerListenerCommand;
+import frc.robot.commands.ElevatorCommandFactory;
+import frc.robot.commands.SwerveCommandFactory;
+import frc.robot.subsystems.leds.LEDSubsystem;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
-import frc.robot.util.Conversions;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
+import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
     private SwerveSubsystem m_swerve;
@@ -32,37 +35,37 @@ public class RobotContainer {
     private final CommandXboxController m_operatorController;
 
     public RobotContainer() {
-        // m_swerve = new SwerveSubsystem();
-        // m_vision = new VisionSubsystem();
+        m_swerve = new SwerveSubsystem();
+        m_vision = new VisionSubsystem();
         m_elevator = new ElevatorSubsystem();
-        // m_endEffector = new EndEffectorSubsystem();
-        // m_leds = new LEDSubsystem();
+        m_endEffector = new EndEffectorSubsystem();
+        m_leds = new LEDSubsystem();
         RobotState.init(m_swerve, m_vision, m_elevator);
-        // AutoChooser.init(m_swerve, m_elevator, m_endEffector, m_leds);
-        System.out.println(
-            "L1 RAD: "
-                + Conversions.elevatorMetersToElevatorRadians(
-                    Conversions.endEffectorMetersToElevatorMeters(ReefHeight.L1.getHeight())
-                )
-        );
-        System.out.println(
-            "L2 RAD: "
-                + Conversions.elevatorMetersToElevatorRadians(
-                    Conversions.endEffectorMetersToElevatorMeters(ReefHeight.L2.getHeight())
-                )
-        );
-        System.out.println(
-            "L3 RAD: "
-                + Conversions.elevatorMetersToElevatorRadians(
-                    Conversions.endEffectorMetersToElevatorMeters(ReefHeight.L3.getHeight())
-                )
-        );
-        System.out.println(
-            "L4 RAD: "
-                + Conversions.elevatorMetersToElevatorRadians(
-                    Conversions.endEffectorMetersToElevatorMeters(ReefHeight.L4.getHeight())
-                )
-        );
+        AutoChooser.init(m_swerve, m_elevator, m_endEffector, m_leds);
+        //        System.out.println(
+        //            "L1 RAD: "
+        //                + Conversions.elevatorMetersToElevatorRadians(
+        //                    Conversions.endEffectorMetersToElevatorMeters(ReefHeight.L1.getHeight())
+        //                )
+        //        );
+        //        System.out.println(
+        //            "L2 RAD: "
+        //                + Conversions.elevatorMetersToElevatorRadians(
+        //                    Conversions.endEffectorMetersToElevatorMeters(ReefHeight.L2.getHeight())
+        //                )
+        //        );
+        //        System.out.println(
+        //            "L3 RAD: "
+        //                + Conversions.elevatorMetersToElevatorRadians(
+        //                    Conversions.endEffectorMetersToElevatorMeters(ReefHeight.L3.getHeight())
+        //                )
+        //        );
+        //        System.out.println(
+        //            "L4 RAD: "
+        //                + Conversions.elevatorMetersToElevatorRadians(
+        //                    Conversions.endEffectorMetersToElevatorMeters(ReefHeight.L4.getHeight())
+        //                )
+        //        );
 
         m_driverController = new CommandXboxController(Constants.DriveTeamConstants.kDriveControllerPort);
         m_operatorController = new CommandXboxController(Constants.DriveTeamConstants.kOperatorControllerPort);
@@ -81,18 +84,18 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        m_elevator.setDefaultCommand(
-            ElevatorCommandFactory.debugControllerAxis(
-                m_elevator,
-                m_driverController::getRightTriggerAxis,
-                m_driverController::getLeftTriggerAxis
+        //        m_elevator.setDefaultCommand(
+        //            ElevatorCommandFactory.debugControllerAxis(
+        //                m_elevator,
+        //                m_driverController::getRightTriggerAxis,
+        //                m_driverController::getLeftTriggerAxis
+        //            )
+        //        );
+        m_swerve.setDefaultCommand(
+            SwerveCommandFactory.makeTeleop(m_swerve, m_driverController).onlyWhile(
+                () -> DriverStation.isTeleop() || DriverStation.isTest()
             )
         );
-        // m_swerve.setDefaultCommand(
-        //     SwerveCommandFactory.makeTeleop(m_swerve, m_driverController).onlyWhile(
-        //         () -> DriverStation.isTeleop() || DriverStation.isTest()
-        //     )
-        // );
 
         // Elevator setpoints
         // m_driverController.cross().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L1));
@@ -144,21 +147,23 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return Commands.none();
-        // return AutoChooser.get().beforeStarting(
-        //     SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(8, 8, Rotation2d.k180deg))
-        // );
+        //        return AutoChooser.get().beforeStarting(
+        //            SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(8, 8, Rotation2d.k180deg))
+        //        );
+        return AutoBuilder.followTestPath(m_swerve).beforeStarting(
+            SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(8, 8, Rotation2d.k180deg))
+        );
     }
 
     public Command getTeleopCommand() {
-        // return new AutomatedTeleopControllerListenerCommand(
-        //     m_elevator,
-        //     m_swerve,
-        //     m_endEffector,
-        //     m_leds,
-        //     m_driverController,
-        //     m_operatorController
-        // );
-        return Commands.none();
+        return new AutomatedTeleopControllerListenerCommand(
+            m_elevator,
+            m_swerve,
+            m_endEffector,
+            m_leds,
+            m_driverController,
+            m_operatorController
+        );
+        //        return Commands.none();
     }
 }

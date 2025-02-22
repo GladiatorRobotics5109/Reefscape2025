@@ -158,7 +158,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         AutoBuilder.configure(
             this::getPose,
-            (Pose2d pose) -> m_poseEstimator.resetPose(pose),
+            m_poseEstimator::resetPose,
             this::getCurrentChassisSpeeds,
             (speeds, feedForward) -> drive(speeds, false),
             new PPHolonomicDriveController(SwerveConstants.kPPTranslationPID, SwerveConstants.kPPRotaitonPID),

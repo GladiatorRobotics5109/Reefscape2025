@@ -12,10 +12,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -27,7 +24,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.util.FieldConstants;
 
 public final class Constants {
-    public static final Mode kCurrentMode = Mode.REAL;
+    public static final Mode kCurrentMode = Mode.SIM;
 
     public static final Alliance kDefaultAlliance = Alliance.Blue;
 
@@ -210,9 +207,33 @@ public final class Constants {
         public static record PhotonCameraConfiguration(String cameraName, Transform3d robotToCamera) {}
 
         public static final PhotonCameraConfiguration[] kCameras = new PhotonCameraConfiguration[] {
-            new PhotonCameraConfiguration("Camera1", new Transform3d()),
-            new PhotonCameraConfiguration("Camera2", new Transform3d()),
-            new PhotonCameraConfiguration("Camera3", new Transform3d())
+            new PhotonCameraConfiguration(
+                "FrontCameraL",
+                new Transform3d(
+                    0.27,
+                    0.15,
+                    SwerveModuleConstants.kWheelRadiusMeters + (65.0 / 1000.0) + (7.037 / 1000.0),
+                    new Rotation3d(0.0, Conversions.degreesToRadians(5), Conversions.degreesToRadians(5))
+                )
+            ),
+            new PhotonCameraConfiguration(
+                "FrontCameraR",
+                new Transform3d(
+                    0.27,
+                    -0.15,
+                    SwerveModuleConstants.kWheelRadiusMeters + (65.0 / 1000.0) + (7.037 / 1000.0),
+                    new Rotation3d(0.0, Conversions.degreesToRadians(5), Conversions.degreesToRadians(-5))
+                )
+            ),
+            new PhotonCameraConfiguration(
+                "RearCamera",
+                new Transform3d(
+                    -0.27,
+                    0.0,
+                    SwerveModuleConstants.kWheelRadiusMeters + (65.0 / 1000.0) + (7.037 / 1000.0),
+                    new Rotation3d(0.0, Conversions.degreesToRadians(25), Conversions.degreesToRadians(220))
+                )
+            )
         };
 
         public static final String kLogPath = "Subsystems/Vision";

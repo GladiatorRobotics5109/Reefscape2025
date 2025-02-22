@@ -42,9 +42,6 @@ public class EndEffectorSubsystem extends SubsystemBase {
         m_inputs = new EndEffectorIOInputsAutoLogged();
     }
 
-    //    private final SparkMax m_leftMotor = new SparkMax(0, MotorType.kBrushless);
-    //    private final SparkMax m_rightMotor = new SparkMax(0, MotorType.kBrushless);
-
     public void setVoltage(double leftVolts, double rightVolts) {
     }
 
