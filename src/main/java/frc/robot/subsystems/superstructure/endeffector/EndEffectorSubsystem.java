@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.EndEffectorConstants;
+import org.littletonrobotics.junction.Logger;
 
 public class EndEffectorSubsystem extends SubsystemBase {
     private final EndEffectorIOInputsAutoLogged m_inputs;
@@ -42,10 +43,8 @@ public class EndEffectorSubsystem extends SubsystemBase {
         m_inputs = new EndEffectorIOInputsAutoLogged();
     }
 
-    //    private final SparkMax m_leftMotor = new SparkMax(0, MotorType.kBrushless);
-    //    private final SparkMax m_rightMotor = new SparkMax(0, MotorType.kBrushless);
-
     public void setVoltage(double leftVolts, double rightVolts) {
+        m_io.setVoltage(leftVolts, rightVolts);
     }
 
     public void setVoltage(double volts) {
@@ -79,6 +78,9 @@ public class EndEffectorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        m_io.updateInputs(m_inputs);
+        Logger.processInputs(EndEffectorConstants.kLogPath, m_inputs);
+
         if (DriverStation.isDisabled()) {
             stop();
         }

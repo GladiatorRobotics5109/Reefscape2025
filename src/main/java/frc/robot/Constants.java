@@ -33,7 +33,7 @@ public final class Constants {
 
     public static final double kLoopPeriodSecs = Robot.defaultPeriodSecs;
 
-    public static final int kPDPPort = 0;
+    public static final int kPDPPort = 1;
 
     public static final double kJoystickDeadzone = 0.15;
 
@@ -50,14 +50,13 @@ public final class Constants {
             /* Use PID controller on motor controllers */
             public static final boolean kUseMotorPID = true;
             /* Use FOC on TalonFX */
-            public static final boolean kUseFOC = false;
+            public static final boolean kUseFOC = true;
 
             public static final MK4GearRatio kDriveGearRatio = MK4GearRatio.L1;
             public static final double kTurnGearRatio = MK4Constants.kTurnGearRatio;
 
             public static final double kWheelRadiusMeters = 0.0472659347214289;
 
-            // TODO: get correct ports
             public static final int kFrontLeftDrivePort = 10;
             public static final int kFrontLeftTurnPort = 20;
             public static final int kFrontLeftEncoderPort = 30;

@@ -18,7 +18,6 @@ public class EndEffectorCommandFactory {
         return score(endEffector).withTimeout(EndEffectorConstants.kScoreTimeoutSeconds);
     }
 
-    // TOOD: implement this
     public static Command intake(EndEffectorSubsystem endEffector) {
         return Commands.sequence(
             Commands.runOnce(endEffector::setIntake, endEffector),
