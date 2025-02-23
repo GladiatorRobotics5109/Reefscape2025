@@ -60,6 +60,8 @@ public final class Paths {
             ppPaths.put("R_G1-Leave", PathPlannerPath.fromPathFile("R_G1-Leave"));
 
             ppPaths.put("C_F3-R_G1", PathPlannerPath.fromPathFile("C_F3-R_G1"));
+
+            ppPaths.put("testPath", PathPlannerPath.fromPathFile("testPath"));
         }
         catch (FileNotFoundException e) {
             DriverStation.reportError("Failed to find path file!\n" + e.getCause(), e.getStackTrace());

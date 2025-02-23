@@ -52,6 +52,10 @@ public class AutoBuilder {
         );
     }
 
+    public static Command followTestPath(SwerveSubsystem swerve) {
+        return SwerveCommandFactory.followPath(swerve, Paths.ppPaths.get("testPath"));
+    }
+
     public static Command simpleTaxiForward(SwerveSubsystem swerve) {
         return Commands.sequence(
             SwerveCommandFactory.drive(swerve, 0.0, 1.0, 0.0, false),

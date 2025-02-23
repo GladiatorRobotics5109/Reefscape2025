@@ -12,10 +12,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -27,13 +24,13 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.util.FieldConstants;
 
 public final class Constants {
-    public static final Mode kCurrentMode = Mode.REAL;
+    public static final Mode kCurrentMode = Mode.SIM;
 
     public static final Alliance kDefaultAlliance = Alliance.Blue;
 
     public static final double kLoopPeriodSecs = Robot.defaultPeriodSecs;
 
-    public static final int kPDPPort = 0;
+    public static final int kPDPPort = 1;
 
     public static final double kJoystickDeadzone = 0.15;
 
@@ -50,14 +47,13 @@ public final class Constants {
             /* Use PID controller on motor controllers */
             public static final boolean kUseMotorPID = true;
             /* Use FOC on TalonFX */
-            public static final boolean kUseFOC = false;
+            public static final boolean kUseFOC = true;
 
             public static final MK4GearRatio kDriveGearRatio = MK4GearRatio.L1;
             public static final double kTurnGearRatio = MK4Constants.kTurnGearRatio;
 
             public static final double kWheelRadiusMeters = 0.0472659347214289;
 
-            // TODO: get correct ports
             public static final int kFrontLeftDrivePort = 10;
             public static final int kFrontLeftTurnPort = 20;
             public static final int kFrontLeftEncoderPort = 30;
@@ -106,20 +102,19 @@ public final class Constants {
             public static final int kTurnSupplyCurrentLimit = 30;
 
             public static final LinearVelocity kDriveMaxFreeSpeed = Units.FeetPerSecond.of(12.9);
-            // TODO: verify this
-            public static final AngularVelocity kTurnMaxRotationSpeed = Units.RotationsPerSecond.of(2);
         }
 
         public static final int kPigeonPort = 40;
 
         public static final boolean kTeleopFieldRelative = true;
 
-        public static final double kOdometryFrequencyHz = 50;
         public static final Pose2d kStartingPose = new Pose2d();
         public static final String kLogPath = "Subsystems/Swerve";
         public static final double kFrameWidth = Conversions.inchesToMeters(29);
         public static final double kFrameHeight = Conversions.inchesToMeters(29);
-        public static final double kDriveBaseRadiusMeters = Math.hypot(kFrameWidth, kFrameHeight);
+        public static final double kDriveBaseRadiusMeters = SwerveModuleConstants.kModulePosFL.getDistance(
+            Translation2d.kZero
+        );
 
         public static final com.pathplanner.lib.config.PIDConstants kPPTranslationPID = new com.pathplanner.lib.config.PIDConstants(
             5,
@@ -134,8 +129,8 @@ public final class Constants {
 
         // TODO: replace with correct values
         public static final RobotConfig kPPConfig = new RobotConfig(
-            52.0,
-            5.0,
+            47.17360648,
+            4.2659057746, // (1 / 12) * mass * (length^2 + width^2)
             // Conversions.poundsToKilograms(112),
             // // Fix rough estimate
             // (1 / 12) * Conversions.poundsToKilograms(112)
@@ -213,9 +208,33 @@ public final class Constants {
         public static record PhotonCameraConfiguration(String cameraName, Transform3d robotToCamera) {}
 
         public static final PhotonCameraConfiguration[] kCameras = new PhotonCameraConfiguration[] {
-            new PhotonCameraConfiguration("Camera1", new Transform3d()),
-            new PhotonCameraConfiguration("Camera2", new Transform3d()),
-            new PhotonCameraConfiguration("Camera3", new Transform3d())
+            new PhotonCameraConfiguration(
+                "FrontCameraL",
+                new Transform3d(
+                    0.27,
+                    0.15,
+                    SwerveModuleConstants.kWheelRadiusMeters + (65.0 / 1000.0) + (7.037 / 1000.0),
+                    new Rotation3d(0.0, Conversions.degreesToRadians(5), Conversions.degreesToRadians(5))
+                )
+            ),
+            new PhotonCameraConfiguration(
+                "FrontCameraR",
+                new Transform3d(
+                    0.27,
+                    -0.15,
+                    SwerveModuleConstants.kWheelRadiusMeters + (65.0 / 1000.0) + (7.037 / 1000.0),
+                    new Rotation3d(0.0, Conversions.degreesToRadians(5), Conversions.degreesToRadians(-5))
+                )
+            ),
+            new PhotonCameraConfiguration(
+                "RearCamera",
+                new Transform3d(
+                    -0.27,
+                    0.0,
+                    SwerveModuleConstants.kWheelRadiusMeters + (65.0 / 1000.0) + (7.037 / 1000.0),
+                    new Rotation3d(0.0, Conversions.degreesToRadians(25), Conversions.degreesToRadians(220))
+                )
+            )
         };
 
         public static final String kLogPath = "Subsystems/Vision";
