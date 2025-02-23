@@ -248,22 +248,24 @@ public final class Constants {
         public static final double kReverseSoftLimitRad = 0.1;
 
         public static final PIDConstants kPID = new PIDConstants(
-            0.1, // V / rad
+            0.13, // V / rad
             0.0,
             0.0
         );
         public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(
             0.1,
-            0.23,
+            0.13,
             0.0,
-            0.07 // V
+            0.10 // V
         );
-        // public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1);
-        // public static final double kElevatorAccelerationRadPerSecPerSec = 30;
-        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1.25);
+        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(0.75);
         public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
-            4
+            2
         );
+        // public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1.25);
+        // public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
+        //     4
+        // );
 
         /** Distance between belly pan and elevator base */
         public static final double kBellyPanToElevatorBaseMeters = Conversions.inchesToMeters(3);
@@ -297,8 +299,8 @@ public final class Constants {
          */
         public static final double kEndEffectorLengthMeters = Conversions.inchesToMeters(11.967);
 
-        public static final int kLeftPort = 50;
-        public static final int kRightPort = 51;
+        public static final int kLeftPort = 30;
+        public static final int kRightPort = 31;
 
         public static final int kCoralSensorPort = 0;
         public static final int kCoralSensorLeadingPort = 1;

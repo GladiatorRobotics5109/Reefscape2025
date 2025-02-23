@@ -82,7 +82,10 @@ public class SwerveSubsystem extends SubsystemBase {
                     SwerveConstants.SwerveModuleConstants.kUseMotorPID
                 );
 
-                m_gyro = new LoggedGyro("Subsystems/Swerve/Gyro", new LoggedGyroIOPigeon(SwerveConstants.kPigeonPort));
+                m_gyro = new LoggedGyro(
+                    "Subsystems/Swerve/Gyro",
+                    new LoggedGyroIOPigeon(SwerveConstants.kPigeonPort, "drivetrain")
+                );
 
                 break;
             case SIM:

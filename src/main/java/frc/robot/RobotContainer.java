@@ -36,7 +36,7 @@ public class RobotContainer {
         m_swerve = new SwerveSubsystem();
         // m_vision = new VisionSubsystem();
         m_elevator = new ElevatorSubsystem();
-        // m_endEffector = new EndEffectorSubsystem();
+        m_endEffector = new EndEffectorSubsystem();
         // m_leds = new LEDSubsystem();
         RobotState.init(m_swerve, m_vision, m_elevator);
         // AutoChooser.init(m_swerve, m_elevator, m_endEffector, m_leds);
