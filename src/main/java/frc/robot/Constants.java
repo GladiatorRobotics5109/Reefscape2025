@@ -256,7 +256,7 @@ public final class Constants {
             0.1,
             0.13,
             0.0,
-            0.10 // V
+            0.30 // V
         );
         public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(0.75);
         public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
@@ -323,7 +323,7 @@ public final class Constants {
 
         public static final double kScoreTimeoutSeconds = 2;
 
-        public static final double kScoreVoltage = 6;
+        public static final double kScoreVoltage = 12;
         public static final double kIntakeVoltage = 6;
         public static final double kIntakeSlowVoltage = 2;
     }

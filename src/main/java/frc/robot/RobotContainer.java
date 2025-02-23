@@ -10,7 +10,6 @@ import frc.robot.subsystems.leds.LEDSubsystem;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -82,47 +81,49 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        // m_elevator.setDefaultCommand(
-        //     ElevatorCommandFactory.debugControllerAxis(
-        //         m_elevator,
-        //         m_driverController::getRightTriggerAxis,
-        //         m_driverController::getLeftTriggerAxis
-        //     )
-        // );
-        m_swerve.setDefaultCommand(
-            SwerveCommandFactory.makeTeleop(m_swerve, m_driverController).onlyWhile(
-                () -> DriverStation.isTeleop() || DriverStation.isTest()
+        m_elevator.setDefaultCommand(
+            ElevatorCommandFactory.debugControllerAxis(
+                m_elevator,
+                m_driverController::getRightTriggerAxis,
+                m_driverController::getLeftTriggerAxis
             )
         );
+        // m_swerve.setDefaultCommand(
+        //     SwerveCommandFactory.makeTeleop(m_swerve, m_driverController).onlyWhile(
+        //         () -> DriverStation.isTeleop() || DriverStation.isTest()
+        //     )
+        // );
 
         // Elevator setpoints
         // m_driverController.cross().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L1));
         // m_driverController.circle().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L2));
         // m_driverController.triangle().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3));
         // m_driverController.square().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4));
-        m_driverController.a().onTrue(
-            ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L1).andThen(
-                Commands.waitUntil(m_elevator::atDesiredPosition).andThen(Commands.waitSeconds(0.1))
-            )
-        );
-        m_driverController.b().onTrue(
-            ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L2).andThen(
-                Commands.waitUntil(m_elevator::atDesiredPosition).andThen(Commands.waitSeconds(0.1))
-            )
-        );
-        m_driverController.y().onTrue(
-            // ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3).andThen(
-            //     Commands.waitUntil(m_elevator::atDesiredPosition).andThen(Commands.waitSeconds(2))
-            // )
-            ElevatorCommandFactory.toElevatorRelativeHeight(m_elevator, () -> 0.0).andThen(
-                Commands.waitUntil(m_elevator::atDesiredPosition).andThen(Commands.waitSeconds(0.1))
-            )
-        );
-        m_driverController.x().onTrue(
-            ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4).andThen(
-                Commands.waitUntil(m_elevator::atDesiredPosition).andThen(Commands.waitSeconds(0.1))
-            )
-        );
+        // m_driverController.a().onTrue(
+        //     ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L1).andThen(
+        //         Commands.waitUntil(m_elevator::atDesiredPosition).andThen(Commands.waitSeconds(0.1))
+        //     )
+        // );
+        // m_driverController.b().onTrue(
+        //     ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L2).andThen(
+        //         Commands.waitUntil(m_elevator::atDesiredPosition).andThen(Commands.waitSeconds(0.1))
+        //     )
+        // );
+        // m_driverController.y().onTrue(
+        //     // ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3).andThen(
+        //     //     Commands.waitUntil(m_elevator::atDesiredPosition).andThen(Commands.waitSeconds(2))
+        //     // )
+        //     ElevatorCommandFactory.toElevatorRelativeHeight(m_elevator, () -> 0.0).andThen(
+        //         Commands.waitUntil(m_elevator::atDesiredPosition).andThen(Commands.waitSeconds(0.1))
+        //     )
+        // );
+        // m_driverController.x().onTrue(
+        //     ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4).andThen(
+        //         Commands.waitUntil(m_elevator::atDesiredPosition).andThen(Commands.waitSeconds(0.1))
+        //     )
+        // );
+
+        m_driverController.y().onTrue(EndEffectorCommandFactory.scoreWithTimeout(m_endEffector));
 
         // m_driverController.leftBumper().debounce(0.5, DebounceType.kRising).onTrue(
         //     Commands.parallel(

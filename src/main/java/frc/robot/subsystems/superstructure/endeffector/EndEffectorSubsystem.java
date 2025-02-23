@@ -1,6 +1,5 @@
 package frc.robot.subsystems.superstructure.endeffector;
 
-import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.loggeddigitalinput.LoggedDigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -11,9 +10,9 @@ public class EndEffectorSubsystem extends SubsystemBase {
     private final EndEffectorIO m_io;
 
     // Detects the leading edge of coral entering the box
-    private final LoggedDigitalInput m_coralSensorLeading;
+    // private final LoggedDigitalInput m_coralSensorLeading;
     // Detects coral at the center of the box
-    private final LoggedDigitalInput m_coralSensor;
+    // private final LoggedDigitalInput m_coralSensor;
 
     public EndEffectorSubsystem() {
         switch (Constants.kCurrentMode) {
@@ -28,16 +27,16 @@ public class EndEffectorSubsystem extends SubsystemBase {
                 break;
         }
 
-        m_coralSensor = new LoggedDigitalInput(
-            EndEffectorConstants.kLogPath + "/CoralSensor",
-            EndEffectorConstants.kCoralSensorPort,
-            Constants.kCurrentMode
-        );
-        m_coralSensorLeading = new LoggedDigitalInput(
-            EndEffectorConstants.kLogPath + "/CoralSensorLeading",
-            EndEffectorConstants.kCoralSensorLeadingPort,
-            Constants.kCurrentMode
-        );
+        // m_coralSensor = new LoggedDigitalInput(
+        //     EndEffectorConstants.kLogPath + "/CoralSensor",
+        //     EndEffectorConstants.kCoralSensorPort,
+        //     Constants.kCurrentMode
+        // );
+        // m_coralSensorLeading = new LoggedDigitalInput(
+        //     EndEffectorConstants.kLogPath + "/CoralSensorLeading",
+        //     EndEffectorConstants.kCoralSensorLeadingPort,
+        //     Constants.kCurrentMode
+        // );
 
         m_inputs = new EndEffectorIOInputsAutoLogged();
     }
@@ -46,6 +45,7 @@ public class EndEffectorSubsystem extends SubsystemBase {
     //    private final SparkMax m_rightMotor = new SparkMax(0, MotorType.kBrushless);
 
     public void setVoltage(double leftVolts, double rightVolts) {
+        m_io.setVoltage(leftVolts, rightVolts);
     }
 
     public void setVoltage(double volts) {
@@ -70,11 +70,13 @@ public class EndEffectorSubsystem extends SubsystemBase {
     }
 
     public boolean hasCoral() {
-        return m_coralSensor.get();
+        // return m_coralSensor.get();
+        return false;
     }
 
     public boolean hasLeadingEdgeCoral() {
-        return m_coralSensorLeading.get();
+        // return m_coralSensorLeading.get();
+        return false;
     }
 
     @Override

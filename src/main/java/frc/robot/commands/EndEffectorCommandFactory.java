@@ -10,7 +10,8 @@ public class EndEffectorCommandFactory {
     public static Command score(EndEffectorSubsystem endEffector) {
         return Commands.sequence(
             endEffector.runOnce(endEffector::setScore),
-            Commands.waitUntil(() -> !endEffector.hasCoral())
+            Commands.waitSeconds(2)
+            // Commands.waitUntil(() -> !endEffector.hasCoral())
         ).finallyDo(endEffector::stop);
     }
 
