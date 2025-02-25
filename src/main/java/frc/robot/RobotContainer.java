@@ -4,9 +4,19 @@
 
 package frc.robot;
 
+import frc.robot.commands.*;
+import frc.robot.subsystems.leds.LEDSubsystem;
+
+import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.AutoBuilder;
+import frc.robot.commands.SwerveCommandFactory;
 import frc.robot.commands.AutomatedTeleopControllerListenerCommand;
 import frc.robot.commands.ElevatorCommandFactory;
 import frc.robot.commands.EndEffectorCommandFactory;
@@ -35,7 +45,7 @@ public class RobotContainer {
         m_endEffector = new EndEffectorSubsystem();
         m_leds = new LEDSubsystem();
         RobotState.init(m_swerve, m_vision, m_elevator);
-        AutoChooser.init(m_swerve, m_elevator, m_endEffector, m_leds);
+        // AutoChooser.init(m_swerve, m_elevator, m_endEffector, m_leds);
         //        System.out.println(
         //            "L1 RAD: "
         //                + Conversions.elevatorMetersToElevatorRadians(
@@ -78,18 +88,18 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        m_elevator.setDefaultCommand(
-            ElevatorCommandFactory.debugControllerAxis(
-                m_elevator,
-                m_driverController::getRightTriggerAxis,
-                m_driverController::getLeftTriggerAxis
-            )
-        );
-        // m_swerve.setDefaultCommand(
-        //     SwerveCommandFactory.makeTeleop(m_swerve, m_driverController).onlyWhile(
-        //         () -> DriverStation.isTeleop() || DriverStation.isTest()
+        // m_elevator.setDefaultCommand(
+        //     ElevatorCommandFactory.debugControllerAxis(
+        //         m_elevator,
+        //         m_driverController::getRightTriggerAxis,
+        //         m_driverController::getLeftTriggerAxis
         //     )
         // );
+        m_swerve.setDefaultCommand(
+            SwerveCommandFactory.makeTeleop(m_swerve, m_driverController).onlyWhile(
+                () -> DriverStation.isTeleop() || DriverStation.isTest()
+            )
+        );
 
         // Elevator setpoints
         // m_driverController.cross().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L1));
@@ -145,14 +155,14 @@ public class RobotContainer {
     public Command getAutonomousCommand() { return AutoChooser.get(); }
 
     public Command getTeleopCommand() {
-        return new AutomatedTeleopControllerListenerCommand(
-            m_elevator,
-            m_swerve,
-            m_endEffector,
-            m_leds,
-            m_driverController,
-            m_operatorController
-        );
-        //        return Commands.none();
+        // return new AutomatedTeleopControllerListenerCommand(
+        //     m_elevator,
+        //     m_swerve,
+        //     m_endEffector,
+        //     m_leds,
+        //     m_driverController,
+        //     m_operatorController
+        // );
+        return Commands.none();
     }
 }
