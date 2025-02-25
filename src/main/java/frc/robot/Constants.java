@@ -304,6 +304,11 @@ public final class Constants {
 
         // The distance from the center of the reef that the elevator will be allowed to autonomously extend
         public static final double kAutoElevatorExtendRequiredDistanceMeters = 4.5;
+        
+        public static final double kL1OffsetMeters = 0.0;
+        public static final double kL2OffsetMeters = 0.0;
+        public static final double kL3OffsetMeters = 0.0;
+        public static final double kL4OffsetMeters = 0.0;
     }
 
     public static final class EndEffectorConstants {
@@ -335,7 +340,7 @@ public final class Constants {
         public static final double kAutoScoreMaxAngularSpeedRadiansPerSecond = Conversions.degreesToRadians(10);
 
         // Angle of coral measured from the horizontal
-        public static final Rotation2d kAngle = Rotation2d.fromDegrees(55);
+        public static final Rotation2d kAngle = Rotation2d.fromDegrees(35);
 
         public static final double kScoreTimeoutSeconds = 2;
 
