@@ -81,9 +81,9 @@ public class SwerveModuleIOTalonFx implements SwerveModuleIO {
         turnConfigs.CurrentLimits.SupplyCurrentLimit = SwerveModuleConstants.kTurnSupplyCurrentLimit;
         turnConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
 
-        turnConfigs.Feedback.SensorToMechanismRatio = 1;
-        turnConfigs.Feedback.RotorToSensorRatio = SwerveModuleConstants.kDriveGearRatio.asDouble();
-        turnConfigs.Feedback.FeedbackRemoteSensorID = m_encoder.getDeviceID();
+        turnConfigs.Feedback.SensorToMechanismRatio = SwerveModuleConstants.kTurnGearRatio;
+        // turnConfigs.Feedback.RotorToSensorRatio = SwerveModuleConstants.kTurnGearRatio;
+        // turnConfigs.Feedback.FeedbackRemoteSensorID = m_encoder.getDeviceID();
         // turnConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
 
         turnConfigs.ClosedLoopGeneral.ContinuousWrap = true;
