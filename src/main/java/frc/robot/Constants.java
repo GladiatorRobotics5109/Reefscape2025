@@ -30,7 +30,7 @@ public final class Constants {
 
     public static final double kLoopPeriodSecs = Robot.defaultPeriodSecs;
 
-    public static final int kPDPPort = 0;
+    public static final int kPDPPort = 1;
 
     public static final double kJoystickDeadzone = 0.15;
 
@@ -47,22 +47,25 @@ public final class Constants {
             /* Use PID controller on motor controllers */
             public static final boolean kUseMotorPID = true;
             /* Use FOC on TalonFX */
-            public static final boolean kUseFOC = false;
+            public static final boolean kUseFOC = true;
 
             public static final MK4GearRatio kDriveGearRatio = MK4GearRatio.L1;
             public static final double kTurnGearRatio = MK4Constants.kTurnGearRatio;
 
             public static final double kWheelRadiusMeters = 0.0472659347214289;
 
-            // TODO: get correct ports
             public static final int kFrontLeftDrivePort = 10;
             public static final int kFrontLeftTurnPort = 20;
+            public static final int kFrontLeftEncoderPort = 30;
             public static final int kFrontRightDrivePort = 11;
             public static final int kFrontRightTurnPort = 21;
+            public static final int kFrontRightEncoderPort = 31;
             public static final int kBackLeftDrivePort = 13;
             public static final int kBackLeftTurnPort = 23;
+            public static final int kBackLeftEncoderPort = 33;
             public static final int kBackRightDrivePort = 12;
             public static final int kBackRightTurnPort = 22;
+            public static final int kBackRightEncoderPort = 32;
 
             public static final Translation2d kModulePosFL = new Translation2d(0.283989, 0.283989);
             public static final Translation2d kModulePosFR = new Translation2d(0.283989, -0.283989);
@@ -99,21 +102,19 @@ public final class Constants {
             public static final int kTurnSupplyCurrentLimit = 30;
 
             public static final LinearVelocity kDriveMaxFreeSpeed = Units.FeetPerSecond.of(12.9);
-            // TODO: verify this
-            public static final AngularVelocity kTurnMaxRotationSpeed = Units.RotationsPerSecond.of(2);
         }
 
-        // TODO: change this
-        public static final int kPigeonPort = 10;
+        public static final int kPigeonPort = 40;
 
         public static final boolean kTeleopFieldRelative = true;
 
-        public static final double kOdometryFrequencyHz = 50;
         public static final Pose2d kStartingPose = new Pose2d();
         public static final String kLogPath = "Subsystems/Swerve";
         public static final double kFrameWidth = Conversions.inchesToMeters(29);
         public static final double kFrameHeight = Conversions.inchesToMeters(29);
-        public static final double kDriveBaseRadiusMeters = Math.hypot(kFrameWidth, kFrameHeight);
+        public static final double kDriveBaseRadiusMeters = SwerveModuleConstants.kModulePosFL.getDistance(
+            Translation2d.kZero
+        );
 
         public static final com.pathplanner.lib.config.PIDConstants kPPTranslationPID = new com.pathplanner.lib.config.PIDConstants(
             5,
@@ -128,8 +129,8 @@ public final class Constants {
 
         // TODO: replace with correct values
         public static final RobotConfig kPPConfig = new RobotConfig(
-            52.0,
-            5.0,
+            47.17360648,
+            4.2659057746, // (1 / 12) * mass * (length^2 + width^2)
             // Conversions.poundsToKilograms(112),
             // // Fix rough estimate
             // (1 / 12) * Conversions.poundsToKilograms(112)
@@ -262,26 +263,28 @@ public final class Constants {
 
         public static final double kElevatorMaxPositionMeters = Conversions.inchesToMeters(69.736220);
 
-        public static final double kForwardSoftLimitRad = 30.0;
-        public static final double kReverseSoftLimitRad = 0.2;
+        public static final double kForwardSoftLimitRad = 29.5;
+        public static final double kReverseSoftLimitRad = 0.1;
 
         public static final PIDConstants kPID = new PIDConstants(
-            0.1, // V / rad
+            0.13, // V / rad
             0.0,
             0.0
         );
         public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(
             0.1,
-            0.23,
+            0.13,
             0.0,
-            0.07 // V
+            0.30 // V
         );
-        // public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1);
-        // public static final double kElevatorAccelerationRadPerSecPerSec = 30;
-        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1.25);
+        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(0.75);
         public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
-            4
+            2
         );
+        // public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1.25);
+        // public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
+        //     4
+        // );
 
         /** Distance between belly pan and elevator base */
         public static final double kBellyPanToElevatorBaseMeters = Conversions.inchesToMeters(3);
@@ -320,8 +323,8 @@ public final class Constants {
          */
         public static final double kEndEffectorLengthMeters = Conversions.inchesToMeters(11.967);
 
-        public static final int kLeftPort = 50;
-        public static final int kRightPort = 51;
+        public static final int kLeftPort = 30;
+        public static final int kRightPort = 31;
 
         public static final int kCoralSensorPort = 0;
         public static final int kCoralSensorLeadingPort = 1;
@@ -344,7 +347,7 @@ public final class Constants {
 
         public static final double kScoreTimeoutSeconds = 2;
 
-        public static final double kScoreVoltage = 6;
+        public static final double kScoreVoltage = 12;
         public static final double kIntakeVoltage = 6;
         public static final double kIntakeSlowVoltage = 2;
     }

@@ -18,12 +18,10 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.RobotState;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModule;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModuleIO;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModuleIOSimTalonFx;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModuleIOTalonFx;
-import frc.robot.subsystems.vision.VisionMeasurement;
 import frc.robot.util.Util;
 import org.littletonrobotics.junction.Logger;
 
@@ -48,6 +46,7 @@ public class SwerveSubsystem extends SubsystemBase {
                     new SwerveModuleIOTalonFx(
                         SwerveConstants.SwerveModuleConstants.kFrontLeftDrivePort,
                         SwerveConstants.SwerveModuleConstants.kFrontLeftTurnPort,
+                        SwerveConstants.SwerveModuleConstants.kFrontLeftEncoderPort,
                         SwerveConstants.SwerveModuleConstants.kUseFOC
                     ),
                     SwerveConstants.SwerveModuleConstants.kUseMotorPID
@@ -57,6 +56,7 @@ public class SwerveSubsystem extends SubsystemBase {
                     new SwerveModuleIOTalonFx(
                         SwerveConstants.SwerveModuleConstants.kFrontRightDrivePort,
                         SwerveConstants.SwerveModuleConstants.kFrontRightTurnPort,
+                        SwerveConstants.SwerveModuleConstants.kFrontRightEncoderPort,
                         SwerveConstants.SwerveModuleConstants.kUseFOC
                     ),
                     SwerveConstants.SwerveModuleConstants.kUseMotorPID
@@ -66,6 +66,7 @@ public class SwerveSubsystem extends SubsystemBase {
                     new SwerveModuleIOTalonFx(
                         SwerveConstants.SwerveModuleConstants.kBackLeftDrivePort,
                         SwerveConstants.SwerveModuleConstants.kBackLeftTurnPort,
+                        SwerveConstants.SwerveModuleConstants.kBackLeftEncoderPort,
                         SwerveConstants.SwerveModuleConstants.kUseFOC
                     ),
                     SwerveConstants.SwerveModuleConstants.kUseMotorPID
@@ -75,12 +76,16 @@ public class SwerveSubsystem extends SubsystemBase {
                     new SwerveModuleIOTalonFx(
                         SwerveConstants.SwerveModuleConstants.kBackRightDrivePort,
                         SwerveConstants.SwerveModuleConstants.kBackRightTurnPort,
+                        SwerveConstants.SwerveModuleConstants.kBackRightEncoderPort,
                         SwerveConstants.SwerveModuleConstants.kUseFOC
                     ),
                     SwerveConstants.SwerveModuleConstants.kUseMotorPID
                 );
 
-                m_gyro = new LoggedGyro("Subsystems/Swerve/Gyro", new LoggedGyroIOPigeon(SwerveConstants.kPigeonPort));
+                m_gyro = new LoggedGyro(
+                    "Subsystems/Swerve/Gyro",
+                    new LoggedGyroIOPigeon(SwerveConstants.kPigeonPort, "drivetrain")
+                );
 
                 break;
             case SIM:
@@ -294,10 +299,10 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void updatePose() {
-        VisionMeasurement[] measurements = RobotState.getVisionMeasurements();
-        for (VisionMeasurement measurement : measurements) {
-            m_poseEstimator.addVisionMeasurement(measurement.estimatedPose().toPose2d(), measurement.timestamp());
-        }
+        // VisionMeasurement[] measurements = RobotState.getVisionMeasurements();
+        // for (VisionMeasurement measurement : measurements) {
+        //     m_poseEstimator.addVisionMeasurement(measurement.estimatedPose().toPose2d(), measurement.timestamp());
+        // }
 
         m_poseEstimator.update(m_gyro.getYaw(), getModulePositions());
     }

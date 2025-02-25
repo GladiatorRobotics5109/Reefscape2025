@@ -70,7 +70,7 @@ public class Conversions extends ConversionsBase {
     }
 
     public static double elevatorRadiansToElevatorMeters(double rad) {
-        return ConversionsBase.radiansToMeters(rad, ElevatorConstants.kSprocketRadiusMeters);
+        return ConversionsBase.radiansToMeters(rad, ElevatorConstants.kSprocketRadiusMeters) * 2;
     }
 
     public static double elevatorRotationsToElevatorMeters(double rot) {

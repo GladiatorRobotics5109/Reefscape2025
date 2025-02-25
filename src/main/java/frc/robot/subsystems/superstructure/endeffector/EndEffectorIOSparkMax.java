@@ -3,6 +3,8 @@ package frc.robot.subsystems.superstructure.endeffector;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import frc.robot.Constants.EndEffectorConstants;
@@ -25,6 +27,13 @@ public class EndEffectorIOSparkMax implements EndEffectorIO {
 
         m_left = new SparkMax(leftPort, MotorType.kBrushless);
         m_right = new SparkMax(rightPort, MotorType.kBrushless);
+
+        m_left.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        m_right.configure(
+            config.inverted(!EndEffectorConstants.kInvertMotor),
+            ResetMode.kResetSafeParameters,
+            PersistMode.kPersistParameters
+        );
 
         m_leftEncoder = m_left.getEncoder();
         m_leftEncoder.setPosition(0.0);
