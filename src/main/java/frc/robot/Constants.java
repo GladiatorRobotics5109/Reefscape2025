@@ -304,7 +304,7 @@ public final class Constants {
 
         // The distance from the center of the reef that the elevator will be allowed to autonomously extend
         public static final double kAutoElevatorExtendRequiredDistanceMeters = 4.5;
-        
+
         public static final double kL1OffsetMeters = 0.0;
         public static final double kL2OffsetMeters = 0.0;
         public static final double kL3OffsetMeters = 0.0;

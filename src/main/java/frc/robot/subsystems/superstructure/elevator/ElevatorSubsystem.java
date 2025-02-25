@@ -28,7 +28,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             case L4 -> ElevatorConstants.kL4OffsetMeters;
         };
     }
-    
+
     private final ElevatorIO m_io;
     private final ElevatorIOInputsAutoLogged m_inputs;
 

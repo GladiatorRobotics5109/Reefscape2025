@@ -4,14 +4,11 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.AutoBuilder;
 import frc.robot.commands.AutomatedTeleopControllerListenerCommand;
 import frc.robot.commands.ElevatorCommandFactory;
 import frc.robot.commands.SwerveCommandFactory;
@@ -146,14 +143,7 @@ public class RobotContainer {
         // Left d-pad - abort climb
     }
 
-    public Command getAutonomousCommand() {
-        //        return AutoChooser.get().beforeStarting(
-        //            SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(8, 8, Rotation2d.k180deg))
-        //        );
-        return AutoBuilder.followTestPath(m_swerve).beforeStarting(
-            SwerveCommandFactory.setPosition(m_swerve, () -> new Pose2d(8, 8, Rotation2d.k180deg))
-        );
-    }
+    public Command getAutonomousCommand() { return AutoChooser.get(); }
 
     public Command getTeleopCommand() {
         return new AutomatedTeleopControllerListenerCommand(
