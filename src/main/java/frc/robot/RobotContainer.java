@@ -4,29 +4,17 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.commands.*;
-import frc.robot.subsystems.leds.LEDSubsystem;
-
-import org.littletonrobotics.junction.Logger;
-
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AutomatedTeleopControllerListenerCommand;
 import frc.robot.commands.ElevatorCommandFactory;
-import frc.robot.commands.SwerveCommandFactory;
+import frc.robot.commands.EndEffectorCommandFactory;
 import frc.robot.subsystems.leds.LEDSubsystem;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
-import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
@@ -42,10 +30,10 @@ public class RobotContainer {
 
     public RobotContainer() {
         m_swerve = new SwerveSubsystem();
-        // m_vision = new VisionSubsystem();
+        m_vision = new VisionSubsystem();
         m_elevator = new ElevatorSubsystem();
         m_endEffector = new EndEffectorSubsystem();
-        // m_leds = new LEDSubsystem();
+        m_leds = new LEDSubsystem();
         RobotState.init(m_swerve, m_vision, m_elevator);
         AutoChooser.init(m_swerve, m_elevator, m_endEffector, m_leds);
         //        System.out.println(
