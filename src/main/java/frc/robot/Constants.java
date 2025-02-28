@@ -361,4 +361,29 @@ public final class Constants {
         public static final int kCANdlePort = 60;
         public static final int kLEDCount = 10;
     }
+
+    public static final class ClimbConstants {
+        public static final String kLogPath = "Subsystems/Climb";
+
+        public static final double kGearRatio = 125.0;
+
+        public static final double kSupplyCurrentLimit = 40.0;
+
+        public static final boolean kInvertMotor = false;
+
+        public static final Rotation2d kStartingPosition = Rotation2d.fromDegrees(90);
+        public static final Rotation2d kMaxPosition = Rotation2d.fromDegrees(100);
+        public static final Rotation2d kMinPosition = Rotation2d.fromDegrees(-10);
+        public static final Rotation2d kClimbPosition = Rotation2d.fromDegrees(10);
+        public static final Rotation2d kCagePosition = Rotation2d.fromDegrees(95);
+
+        public static final double kClimbingVoltage = -5.0;
+        public static final double kHoldingVoltage = -0.0;
+
+        public static final int kMotorPort = 4;
+
+        public static final PIDConstants kPID = new PIDConstants(0.0, 0.0, 0.0);
+
+        public static final double kPositionToleranceRad = Conversions.degreesToRadians(2);
+    }
 }

@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.vision.VisionIO.VisionIOInputs;
-import org.littletonrobotics.junction.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,9 +53,9 @@ public class VisionSubsystem extends SubsystemBase {
         }
 
         // TODO: figure out why no log targets here :(
-        Logger.recordOutput(
-            VisionConstants.kLogPath.concat("/Measurements"),
-            m_measurements.toArray(new VisionMeasurement[0])
-        );
+        //        Logger.recordOutput(
+        //            VisionConstants.kLogPath.concat("/Measurements"),
+        //            m_measurements.toArray(new VisionMeasurement[0])
+        //        );
     }
 }
