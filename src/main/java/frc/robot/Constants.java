@@ -277,14 +277,14 @@ public final class Constants {
             0.0,
             0.30 // V
         );
-        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(0.75);
+        //        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(0.75);
+        //        public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
+        //            2
+        //        )s
+        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1.25);
         public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
-            2
+            4
         );
-        // public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1.25);
-        // public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
-        //     4
-        // );
 
         /** Distance between belly pan and elevator base */
         public static final double kBellyPanToElevatorBaseMeters = Conversions.inchesToMeters(3);
