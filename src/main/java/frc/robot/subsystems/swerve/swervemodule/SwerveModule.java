@@ -9,8 +9,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.subsystems.swerve.SwerveConstants;
-import frc.robot.subsystems.swerve.SwerveConstants.SwerveModuleConstants;
+import frc.robot.Constants.SwerveConstants;
+import frc.robot.Constants.SwerveConstants.SwerveModuleConstants;
 import frc.robot.util.Conversions;
 
 public class SwerveModule {
@@ -54,12 +54,11 @@ public class SwerveModule {
     }
 
     public SwerveModuleState setDesiredState(SwerveModuleState desiredState, boolean optimize) {
-        SwerveModuleState optimizedState = optimize
-            ? SwerveModuleState.optimize(desiredState, getTurnAngle())
-            : desiredState;
+        if (optimize)
+            desiredState.optimize(getTurnAngle());
 
-        m_desiredState = optimizedState;
-        return optimizedState;
+        m_desiredState = desiredState;
+        return desiredState;
     }
 
     public SwerveModuleState setDesiredState(SwerveModuleState desiredState) {
@@ -74,18 +73,15 @@ public class SwerveModule {
         m_io.setTurnVoltage(volts);
     }
 
-    public Rotation2d getTurnAngle() {
-        // return m_desiredState.angle;
-        return m_currentState.angle;
-    }
+    public Rotation2d getTurnAngle() { return m_currentState.angle; }
 
-    public SwerveModuleState getState() {
-        return m_currentState;
-    }
+    public double getTurnVelocityRadPerSec() { return m_inputs.turnVelocityRadPerSec; }
 
-    public SwerveModulePosition getPosition() {
-        return m_currentPosition;
-    }
+    public SwerveModuleState getState() { return m_currentState; }
+
+    public SwerveModulePosition getPosition() { return m_currentPosition; }
+
+    public double getDrivePositionRads() { return m_inputs.drivePositionRad; }
 
     public void periodic() {
         m_io.periodic();
@@ -97,9 +93,10 @@ public class SwerveModule {
             m_io.setTurnVoltage(0);
         }
         else {
+            double cos = m_desiredState.angle.minus(m_currentState.angle).getCos();
             if (m_useMotorPID) {
                 m_io.setDriveWheelSpeed(
-                    Conversions.driveWheelMetersToWheelRadians(m_desiredState.speedMetersPerSecond)
+                    Conversions.driveWheelMetersToWheelRadians(m_desiredState.speedMetersPerSecond * cos)
                 );
 
                 m_io.setTurnPosition(m_desiredState.angle);
@@ -107,17 +104,15 @@ public class SwerveModule {
             else {
                 m_io.setDriveVoltage(
                     m_driveFeedforward.calculate(
-                        Conversions.driveWheelMetersToWheelRadians(m_desiredState.speedMetersPerSecond)
+                        Conversions.driveWheelMetersToWheelRadians(m_desiredState.speedMetersPerSecond * cos)
                     )
                         + m_drivePID.calculate(
                             Conversions.driveWheelMetersToWheelRadians(m_currentState.speedMetersPerSecond),
-                            Conversions.driveWheelMetersToWheelRadians(m_desiredState.speedMetersPerSecond)
+                            Conversions.driveWheelMetersToWheelRadians(m_desiredState.speedMetersPerSecond * cos)
                         )
                 );
                 m_io.setTurnVoltage(
-                    m_turnFeedforward.calculate(
-                        m_desiredState.angle.getRadians()
-                    )
+                    m_turnFeedforward.calculate(m_desiredState.angle.getRadians())
                         + m_turnPID.calculate(m_currentState.angle.getRadians(), m_desiredState.angle.getRadians())
                 );
             }

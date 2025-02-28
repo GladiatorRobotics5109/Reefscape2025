@@ -1,12 +1,12 @@
 package frc.robot.subsystems.swerve;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.loggedgyro.LoggedGyro;
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.loggedgyro.LoggedGyroIO;
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.loggedgyro.LoggedGyroIOPigeon;
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.loggedgyro.LoggedGyroIOSim;
-
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -14,16 +14,20 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.SwerveConstants;
+import frc.robot.RobotState;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModule;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModuleIO;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModuleIOSimTalonFx;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModuleIOTalonFx;
+import frc.robot.subsystems.vision.VisionMeasurement;
 import frc.robot.util.Util;
+import org.littletonrobotics.junction.Logger;
+
+import java.util.List;
 
 public class SwerveSubsystem extends SubsystemBase {
     private final SwerveModule m_moduleFL;
@@ -44,6 +48,7 @@ public class SwerveSubsystem extends SubsystemBase {
                     new SwerveModuleIOTalonFx(
                         SwerveConstants.SwerveModuleConstants.kFrontLeftDrivePort,
                         SwerveConstants.SwerveModuleConstants.kFrontLeftTurnPort,
+                        SwerveConstants.SwerveModuleConstants.kFrontLeftEncoderPort,
                         SwerveConstants.SwerveModuleConstants.kUseFOC
                     ),
                     SwerveConstants.SwerveModuleConstants.kUseMotorPID
@@ -53,6 +58,7 @@ public class SwerveSubsystem extends SubsystemBase {
                     new SwerveModuleIOTalonFx(
                         SwerveConstants.SwerveModuleConstants.kFrontRightDrivePort,
                         SwerveConstants.SwerveModuleConstants.kFrontRightTurnPort,
+                        SwerveConstants.SwerveModuleConstants.kFrontRightEncoderPort,
                         SwerveConstants.SwerveModuleConstants.kUseFOC
                     ),
                     SwerveConstants.SwerveModuleConstants.kUseMotorPID
@@ -62,6 +68,7 @@ public class SwerveSubsystem extends SubsystemBase {
                     new SwerveModuleIOTalonFx(
                         SwerveConstants.SwerveModuleConstants.kBackLeftDrivePort,
                         SwerveConstants.SwerveModuleConstants.kBackLeftTurnPort,
+                        SwerveConstants.SwerveModuleConstants.kBackLeftEncoderPort,
                         SwerveConstants.SwerveModuleConstants.kUseFOC
                     ),
                     SwerveConstants.SwerveModuleConstants.kUseMotorPID
@@ -71,12 +78,16 @@ public class SwerveSubsystem extends SubsystemBase {
                     new SwerveModuleIOTalonFx(
                         SwerveConstants.SwerveModuleConstants.kBackRightDrivePort,
                         SwerveConstants.SwerveModuleConstants.kBackRightTurnPort,
+                        SwerveConstants.SwerveModuleConstants.kBackRightEncoderPort,
                         SwerveConstants.SwerveModuleConstants.kUseFOC
                     ),
                     SwerveConstants.SwerveModuleConstants.kUseMotorPID
                 );
 
-                m_gyro = new LoggedGyro("Subsystems/Swerve/Gyro", new LoggedGyroIOPigeon(SwerveConstants.kPigeonPort));
+                m_gyro = new LoggedGyro(
+                    "Subsystems/Swerve/Gyro",
+                    new LoggedGyroIOPigeon(SwerveConstants.kPigeonPort, "drivetrain")
+                );
 
                 break;
             case SIM:
@@ -149,25 +160,46 @@ public class SwerveSubsystem extends SubsystemBase {
             m_kinematics,
             m_gyro.getYaw(),
             getModulePositions(),
-            new Pose2d()
+            SwerveConstants.kStartingPose
+        );
+
+        AutoBuilder.configure(
+            this::getPose,
+            m_poseEstimator::resetPose,
+            this::getCurrentChassisSpeeds,
+            (speeds, feedForward) -> drive(speeds, false),
+            new PPHolonomicDriveController(SwerveConstants.kPPTranslationPID, SwerveConstants.kPPRotaitonPID),
+            SwerveConstants.kPPConfig,
+            () -> Util.getAlliance() == Alliance.Red, // Flip if red alliance
+            this
+        );
+
+        PathPlannerLogging.setLogActivePathCallback(
+            (
+                List<Pose2d> path
+            ) -> Logger.recordOutput(SwerveConstants.kLogPath + "/PathPlanner/ActivePath", path.toArray(new Pose2d[0]))
+        );
+        PathPlannerLogging.setLogCurrentPoseCallback(
+            (Pose2d pose) -> Logger.recordOutput(SwerveConstants.kLogPath + "/PathPlanner/CurrentPose", pose)
+        );
+        PathPlannerLogging.setLogTargetPoseCallback(
+            (Pose2d pose) -> Logger.recordOutput(SwerveConstants.kLogPath + "/PathPlanner/DesiredPose", pose)
         );
     }
 
     /**
      *
-     * @param vx
-     *            velocity in m/s
-     * @param vy
-     *            velocity in m/s
-     * @param vrot
-     *            rotational velocity in rad/s
+     * @param vx velocity in m/s
+     * @param vy velocity in m/s
+     * @param vrot rotational velocity in rad/s
      * @param fieldRelative
      */
     public void drive(double vx, double vy, double vrot, boolean fieldRelative) {
-        Rotation2d headingOffset = Util.getAlliance() == Alliance.Red ? Rotation2d.fromDegrees(0)
-            : Rotation2d.fromDegrees(180);
+        Rotation2d headingOffset = Util.getAlliance() == Alliance.Red
+            ? Rotation2d.fromDegrees(180)
+            : Rotation2d.fromDegrees(0);
         ChassisSpeeds desiredSpeeds = fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(vy, vx, vrot, getHeading().plus(headingOffset))
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, getHeading().plus(headingOffset))
             : new ChassisSpeeds(vx, vy, vrot);
         desiredSpeeds = ChassisSpeeds.discretize(desiredSpeeds, Constants.kLoopPeriodSecs);
 
@@ -182,13 +214,34 @@ public class SwerveSubsystem extends SubsystemBase {
         Logger.recordOutput(SwerveConstants.kLogPath + "/desiredModuleStates", optimizedStates);
     }
 
-    public Pose2d getPose() {
-        return m_poseEstimator.getEstimatedPosition();
+    public void drive(ChassisSpeeds speeds, boolean fieldRelative) {
+        drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, fieldRelative);
     }
 
-    public Rotation2d getHeading() {
-        return getPose().getRotation();
+    public void stopAndX() {
+        SwerveModuleState flBr = new SwerveModuleState(0.0, Rotation2d.fromDegrees(45));
+        SwerveModuleState frBL = new SwerveModuleState(0.0, Rotation2d.fromDegrees(-45));
+
+        m_moduleFL.setDesiredState(flBr, false);
+        m_moduleFR.setDesiredState(frBL, false);
+        m_moduleBL.setDesiredState(frBL, false);
+        m_moduleBR.setDesiredState(flBr, false);
+
+        Logger.recordOutput(
+            SwerveConstants.kLogPath
+                + "/desiredModuleStates",
+            new SwerveModuleState[] {
+                flBr,
+                frBL,
+                frBL,
+                flBr
+            }
+        );
     }
+
+    public Pose2d getPose() { return m_poseEstimator.getEstimatedPosition(); }
+
+    public Rotation2d getHeading() { return getPose().getRotation(); }
 
     public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {
@@ -208,6 +261,15 @@ public class SwerveSubsystem extends SubsystemBase {
         };
     }
 
+    public double[] getModuleTurnVelocities() {
+        return new double[] {
+            m_moduleFL.getTurnVelocityRadPerSec(),
+            m_moduleFR.getTurnVelocityRadPerSec(),
+            m_moduleBL.getTurnVelocityRadPerSec(),
+            m_moduleBR.getTurnVelocityRadPerSec(),
+        };
+    }
+
     /**
      * Should be used for debug/testing purposes only
      *
@@ -222,15 +284,28 @@ public class SwerveSubsystem extends SubsystemBase {
         };
     }
 
-    public void setController(Command controller) {
-        if (!controller.hasRequirement(this)) {
-            DriverStation.reportWarning("Swerve Controller Command does not require this subsystem!", true);
-        }
+    /** Get the position of all drive wheels in radians. */
+    public double[] getWheelRadiusCharacterizationPosition() {
+        return new double[] {
+            m_moduleFL.getDrivePositionRads(),
+            m_moduleFR.getDrivePositionRads(),
+            m_moduleBL.getDrivePositionRads(),
+            m_moduleBR.getDrivePositionRads()
+        };
+    }
 
-        controller.schedule();
+    public ChassisSpeeds getCurrentChassisSpeeds() { return m_kinematics.toChassisSpeeds(getModuleStates()); }
+
+    public void setPosition(Pose2d pose) {
+        m_poseEstimator.resetPosition(m_gyro.getYaw(), getModulePositions(), pose);
     }
 
     public void updatePose() {
+        VisionMeasurement[] measurements = RobotState.getVisionMeasurements();
+        for (VisionMeasurement measurement : measurements) {
+            m_poseEstimator.addVisionMeasurement(measurement.estimatedPose().toPose2d(), measurement.timestamp());
+        }
+
         m_poseEstimator.update(m_gyro.getYaw(), getModulePositions());
     }
 
@@ -254,8 +329,5 @@ public class SwerveSubsystem extends SubsystemBase {
         }
 
         updatePose();
-
-        Logger.recordOutput(SwerveConstants.kLogPath + "/currentPose", getPose());
-        Logger.recordOutput(SwerveConstants.kLogPath + "/currentModuleStates", getModuleStates());
     }
 }

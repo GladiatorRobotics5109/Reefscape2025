@@ -6,20 +6,22 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.*;
-import frc.robot.subsystems.swerve.SwerveConstants;
-import frc.robot.subsystems.swerve.SwerveConstants.SwerveModuleConstants;
+import frc.robot.Constants.SwerveConstants.SwerveModuleConstants;
 import frc.robot.util.Conversions;
 
 public class SwerveModuleIOTalonFx implements SwerveModuleIO {
     protected final TalonFX m_drive;
     protected final TalonFX m_turn;
+    protected final CANcoder m_encoder;
 
     private final boolean m_useFOC;
 
@@ -47,20 +49,25 @@ public class SwerveModuleIOTalonFx implements SwerveModuleIO {
     private final StatusSignal<Current> m_signalTurnStatorCurrent;
     private final StatusSignal<Current> m_signalTurnSupplyCurrent;
 
-    public SwerveModuleIOTalonFx(int drivePort, int turnPort, boolean useFOC) {
-        m_drive = new TalonFX(drivePort);
-        m_turn = new TalonFX(turnPort);
+    public SwerveModuleIOTalonFx(int drivePort, int turnPort, int encoderPort, boolean useFOC) {
+        m_drive = new TalonFX(drivePort, "drivetrain");
+        m_turn = new TalonFX(turnPort, "drivetrain");
+        m_encoder = new CANcoder(encoderPort, "drivetrain");
 
         m_useFOC = useFOC;
 
         TalonFXConfiguration driveConfigs = new TalonFXConfiguration();
         driveConfigs.CurrentLimits.StatorCurrentLimit = SwerveModuleConstants.kDriveStatorCurrentLimit;
         driveConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
-        driveConfigs.CurrentLimits.SupplyCurrentLimit = SwerveModuleConstants.kDriveSupplyCurrentLimit;
+        driveConfigs.CurrentLimits.SupplyCurrentLimit = SwerveModuleConstants.kDriveSupplyCurrentLowerLimit;
+        // Should be able to get away w ~1 second
+        driveConfigs.CurrentLimits.SupplyCurrentLowerTime = 1.0;
+        driveConfigs.CurrentLimits.SupplyCurrentLowerLimit = SwerveModuleConstants.kDriveSupplyCurrentLimit;
         driveConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
-        // TODO: test new ratios
+
         driveConfigs.Feedback.SensorToMechanismRatio = SwerveModuleConstants.kDriveGearRatio.asDouble();
-        // Need to convert to rations here bc talonfx native units is rotations
+
+        // Need to convert to rations here bc TalonFX native unit is rotations
         driveConfigs.Slot0.kP = Conversions.radiansToRotations(SwerveModuleConstants.kDrivePID.kp());
         driveConfigs.Slot0.kI = Conversions.radiansToRotations(SwerveModuleConstants.kDrivePID.ki());
         driveConfigs.Slot0.kD = Conversions.radiansToRotations(SwerveModuleConstants.kDrivePID.kd());
@@ -68,20 +75,28 @@ public class SwerveModuleIOTalonFx implements SwerveModuleIO {
         driveConfigs.Slot0.kS = Conversions.radiansToRotations(SwerveModuleConstants.kDriveFeedforward.ks());
         driveConfigs.Slot0.kV = Conversions.radiansToRotations(SwerveModuleConstants.kDriveFeedforward.kv());
         driveConfigs.Slot0.kA = Conversions.radiansToRotations(SwerveModuleConstants.kDriveFeedforward.ka());
+
         m_drive.getConfigurator().apply(driveConfigs);
 
         TalonFXConfiguration turnConfigs = new TalonFXConfiguration();
         turnConfigs.CurrentLimits.SupplyCurrentLimit = SwerveModuleConstants.kTurnSupplyCurrentLimit;
         turnConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
-        turnConfigs.Feedback.SensorToMechanismRatio = SwerveModuleConstants.kTurnGearRatio;
+
+        turnConfigs.Feedback.SensorToMechanismRatio = 1;
+        turnConfigs.Feedback.RotorToSensorRatio = SwerveModuleConstants.kTurnGearRatio;
+        turnConfigs.Feedback.FeedbackRemoteSensorID = m_encoder.getDeviceID();
+        turnConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+
         turnConfigs.ClosedLoopGeneral.ContinuousWrap = true;
-        // Need to convert to rations here bc talonfx native units is rotations
+        // Need to convert to rations here bc TalonFX native unit is rotations
         turnConfigs.Slot0.kP = Conversions.radiansToRotations(SwerveModuleConstants.kTurnPID.kp());
         turnConfigs.Slot0.kI = Conversions.radiansToRotations(SwerveModuleConstants.kTurnPID.ki());
         turnConfigs.Slot0.kD = Conversions.radiansToRotations(SwerveModuleConstants.kTurnPID.kd());
+        driveConfigs.Slot0.StaticFeedforwardSign = StaticFeedforwardSignValue.UseVelocitySign;
         turnConfigs.Slot0.kS = Conversions.radiansToRotations(SwerveModuleConstants.kTurnFeedforward.ks());
         turnConfigs.Slot0.kV = Conversions.radiansToRotations(SwerveModuleConstants.kTurnFeedforward.kv());
         turnConfigs.Slot0.kA = Conversions.radiansToRotations(SwerveModuleConstants.kTurnFeedforward.ka());
+
         m_turn.getConfigurator().apply(turnConfigs);
 
         m_driveVelocity = new VelocityVoltage(0);
@@ -116,15 +131,16 @@ public class SwerveModuleIOTalonFx implements SwerveModuleIO {
         m_drive.setPosition(0);
         m_turn.setPosition(0);
 
-        BaseStatusSignal.setUpdateFrequencyForAll(
-            SwerveConstants.kOdometryFrequencyHz,
-            m_signalDrivePosition,
-            m_signalDriveVelocity,
-            m_signalDriveAcceleration,
-            m_signalTurnPosition,
-            m_signalTurnVelocity,
-            m_signalTurnAcceleration
-        );
+        // TODO: high refresh odoom
+        // BaseStatusSignal.setUpdateFrequencyForAll(
+        // SwerveConstants.kOdometryFrequencyHz,
+        // m_signalDrivePosition,
+        // m_signalDriveVelocity,
+        // m_signalDriveAcceleration,
+        // m_signalTurnPosition,
+        // m_signalTurnVelocity,
+        // m_signalTurnAcceleration
+        // );
     }
 
     @Override

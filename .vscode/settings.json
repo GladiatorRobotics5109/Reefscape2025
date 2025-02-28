@@ -56,5 +56,21 @@
     "edu.wpi.first.math.proto.*",
     "edu.wpi.first.math.**.proto.*",
     "edu.wpi.first.math.**.struct.*",
-  ]
+  ],
+  "cSpell.words": [
+    "CTRE",
+    "Deadzone",
+    "Feedforward",
+    "jank",
+    "Pathfinding",
+    "Peachtree",
+    "periodics",
+    "Reefscape",
+    "teleop",
+    "URCL",
+    "vrot",
+    "WPILOG"
+  ],
+  "java.debug.settings.onBuildFailureProceed": true,
+  "wpilib.autoStartRioLog": false
 }

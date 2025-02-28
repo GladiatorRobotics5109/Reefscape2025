@@ -6,7 +6,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.Constants;
-import frc.robot.subsystems.swerve.SwerveConstants.SwerveModuleConstants;
+import frc.robot.Constants.SwerveConstants.SwerveModuleConstants;
 import frc.robot.util.Conversions;
 
 public class SwerveModuleIOSimTalonFx extends SwerveModuleIOTalonFx {
@@ -14,23 +14,19 @@ public class SwerveModuleIOSimTalonFx extends SwerveModuleIOTalonFx {
     private final DCMotorSim m_turnSim;
 
     public SwerveModuleIOSimTalonFx(int drivePort, int turnPort, boolean useFOC) {
-        super(drivePort, turnPort, useFOC);
+        super(drivePort, turnPort, 0, useFOC);
 
         m_driveSim = new DCMotorSim(
             LinearSystemId.createDCMotorSystem(
                 DCMotor.getKrakenX60(1),
-                SwerveModuleConstants.kDriveFeedforward.kv(),
-                SwerveModuleConstants.kDriveFeedforward.ka()
+                0.025,
+                SwerveModuleConstants.kDriveGearRatio.asDouble()
             ),
             DCMotor.getKrakenX60(1)
         );
 
         m_turnSim = new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(
-                DCMotor.getKrakenX60(1),
-                SwerveModuleConstants.kTurnFeedforward.kv(),
-                SwerveModuleConstants.kTurnFeedforward.ka()
-            ),
+            LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60(1), 0.004, SwerveModuleConstants.kTurnGearRatio),
             DCMotor.getKrakenX60(1)
         );
 
@@ -63,20 +59,24 @@ public class SwerveModuleIOSimTalonFx extends SwerveModuleIOTalonFx {
         m_turnSim.update(Constants.kLoopPeriodSecs);
 
         driveSimState.setRawRotorPosition(
-            m_driveSim.getAngularPositionRotations() * SwerveModuleConstants.kDriveGearRatio.asDouble()
+            m_driveSim.getAngularPositionRotations()
+                * SwerveModuleConstants.kDriveGearRatio.asDouble()
         );
         driveSimState.setRotorVelocity(
             Conversions.radiansToRotations(
-                m_driveSim.getAngularVelocityRadPerSec() * SwerveModuleConstants.kDriveGearRatio.asDouble()
+                m_driveSim.getAngularVelocityRadPerSec()
+                    * SwerveModuleConstants.kDriveGearRatio.asDouble()
             )
         );
 
         turnSimState.setRawRotorPosition(
-            m_turnSim.getAngularPositionRotations() * SwerveModuleConstants.kTurnGearRatio
+            m_turnSim.getAngularPositionRotations()
+                * SwerveModuleConstants.kTurnGearRatio
         );
         turnSimState.setRotorVelocity(
             Conversions.radiansToRotations(
-                m_turnSim.getAngularVelocityRadPerSec() * SwerveModuleConstants.kTurnGearRatio
+                m_turnSim.getAngularVelocityRadPerSec()
+                    * SwerveModuleConstants.kTurnGearRatio
             )
         );
     }

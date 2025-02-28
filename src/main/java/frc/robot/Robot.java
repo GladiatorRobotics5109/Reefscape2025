@@ -10,19 +10,30 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.littletonrobotics.urcl.URCL;
 
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.PeriodicUtil;
+import com.pathplanner.lib.commands.PathfindingCommand;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.util.LocalADStarAK;
+import frc.robot.util.Paths;
 
 public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
+    private Command m_teleopCommand;
 
     private RobotContainer m_robotContainer;
 
     @Override
     public void robotInit() {
+        // Use Akit compatible path finding
+        Pathfinding.setPathfinder(new LocalADStarAK());
+        PathfindingCommand.warmupCommand().onlyWhile(DriverStation::isDisabled).schedule();
+
         // Record metadata
         Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
         Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
@@ -74,15 +85,18 @@ public class Robot extends LoggedRobot {
         // AdvantageKit. Logger.disableDeterministicTimestamps()
 
         // Start AdvantageKit logger
+        Logger.registerURCL(URCL.startExternal());
         Logger.start();
+        Paths.init();
+        Paths.log();
 
         m_robotContainer = new RobotContainer();
     }
 
     @Override
     public void robotPeriodic() {
-        PeriodicUtil.periodic();
         CommandScheduler.getInstance().run();
+        PeriodicUtil.periodic();
     }
 
     @Override
@@ -114,6 +128,12 @@ public class Robot extends LoggedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }
+
+        m_teleopCommand = m_robotContainer.getTeleopCommand();
+
+        if (m_teleopCommand != null) {
+            m_teleopCommand.schedule();
+        }
     }
 
     @Override
@@ -129,6 +149,9 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void testPeriodic() {}
+
+    @Override
+    public void simulationPeriodic() {}
 
     @Override
     public void testExit() {}
