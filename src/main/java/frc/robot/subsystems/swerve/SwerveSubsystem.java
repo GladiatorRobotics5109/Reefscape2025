@@ -48,6 +48,7 @@ public class SwerveSubsystem extends SubsystemBase {
                     new SwerveModuleIOTalonFx(
                         SwerveConstants.SwerveModuleConstants.kFrontLeftDrivePort,
                         SwerveConstants.SwerveModuleConstants.kFrontLeftTurnPort,
+                        SwerveConstants.SwerveModuleConstants.kFrontLeftEncoderPort,
                         SwerveConstants.SwerveModuleConstants.kUseFOC
                     ),
                     SwerveConstants.SwerveModuleConstants.kUseMotorPID
@@ -57,6 +58,7 @@ public class SwerveSubsystem extends SubsystemBase {
                     new SwerveModuleIOTalonFx(
                         SwerveConstants.SwerveModuleConstants.kFrontRightDrivePort,
                         SwerveConstants.SwerveModuleConstants.kFrontRightTurnPort,
+                        SwerveConstants.SwerveModuleConstants.kFrontRightEncoderPort,
                         SwerveConstants.SwerveModuleConstants.kUseFOC
                     ),
                     SwerveConstants.SwerveModuleConstants.kUseMotorPID
@@ -66,6 +68,7 @@ public class SwerveSubsystem extends SubsystemBase {
                     new SwerveModuleIOTalonFx(
                         SwerveConstants.SwerveModuleConstants.kBackLeftDrivePort,
                         SwerveConstants.SwerveModuleConstants.kBackLeftTurnPort,
+                        SwerveConstants.SwerveModuleConstants.kBackLeftEncoderPort,
                         SwerveConstants.SwerveModuleConstants.kUseFOC
                     ),
                     SwerveConstants.SwerveModuleConstants.kUseMotorPID
@@ -75,12 +78,16 @@ public class SwerveSubsystem extends SubsystemBase {
                     new SwerveModuleIOTalonFx(
                         SwerveConstants.SwerveModuleConstants.kBackRightDrivePort,
                         SwerveConstants.SwerveModuleConstants.kBackRightTurnPort,
+                        SwerveConstants.SwerveModuleConstants.kBackRightEncoderPort,
                         SwerveConstants.SwerveModuleConstants.kUseFOC
                     ),
                     SwerveConstants.SwerveModuleConstants.kUseMotorPID
                 );
 
-                m_gyro = new LoggedGyro("Subsystems/Swerve/Gyro", new LoggedGyroIOPigeon(SwerveConstants.kPigeonPort));
+                m_gyro = new LoggedGyro(
+                    "Subsystems/Swerve/Gyro",
+                    new LoggedGyroIOPigeon(SwerveConstants.kPigeonPort, "drivetrain")
+                );
 
                 break;
             case SIM:
@@ -158,7 +165,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         AutoBuilder.configure(
             this::getPose,
-            (Pose2d pose) -> m_poseEstimator.resetPose(pose),
+            m_poseEstimator::resetPose,
             this::getCurrentChassisSpeeds,
             (speeds, feedForward) -> drive(speeds, false),
             new PPHolonomicDriveController(SwerveConstants.kPPTranslationPID, SwerveConstants.kPPRotaitonPID),

@@ -1,14 +1,12 @@
 package frc.robot.subsystems.vision;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.vision.VisionIO.VisionIOInputs;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class VisionSubsystem extends SubsystemBase {
     private VisionIO[] m_ios;
@@ -21,13 +19,13 @@ public class VisionSubsystem extends SubsystemBase {
         m_inputs = new VisionIOInputs[VisionConstants.kCameras.length];
 
         switch (Constants.kCurrentMode) {
-            case REAL:
-                for (int i = 0; i < VisionConstants.kCameras.length; i++) {
-                    m_ios[i] = new VisionIOPhotonVision(VisionConstants.kCameras[i]);
-                    m_inputs[i] = new VisionIOInputs();
-                }
-
-                break;
+            //            case REAL:
+            //                for (int i = 0; i < VisionConstants.kCameras.length; i++) {
+            //                    m_ios[i] = new VisionIOPhotonVision(VisionConstants.kCameras[i]);
+            //                    m_inputs[i] = new VisionIOInputs();
+            //                }
+            //
+            //                break;
             default:
                 for (int i = 0; i < VisionConstants.kCameras.length; i++) {
                     m_ios[i] = new VisionIO() {};
@@ -55,9 +53,9 @@ public class VisionSubsystem extends SubsystemBase {
         }
 
         // TODO: figure out why no log targets here :(
-        Logger.recordOutput(
-            VisionConstants.kLogPath.concat("/Measurements"),
-            m_measurements.toArray(new VisionMeasurement[0])
-        );
+        //        Logger.recordOutput(
+        //            VisionConstants.kLogPath.concat("/Measurements"),
+        //            m_measurements.toArray(new VisionMeasurement[0])
+        //        );
     }
 }

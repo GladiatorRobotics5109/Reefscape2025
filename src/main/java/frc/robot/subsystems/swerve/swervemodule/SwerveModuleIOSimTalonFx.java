@@ -14,7 +14,7 @@ public class SwerveModuleIOSimTalonFx extends SwerveModuleIOTalonFx {
     private final DCMotorSim m_turnSim;
 
     public SwerveModuleIOSimTalonFx(int drivePort, int turnPort, boolean useFOC) {
-        super(drivePort, turnPort, useFOC);
+        super(drivePort, turnPort, 0, useFOC);
 
         m_driveSim = new DCMotorSim(
             LinearSystemId.createDCMotorSystem(

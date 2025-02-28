@@ -1,30 +1,44 @@
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
-
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.LinearVelocity;
-
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
-import frc.robot.util.Conversions;
-import org.littletonrobotics.junction.Logger;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
-
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModule;
+import frc.robot.util.Conversions;
 import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
+import frc.robot.util.Util;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.Logger;
+
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 public final class SwerveCommandFactory {
     private SwerveCommandFactory() {
@@ -91,6 +105,37 @@ public final class SwerveCommandFactory {
 
     public static Command followPath(SwerveSubsystem swerve, PathPlannerPath path) {
         return AutoBuilder.followPath(path);
+    }
+
+    public static Command followPathControllerInfluence(
+        SwerveSubsystem swerve,
+        PathPlannerPath path,
+        DoubleSupplier x,
+        DoubleSupplier y,
+        DoubleSupplier rot
+    ) {
+        double driveSpeed = SwerveConstants.kTeleopConfig.defaultDriveSpeed().in(Units.MetersPerSecond);
+        double rotSpeed = SwerveConstants.kTeleopConfig.defaultRotationSpeed().in(Units.RadiansPerSecond);
+
+        return new FollowPathCommand(
+            path,
+            swerve::getPose,
+            swerve::getCurrentChassisSpeeds,
+            (speeds, feedForward) -> swerve.drive(
+                speeds.plus(
+                    new ChassisSpeeds(
+                        x.getAsDouble() * driveSpeed,
+                        y.getAsDouble() * driveSpeed,
+                        rot.getAsDouble() * rotSpeed
+                    )
+                ),
+                SwerveConstants.kTeleopFieldRelative
+            ),
+            new PPHolonomicDriveController(SwerveConstants.kPPTranslationPID, SwerveConstants.kPPRotaitonPID),
+            SwerveConstants.kPPConfig,
+            () -> Util.getAlliance() == Alliance.Red,
+            swerve
+        );
     }
 
     public static Command driveToPose(Pose2d pose, PathConstraints constraints, LinearVelocity endVelocity) {

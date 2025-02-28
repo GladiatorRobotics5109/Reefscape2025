@@ -14,6 +14,7 @@ import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.util.FieldConstants.CoralStationConstants.CoralStation;
 import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +22,14 @@ import java.util.Optional;
 
 public class AutoChooser {
     private static LoggedDashboardChooser<Command> s_autoChooser;
+    private static LoggedNetworkNumber s_preAutoDelay;
     private static List<LoggedDashboardChooser<String>> s_reefBranches;
     private static List<LoggedDashboardChooser<String>> s_coralStations;
+
+    private static SwerveSubsystem s_swerve;
+    private static ElevatorSubsystem s_elevator;
+    private static EndEffectorSubsystem s_endEffector;
+    private static LEDSubsystem s_leds;
 
     public static void init(
         SwerveSubsystem swerve,
@@ -30,7 +37,13 @@ public class AutoChooser {
         EndEffectorSubsystem endEffector,
         LEDSubsystem leds
     ) {
+        s_swerve = swerve;
+        s_elevator = elevator;
+        s_endEffector = endEffector;
+        s_leds = leds;
+
         s_autoChooser = new LoggedDashboardChooser<>("AutoChooser");
+        s_preAutoDelay = new LoggedNetworkNumber("PreAutoDelay", 0.0);
         s_reefBranches = new ArrayList<>();
         s_reefBranches.add(new LoggedDashboardChooser<>("Branch_1"));
         s_reefBranches.add(new LoggedDashboardChooser<>("Branch_3"));
@@ -125,7 +138,11 @@ public class AutoChooser {
         return Commands.sequence(commands);
     }
 
+    private static Command autoPrefix() {
+        return Commands.waitSeconds(s_preAutoDelay.get());
+    }
+
     public static Command get() {
-        return s_autoChooser.get();
+        return autoPrefix().andThen(s_autoChooser.get());
     }
 }

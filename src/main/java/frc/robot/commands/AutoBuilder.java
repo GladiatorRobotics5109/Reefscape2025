@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
 import com.pathplanner.lib.path.PathPlannerPath;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
@@ -52,6 +54,13 @@ public class AutoBuilder {
         );
     }
 
+    public static Command followTestPath(SwerveSubsystem swerve) {
+        return Commands.sequence(
+            SwerveCommandFactory.setPosition(swerve, () -> new Pose2d(6.0, 3.5, Rotation2d.k180deg)),
+            SwerveCommandFactory.followPath(swerve, Paths.ppPaths.get("testPath"))
+        );
+    }
+
     public static Command simpleTaxiForward(SwerveSubsystem swerve) {
         return Commands.sequence(
             SwerveCommandFactory.drive(swerve, 0.0, 1.0, 0.0, false),
@@ -71,6 +80,7 @@ public class AutoBuilder {
         final ReefBranch kBranch = ReefBranch.kL4G2;
 
         return Commands.sequence(
+            SwerveCommandFactory.setPosition(swerve, () -> kToReef.getStartingHolonomicPose().orElse(Pose2d.kZero)),
             Commands.parallel(
                 SwerveCommandFactory.followPath(swerve, kToReef),
                 SuperstructureCommandFactory.autoScore(elevator, endEffector, leds, kBranch)
@@ -96,6 +106,7 @@ public class AutoBuilder {
         final ReefBranch kBranch2 = ReefBranch.kL4G1;
 
         return Commands.sequence(
+            SwerveCommandFactory.setPosition(swerve, () -> kToReef1.getStartingHolonomicPose().orElse(Pose2d.kZero)),
             Commands.parallel(
                 SwerveCommandFactory.followPath(swerve, kToReef1),
                 SuperstructureCommandFactory.autoScore(elevator, endEffector, leds, kBranch1)

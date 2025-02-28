@@ -18,23 +18,23 @@ public class ElevatorIOSparkMax implements ElevatorIO {
     private final RelativeEncoder m_encoder;
 
     public ElevatorIOSparkMax(int motorPort, int followerPort) {
-        SparkMaxConfig motorConfig = new SparkMaxConfig();
-        motorConfig.smartCurrentLimit((int)ElevatorConstants.kSupplyCurrentLimit);
-        motorConfig.softLimit.forwardSoftLimit(Conversions.radiansToRotations(ElevatorConstants.kForwardSoftLimitRad));
-        motorConfig.softLimit.forwardSoftLimitEnabled(true);
-        motorConfig.softLimit.reverseSoftLimit(Conversions.radiansToRotations(ElevatorConstants.kReverseSoftLimitRad));
-        motorConfig.softLimit.reverseSoftLimitEnabled(true);
+        SparkMaxConfig config = new SparkMaxConfig();
+        config.smartCurrentLimit((int)ElevatorConstants.kSupplyCurrentLimit);
+        config.softLimit.forwardSoftLimit(Conversions.radiansToRotations(ElevatorConstants.kForwardSoftLimitRad));
+        config.softLimit.forwardSoftLimitEnabled(true);
+        config.softLimit.reverseSoftLimit(Conversions.radiansToRotations(ElevatorConstants.kReverseSoftLimitRad));
+        config.softLimit.reverseSoftLimitEnabled(true);
 
-        motorConfig.encoder.positionConversionFactor(1 / ElevatorConstants.kGearRatio);
+        config.encoder.positionConversionFactor(1 / ElevatorConstants.kGearRatio);
 
-        motorConfig.idleMode(IdleMode.kBrake);
-        motorConfig.inverted(ElevatorConstants.kInvertMotor);
+        config.idleMode(IdleMode.kBrake);
+        config.inverted(ElevatorConstants.kInvertMotor);
 
         m_motor = new SparkMax(motorPort, MotorType.kBrushless);
-        m_motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        m_motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         m_follower = new SparkMax(followerPort, MotorType.kBrushless);
-        SparkMaxConfig followerConfig = motorConfig;
+        SparkMaxConfig followerConfig = config;
         followerConfig.follow(m_motor, true);
         m_follower.configure(followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
