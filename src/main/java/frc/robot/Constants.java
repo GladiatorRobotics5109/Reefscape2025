@@ -334,7 +334,7 @@ public final class Constants {
 
         public static final double kGearRatio = 12;
 
-        public static final boolean kInvertMotor = false;
+        public static final boolean kInvertMotor = true;
 
         // The maximum distance the chassis can be from the auto score location to score
         public static final double kAutoScoreMaxDistMeters = 0.02;
