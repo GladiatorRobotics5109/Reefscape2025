@@ -102,7 +102,7 @@ public class ElevatorCommandFactory {
         }, (interrupted) -> {
             elevator.setVoltage(0.0);
             timer.stop();
-            Logger.recordOutput(kLogPath + "K_g-K_s", appliedVolts[0]);
+            Logger.recordOutput(kLogPath + "/K_g-K_s", appliedVolts[0]);
             System.out.println("K_g-K_s: " + appliedVolts[0]);
         }, () -> elevator.getCurrentVelocity() < Conversions.elevatorRadiansToElevatorMeters(-0.5), elevator);
 
