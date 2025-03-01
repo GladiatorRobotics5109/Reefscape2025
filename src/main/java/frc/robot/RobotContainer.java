@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.leds.LEDSubsystem;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
@@ -89,11 +90,8 @@ public class RobotContainer {
             ElevatorCommandFactory.setVoltage(m_elevator, 0.0)
         );
 
-        //m_driverController.leftBumper().onTrue(SuperstructureCommandFactory.intake(m_elevator, m_endEffector));
-        //m_driverController.rightBumper().onTrue(EndEffectorCommandFactory.score(m_endEffector));
-        m_driverController.rightBumper().whileTrue(SuperstructureCommandFactory.intake(m_elevator, m_endEffector));
-
-        // m_driverController.leftBumper().toggleOnTrue()
+        m_driverController.leftBumper().onTrue(SuperstructureCommandFactory.intake(m_elevator, m_endEffector));
+        m_driverController.rightBumper().onTrue(EndEffectorCommandFactory.score(m_endEffector));
 
         //        m_driverController.povUp().onTrue(ClimbCommandFactory.prepareClimb(m_climb));
         //        m_driverController.povDown().onTrue(ClimbCommandFactory.climb(m_climb));
