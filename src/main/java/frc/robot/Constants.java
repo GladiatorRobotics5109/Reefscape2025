@@ -172,8 +172,8 @@ public final class Constants {
             SwerveModuleConstants.kDriveMaxFreeSpeed,
             Units.MetersPerSecond.of(0.5),
             // Units.RotationsPerSecond.of(0.2),
-            Units.RotationsPerSecond.of(1.25),
-            Units.RotationsPerSecond.of(0.5),
+            Units.RotationsPerSecond.of(3),
+            Units.RotationsPerSecond.of(2),
             kTeleopFieldRelative
         );
 
