@@ -91,7 +91,7 @@ public class RobotContainer {
 
         //m_driverController.leftBumper().onTrue(SuperstructureCommandFactory.intake(m_elevator, m_endEffector));
         //m_driverController.rightBumper().onTrue(EndEffectorCommandFactory.score(m_endEffector));
-        m_driverController.rightBumper().whileTrue  (SuperstructureCommandFactory.intake(m_elevator, m_endEffector));
+        m_driverController.rightBumper().whileTrue(SuperstructureCommandFactory.intake(m_elevator, m_endEffector));
 
         // m_driverController.leftBumper().toggleOnTrue()
 
