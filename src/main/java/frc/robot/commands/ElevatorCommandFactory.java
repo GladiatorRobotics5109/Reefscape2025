@@ -14,6 +14,10 @@ import org.littletonrobotics.junction.Logger;
 import java.util.function.DoubleSupplier;
 
 public class ElevatorCommandFactory {
+    public static Command setVoltage(ElevatorSubsystem elevator, double volts) {
+        return elevator.runOnce(() -> elevator.setVoltage(volts));
+    }
+
     public static Command toElevatorRelativeHeight(ElevatorSubsystem elevator, DoubleSupplier positionMeters) {
         return elevator.runOnce(() -> elevator.setDesiredPositionElevator(positionMeters.getAsDouble()));
     }
