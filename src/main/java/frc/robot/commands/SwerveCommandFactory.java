@@ -39,7 +39,7 @@ public final class SwerveCommandFactory {
             swerve,
             SwerveConstants.kTeleopConfig,
             () -> -controller.getLeftX(),
-            () -> -controller.getLeftY() * 2,
+            () -> -controller.getLeftY() ,
             controller::getRightX,
             controller::getRightTriggerAxis
         );
