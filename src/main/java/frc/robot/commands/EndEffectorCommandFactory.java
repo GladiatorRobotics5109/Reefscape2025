@@ -11,7 +11,7 @@ public class EndEffectorCommandFactory {
     public static Command setVoltage(EndEffectorSubsystem endEffector, double volts) {
         return endEffector.runOnce(() -> endEffector.setVoltage(volts));
     }
-    
+
     public static Command score(EndEffectorSubsystem endEffector) {
         return Commands.sequence(
             endEffector.runOnce(endEffector::setScore),
