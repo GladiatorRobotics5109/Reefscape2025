@@ -89,8 +89,9 @@ public class RobotContainer {
             ElevatorCommandFactory.setVoltage(m_elevator, 0.5)
         );
 
-        m_driverController.leftBumper().onTrue(SuperstructureCommandFactory.intake(m_elevator, m_endEffector));
-        m_driverController.rightBumper().onTrue(EndEffectorCommandFactory.score(m_endEffector));
+        //m_driverController.leftBumper().onTrue(SuperstructureCommandFactory.intake(m_elevator, m_endEffector));
+        //m_driverController.rightBumper().onTrue(EndEffectorCommandFactory.score(m_endEffector));
+        m_driverController.rightBumper().toggleOnTrue(SuperstructureCommandFactory.intake(m_elevator, m_endEffector));
 
         //        m_driverController.povUp().onTrue(ClimbCommandFactory.prepareClimb(m_climb));
         //        m_driverController.povDown().onTrue(ClimbCommandFactory.climb(m_climb));
