@@ -32,7 +32,7 @@ public class EndEffectorCommandFactory {
                 Commands.waitUntil(endEffector::hasLeadingEdgeCoral),
                 Util::isSim
             ),
-            Commands.waitSeconds(0.2);
+            Commands.waitSeconds(0.08),
             Commands.runOnce(endEffector::setIntakeSlow, endEffector),
             Commands.either(
                 Commands.waitSeconds(1),
