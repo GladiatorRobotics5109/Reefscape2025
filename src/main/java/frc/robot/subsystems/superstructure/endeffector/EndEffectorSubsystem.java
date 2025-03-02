@@ -6,14 +6,16 @@ import frc.robot.Constants;
 import frc.robot.Constants.EndEffectorConstants;
 import org.littletonrobotics.junction.Logger;
 
+import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.loggeddigitalinput.LoggedDigitalInput;
+
 public class EndEffectorSubsystem extends SubsystemBase {
     private final EndEffectorIOInputsAutoLogged m_inputs;
     private final EndEffectorIO m_io;
 
     // Detects the leading edge of coral entering the box
-    // private final LoggedDigitalInput m_coralSensorLeading;
+    private final LoggedDigitalInput m_coralSensorLeading;
     // Detects coral at the center of the box
-    // private final LoggedDigitalInput m_coralSensor;
+    private final LoggedDigitalInput m_coralSensor;
 
     public EndEffectorSubsystem() {
         switch (Constants.kCurrentMode) {
@@ -28,16 +30,16 @@ public class EndEffectorSubsystem extends SubsystemBase {
                 break;
         }
 
-        // m_coralSensor = new LoggedDigitalInput(
-        //     EndEffectorConstants.kLogPath + "/CoralSensor",
-        //     EndEffectorConstants.kCoralSensorPort,
-        //     Constants.kCurrentMode
-        // );
-        // m_coralSensorLeading = new LoggedDigitalInput(
-        //     EndEffectorConstants.kLogPath + "/CoralSensorLeading",
-        //     EndEffectorConstants.kCoralSensorLeadingPort,
-        //     Constants.kCurrentMode
-        // );
+        m_coralSensor = new LoggedDigitalInput(
+            EndEffectorConstants.kLogPath + "/CoralSensor",
+            EndEffectorConstants.kCoralSensorPort,
+            Constants.kCurrentMode
+        );
+        m_coralSensorLeading = new LoggedDigitalInput(
+            EndEffectorConstants.kLogPath + "/CoralSensorLeading",
+            EndEffectorConstants.kCoralSensorLeadingPort,
+            Constants.kCurrentMode
+        );
 
         m_inputs = new EndEffectorIOInputsAutoLogged();
     }
@@ -68,13 +70,13 @@ public class EndEffectorSubsystem extends SubsystemBase {
     }
 
     public boolean hasCoral() {
-        // return m_coralSensor.get();
-        return false;
+        return m_coralSensor.get();
+        // return false;
     }
 
     public boolean hasLeadingEdgeCoral() {
-        // return m_coralSensorLeading.get();
-        return false;
+        return m_coralSensorLeading.get();
+        // return false;
     }
 
     @Override
