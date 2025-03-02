@@ -309,7 +309,7 @@ public final class Constants {
         public static final double kAutoElevatorExtendRequiredDistanceMeters = 4.5;
 
         public static final double kL1OffsetMeters = 0.0;
-        public static final double kL2OffsetMeters = -Conversions.inchesToMeters(30);
+        public static final double kL2OffsetMeters = -Conversions.inchesToMeters(15);
         public static final double kL3OffsetMeters = 0.0;
         public static final double kL4OffsetMeters = 0.0;
     }
