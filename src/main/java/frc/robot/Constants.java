@@ -349,9 +349,9 @@ public final class Constants {
         public static final double kScoreTimeoutSeconds = 2;
 
         public static final double kScoreVoltage = 12;
-        public static final double kIntakeVoltage = 5.5;
-        public static final double kIntakeSlowVoltage = 4.5;
-        public static final double kIntakeSlowSlowVoltage = -2;
+        public static final double kIntakeVoltage = 6;
+        public static final double kIntakeSlowVoltage = 5;
+        public static final double kIntakeSlowSlowVoltage = -1.75;
     }
 
     public static final class BallsIntakeConstants {
