@@ -311,7 +311,7 @@ public final class Constants {
 
         public static final double kL1OffsetMeters = -Conversions.inchesToMeters(11.5);
         public static final double kL2OffsetMeters = -Conversions.inchesToMeters(11.5);
-        public static final double kL3OffsetMeters = -Conversions.inchesToMeters(22);
+        public static final double kL3OffsetMeters = -Conversions.inchesToMeters(20.5);
         public static final double kL4OffsetMeters = -Conversions.inchesToMeters(11.5);
     }
 
