@@ -327,8 +327,8 @@ public final class Constants {
         public static final int kLeftPort = 30;
         public static final int kRightPort = 31;
 
-        public static final int kCoralSensorPort = 0;
-        public static final int kCoralSensorLeadingPort = 1;
+        public static final int kCoralSensorPort = 1;
+        public static final int kCoralSensorLeadingPort = 0;
 
         public static final double kSupplyCurrentLimit = 40;
         public static final double kStatorCurrentLimit = 1.75 * kSupplyCurrentLimit;
