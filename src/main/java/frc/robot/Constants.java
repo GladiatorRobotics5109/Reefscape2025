@@ -350,7 +350,7 @@ public final class Constants {
 
         public static final double kScoreVoltage = 12;
         public static final double kIntakeVoltage = 6;
-        public static final double kIntakeSlowVoltage = 1.5;
+        public static final double kIntakeSlowVoltage = 2;
     }
 
     public static final class BallsIntakeConstants {
