@@ -172,6 +172,9 @@ public class AutoBuilder {
     }
 
     public static Command prefix(SwerveSubsystem swerve) {
-        return SwerveCommandFactory.setPosition(swerve, () -> new Pose2d(0, 0, Util.getAlliance() == Alliance.Blue ? Rotation2d.k180deg : Rotation2d.kZero));
+        return SwerveCommandFactory.setPosition(
+            swerve,
+            () -> new Pose2d(0, 0, Util.getAlliance() == Alliance.Blue ? Rotation2d.k180deg : Rotation2d.kZero)
+        );
     }
 }
