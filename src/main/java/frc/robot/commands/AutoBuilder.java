@@ -66,7 +66,7 @@ public class AutoBuilder {
     public static Command simpleTaxiForward(SwerveSubsystem swerve) {
         return Commands.sequence(
             prefix(swerve),
-            SwerveCommandFactory.drive(swerve, 0.0, 1.0, 0.0, false),
+            SwerveCommandFactory.drive(swerve, 1.0, 0.0, 0.0, false),
             Commands.waitSeconds(2),
             SwerveCommandFactory.stopAndX(swerve)
         ).withName("AutoBuilder::simpleTaxiForward");
