@@ -29,7 +29,7 @@ public class EndEffectorCommandFactory {
             Commands.either(
                 // If sim, don't wait for coral bc coral sensor is not simulated
                 Commands.waitSeconds(1),
-                Commands.waitUntil(endEffector::hasCoral),
+                Commands.waitUntil(endEffector::hasLeadingEdgeCoral),
                 Util::isSim
             ),
             Commands.runOnce(endEffector::setIntakeSlow, endEffector),
