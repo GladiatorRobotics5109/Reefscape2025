@@ -273,7 +273,7 @@ public final class Constants {
         );
         public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(
             0.0872353778,
-            0.28,
+            0.25,
             0.0,
             0.10
             // 0.0860202312 // V
@@ -310,7 +310,7 @@ public final class Constants {
         public static final double kAutoElevatorExtendRequiredDistanceMeters = 4.5;
 
         public static final double kL1OffsetMeters = 0.0;
-        public static final double kL2OffsetMeters = -Conversions.inchesToMeters(12);
+        public static final double kL2OffsetMeters = Conversions.inchesToMeters(-8);
         public static final double kL3OffsetMeters = 0.0;
         public static final double kL4OffsetMeters = 0.0;
     }
