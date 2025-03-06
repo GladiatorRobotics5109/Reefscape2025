@@ -247,9 +247,9 @@ public final class Constants {
     public static final class ElevatorConstants {
         public static final String kLogPath = "Subsystems/Elevator";
 
-        public static final int kMotorPort = 20;
+        public static final int kMotorPort = 40;
         public static final boolean kInvertMotor = true;
-        public static final int kFollowerPort = 21;
+        public static final int kFollowerPort = 41;
 
         public static final boolean kUseMotorPID = false;
 
@@ -324,8 +324,8 @@ public final class Constants {
          */
         public static final double kEndEffectorLengthMeters = Conversions.inchesToMeters(11.967);
 
-        public static final int kLeftPort = 30;
-        public static final int kRightPort = 31;
+        public static final int kLeftPort = 50;
+        public static final int kRightPort = 51;
 
         public static final int kCoralSensorPort = 1;
         public static final int kCoralSensorLeadingPort = 0;
@@ -382,7 +382,7 @@ public final class Constants {
         public static final double kClimbingVoltage = -5.0;
         public static final double kHoldingVoltage = -0.0;
 
-        public static final int kMotorPort = 4;
+        public static final int kMotorPort = 60;
 
         public static final PIDConstants kPID = new PIDConstants(0.0, 0.0, 0.0);
 
