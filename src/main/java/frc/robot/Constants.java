@@ -22,6 +22,7 @@ import frc.robot.util.Conversions;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.util.FieldConstants;
+import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 
 public final class Constants {
     public static final Mode kCurrentMode = Mode.REAL;
@@ -304,15 +305,15 @@ public final class Constants {
             + FieldConstants.CoralConstants.kCoralOuterRadiusMeters
                 * EndEffectorConstants.kAngle.minus(Rotation2d.kCCW_Pi_2).getSin();
 
-        public static final double kPositionToleranceMeters = Conversions.inchesToMeters(1);
+        public static final double kPositionToleranceMeters = Conversions.inchesToMeters(0.5);
 
         // The distance from the center of the reef that the elevator will be allowed to autonomously extend
         public static final double kAutoElevatorExtendRequiredDistanceMeters = 4.5;
 
-        public static final double kL1OffsetMeters = -Conversions.inchesToMeters(11.5);
-        public static final double kL2OffsetMeters = -Conversions.inchesToMeters(11.5);
-        public static final double kL3OffsetMeters = -Conversions.inchesToMeters(19);
-        public static final double kL4OffsetMeters = -Conversions.inchesToMeters(25);
+        public static final double kL1HeightMeters = 0.0;
+        public static final double kL2HeightMeters = ReefHeight.L2.getHeight() + Conversions.inchesToMeters(2);
+        public static final double kL3HeightMeters = ReefHeight.L3.getHeight() + Conversions.inchesToMeters(2);
+        public static final double kL4HeightMeters = ReefHeight.L4.getHeight() + Conversions.inchesToMeters(2);
     }
 
     public static final class EndEffectorConstants {

@@ -20,12 +20,12 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 
 public class ElevatorSubsystem extends SubsystemBase {
-    public static double getHeightOffsetMeters(ReefHeight height) {
+    public static double getReefHeightMeters(ReefHeight height) {
         return switch (height) {
-            case L1 -> ElevatorConstants.kL1OffsetMeters;
-            case L2 -> ElevatorConstants.kL2OffsetMeters;
-            case L3 -> ElevatorConstants.kL3OffsetMeters;
-            case L4 -> ElevatorConstants.kL4OffsetMeters;
+            case L1 -> ElevatorConstants.kL1HeightMeters;
+            case L2 -> ElevatorConstants.kL2HeightMeters;
+            case L3 -> ElevatorConstants.kL3HeightMeters;
+            case L4 -> ElevatorConstants.kL4HeightMeters;
         };
     }
 
@@ -125,7 +125,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void setDesiredPositionEndEffector(ReefHeight height) {
-        setDesiredPositionEndEffector(height.getHeight() + getHeightOffsetMeters(height));
+        setDesiredPositionEndEffector(getReefHeightMeters(height));
     }
 
     public double getCurrentPositionElevator() {
