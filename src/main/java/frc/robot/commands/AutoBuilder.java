@@ -3,6 +3,7 @@ package frc.robot.commands;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
@@ -15,10 +16,11 @@ import frc.robot.util.FieldConstants.CoralStationConstants.CoralStation;
 import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 import frc.robot.util.Paths;
+import frc.robot.util.Util;
 
 public class AutoBuilder {
-    public static Command none() {
-        return Commands.none();
+    public static Command none(SwerveSubsystem swerve) {
+        return prefix(swerve);
     }
 
     public static Command testAuto(
@@ -63,8 +65,9 @@ public class AutoBuilder {
 
     public static Command simpleTaxiForward(SwerveSubsystem swerve) {
         return Commands.sequence(
-            SwerveCommandFactory.drive(swerve, 0.0, 1.0, 0.0, false),
-            Commands.waitSeconds(1),
+            prefix(swerve),
+            SwerveCommandFactory.drive(swerve, 1.0, 0.0, 0.0, false),
+            Commands.waitSeconds(2),
             SwerveCommandFactory.stopAndX(swerve)
         ).withName("AutoBuilder::simpleTaxiForward");
     }
@@ -80,6 +83,7 @@ public class AutoBuilder {
         final ReefBranch kBranch = ReefBranch.kL4G2;
 
         return Commands.sequence(
+            prefix(swerve),
             SwerveCommandFactory.setPosition(swerve, () -> kToReef.getStartingHolonomicPose().orElse(Pose2d.kZero)),
             Commands.parallel(
                 SwerveCommandFactory.followPath(swerve, kToReef),
@@ -106,6 +110,7 @@ public class AutoBuilder {
         final ReefBranch kBranch2 = ReefBranch.kL4G1;
 
         return Commands.sequence(
+            prefix(swerve),
             SwerveCommandFactory.setPosition(swerve, () -> kToReef1.getStartingHolonomicPose().orElse(Pose2d.kZero)),
             Commands.parallel(
                 SwerveCommandFactory.followPath(swerve, kToReef1),
@@ -164,5 +169,12 @@ public class AutoBuilder {
         LEDSubsystem leds
     ) {
         return new AutoDecideScoreCommand(height, swerve, elevator, endEffector, leds);
+    }
+
+    public static Command prefix(SwerveSubsystem swerve) {
+        return SwerveCommandFactory.setPosition(
+            swerve,
+            () -> new Pose2d(0, 0, Util.getAlliance() == Alliance.Blue ? Rotation2d.k180deg : Rotation2d.kZero)
+        );
     }
 }

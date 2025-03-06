@@ -6,12 +6,9 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.*;
@@ -21,7 +18,7 @@ import frc.robot.util.Conversions;
 public class SwerveModuleIOTalonFx implements SwerveModuleIO {
     protected final TalonFX m_drive;
     protected final TalonFX m_turn;
-    protected final CANcoder m_encoder;
+    //    protected final CANcoder m_encoder;
 
     private final boolean m_useFOC;
 
@@ -52,7 +49,7 @@ public class SwerveModuleIOTalonFx implements SwerveModuleIO {
     public SwerveModuleIOTalonFx(int drivePort, int turnPort, int encoderPort, boolean useFOC) {
         m_drive = new TalonFX(drivePort, "drivetrain");
         m_turn = new TalonFX(turnPort, "drivetrain");
-        m_encoder = new CANcoder(encoderPort, "drivetrain");
+        //        m_encoder = new CANcoder(encoderPort, "drivetrain");
 
         m_useFOC = useFOC;
 
@@ -82,10 +79,12 @@ public class SwerveModuleIOTalonFx implements SwerveModuleIO {
         turnConfigs.CurrentLimits.SupplyCurrentLimit = SwerveModuleConstants.kTurnSupplyCurrentLimit;
         turnConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
 
-        turnConfigs.Feedback.SensorToMechanismRatio = 1;
-        turnConfigs.Feedback.RotorToSensorRatio = SwerveModuleConstants.kTurnGearRatio;
-        turnConfigs.Feedback.FeedbackRemoteSensorID = m_encoder.getDeviceID();
-        turnConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+        turnConfigs.Feedback.SensorToMechanismRatio = SwerveModuleConstants.kTurnGearRatio;
+
+        //        turnConfigs.Feedback.SensorToMechanismRatio = 1;
+        //        turnConfigs.Feedback.RotorToSensorRatio = SwerveModuleConstants.kTurnGearRatio;
+        //        turnConfigs.Feedback.FeedbackRemoteSensorID = m_encoder.getDeviceID();
+        //        turnConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
 
         turnConfigs.ClosedLoopGeneral.ContinuousWrap = true;
         // Need to convert to rations here bc TalonFX native unit is rotations

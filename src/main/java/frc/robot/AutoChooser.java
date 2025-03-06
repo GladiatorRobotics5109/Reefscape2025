@@ -65,7 +65,7 @@ public class AutoChooser {
             }
         }
 
-        s_autoChooser.addDefaultOption("Comp_None", AutoBuilder.none());
+        s_autoChooser.addDefaultOption("Comp_None", AutoBuilder.none(swerve));
         s_autoChooser.addOption("Comp_SimpleTaxi", AutoBuilder.simpleTaxiForward(swerve));
         s_autoChooser.addOption(
             "Comp_CustomizableAuto",

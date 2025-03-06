@@ -47,7 +47,7 @@ public final class Constants {
             /* Use PID controller on motor controllers */
             public static final boolean kUseMotorPID = true;
             /* Use FOC on TalonFX */
-            public static final boolean kUseFOC = true;
+            public static final boolean kUseFOC = false;
 
             public static final MK4GearRatio kDriveGearRatio = MK4GearRatio.L1;
             public static final double kTurnGearRatio = MK4Constants.kTurnGearRatio;
@@ -172,8 +172,8 @@ public final class Constants {
             SwerveModuleConstants.kDriveMaxFreeSpeed,
             Units.MetersPerSecond.of(0.5),
             // Units.RotationsPerSecond.of(0.2),
-            Units.RotationsPerSecond.of(1.25),
-            Units.RotationsPerSecond.of(0.5),
+            Units.RotationsPerSecond.of(2),
+            Units.RotationsPerSecond.of(1),
             kTeleopFieldRelative
         );
 
@@ -272,19 +272,20 @@ public final class Constants {
             0.0
         );
         public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(
-            0.1,
-            0.13,
+            0.09,
+            0.2,
             0.0,
-            0.30 // V
+            0.10
+            // 0.0860202312 // V
         );
-        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(0.75);
+        //        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(0.75);
+        //        public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
+        //            2
+        //        )s
+        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1.25);
         public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
-            2
+            4
         );
-        // public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1.25);
-        // public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
-        //     4
-        // );
 
         /** Distance between belly pan and elevator base */
         public static final double kBellyPanToElevatorBaseMeters = Conversions.inchesToMeters(3);
@@ -308,10 +309,10 @@ public final class Constants {
         // The distance from the center of the reef that the elevator will be allowed to autonomously extend
         public static final double kAutoElevatorExtendRequiredDistanceMeters = 4.5;
 
-        public static final double kL1OffsetMeters = 0.0;
-        public static final double kL2OffsetMeters = 0.0;
-        public static final double kL3OffsetMeters = 0.0;
-        public static final double kL4OffsetMeters = 0.0;
+        public static final double kL1OffsetMeters = -Conversions.inchesToMeters(11.5);
+        public static final double kL2OffsetMeters = -Conversions.inchesToMeters(11.5);
+        public static final double kL3OffsetMeters = -Conversions.inchesToMeters(19);
+        public static final double kL4OffsetMeters = -Conversions.inchesToMeters(25);
     }
 
     public static final class EndEffectorConstants {
@@ -326,15 +327,15 @@ public final class Constants {
         public static final int kLeftPort = 30;
         public static final int kRightPort = 31;
 
-        public static final int kCoralSensorPort = 0;
-        public static final int kCoralSensorLeadingPort = 1;
+        public static final int kCoralSensorPort = 1;
+        public static final int kCoralSensorLeadingPort = 0;
 
         public static final double kSupplyCurrentLimit = 40;
         public static final double kStatorCurrentLimit = 1.75 * kSupplyCurrentLimit;
 
         public static final double kGearRatio = 12;
 
-        public static final boolean kInvertMotor = false;
+        public static final boolean kInvertMotor = true;
 
         // The maximum distance the chassis can be from the auto score location to score
         public static final double kAutoScoreMaxDistMeters = 0.02;
@@ -347,9 +348,10 @@ public final class Constants {
 
         public static final double kScoreTimeoutSeconds = 2;
 
-        public static final double kScoreVoltage = 12;
+        public static final double kScoreVoltage = 10;
         public static final double kIntakeVoltage = 6;
-        public static final double kIntakeSlowVoltage = 2;
+        public static final double kIntakeSlowVoltage = 5;
+        public static final double kIntakeSlowSlowVoltage = -1.75;
     }
 
     public static final class BallsIntakeConstants {

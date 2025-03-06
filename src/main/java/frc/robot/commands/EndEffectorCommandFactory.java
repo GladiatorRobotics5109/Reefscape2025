@@ -8,6 +8,10 @@ import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
 import frc.robot.util.Util;
 
 public class EndEffectorCommandFactory {
+    public static Command setVoltage(EndEffectorSubsystem endEffector, double volts) {
+        return endEffector.runOnce(() -> endEffector.setVoltage(volts));
+    }
+
     public static Command score(EndEffectorSubsystem endEffector) {
         return Commands.sequence(
             endEffector.runOnce(endEffector::setScore),
@@ -25,15 +29,19 @@ public class EndEffectorCommandFactory {
             Commands.either(
                 // If sim, don't wait for coral bc coral sensor is not simulated
                 Commands.waitSeconds(1),
-                Commands.waitUntil(endEffector::hasCoral),
+                Commands.waitUntil(endEffector::hasLeadingEdgeCoral),
                 Util::isSim
             ),
+            Commands.waitSeconds(0.08),
             Commands.runOnce(endEffector::setIntakeSlow, endEffector),
             Commands.either(
                 Commands.waitSeconds(1),
                 Commands.waitUntil(() -> !endEffector.hasLeadingEdgeCoral()),
                 Util::isSim
             ),
+            Commands.runOnce(() -> endEffector.setVoltage(EndEffectorConstants.kIntakeSlowSlowVoltage), endEffector),
+            Commands.waitUntil(endEffector::hasLeadingEdgeCoral),
+            Commands.waitSeconds(0.155),
             Commands.runOnce(endEffector::stop, endEffector)
         );
     }
