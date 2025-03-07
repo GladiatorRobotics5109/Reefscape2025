@@ -28,7 +28,7 @@ public class SuperstructureCommandFactory {
 
                 // Robot is close enough to branch
                 Translation2d currentPos = RobotState.getSwervePose().getTranslation();
-                Translation2d branchPos = branch.getBranchPosition().toTranslation2d();
+                Translation2d branchPos = AutoBuilder.flipIfNecessary(branch.getBranchPosition().toTranslation2d());
                 boolean withinRadius = currentPos.getDistance(branchPos)
                     - (Constants.kBumperWidthMeters + Constants.kChassisLengthMeters)
                     <= Conversions.inchesToMeters(3);

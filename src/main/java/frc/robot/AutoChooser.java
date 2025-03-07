@@ -71,6 +71,8 @@ public class AutoChooser {
             "Comp_CustomizableAuto",
             Commands.runOnce(() -> buildCustomAuto(swerve, elevator, endEffector, leds).schedule())
         );
+        s_autoChooser.addOption("Comp_PP-B_6_L1G2", AutoBuilder.auto_PP_B6_L1G2(swerve, elevator, endEffector, leds));
+        s_autoChooser.addOption("Comp_PP-B_6_L2G2", AutoBuilder.auto_PP_B6_L2G2(swerve, elevator, endEffector, leds));
         s_autoChooser.addOption(
             "Comp_PP-B_6-R_L4G2-Leave",
             AutoBuilder.auto_PP_B6_L4G2_Leave(swerve, elevator, endEffector, leds)

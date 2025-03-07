@@ -1,8 +1,10 @@
 package frc.robot.commands;
 
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -17,6 +19,8 @@ import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 import frc.robot.util.Paths;
 import frc.robot.util.Util;
+
+import java.util.function.Supplier;
 
 public class AutoBuilder {
     public static Command none(SwerveSubsystem swerve) {
@@ -72,6 +76,43 @@ public class AutoBuilder {
         ).withName("AutoBuilder::simpleTaxiForward");
     }
 
+    public static Command auto_PP_B6_L1G2(
+        SwerveSubsystem swerve,
+        ElevatorSubsystem elevator,
+        EndEffectorSubsystem endEffector,
+        LEDSubsystem leds
+    ) {
+        final PathPlannerPath kToReef = Paths.ppPaths.get("B_6-R_G2");
+        final ReefHeight kHeight = ReefHeight.L1;
+
+        return Commands.sequence(
+            prefix(swerve, () -> flipIfNecessary(kToReef).getStartingHolonomicPose().orElse(Pose2d.kZero)),
+            Commands.parallel(
+                SwerveCommandFactory.followPath(swerve, kToReef),
+                ElevatorCommandFactory.toReefHeight(elevator, kHeight)
+            ),
+            EndEffectorCommandFactory.scoreWithTimeout(endEffector)
+        );
+    }
+
+    public static Command auto_PP_B6_L2G2(
+        SwerveSubsystem swerve,
+        ElevatorSubsystem elevator,
+        EndEffectorSubsystem endEffector,
+        LEDSubsystem leds
+    ) {
+        final PathPlannerPath kToReef = Paths.ppPaths.get("B_6-R_G2");
+        final ReefBranch kBranch = ReefBranch.kL2G2;
+
+        return Commands.sequence(
+            prefix(swerve, () -> flipIfNecessary(kToReef).getStartingHolonomicPose().orElse(Pose2d.kZero)),
+            Commands.parallel(
+                SwerveCommandFactory.followPath(swerve, kToReef),
+                SuperstructureCommandFactory.autoScore(elevator, endEffector, leds, kBranch)
+            )
+        );
+    }
+
     public static Command auto_PP_B6_L4G2_Leave(
         SwerveSubsystem swerve,
         ElevatorSubsystem elevator,
@@ -83,8 +124,7 @@ public class AutoBuilder {
         final ReefBranch kBranch = ReefBranch.kL4G2;
 
         return Commands.sequence(
-            prefix(swerve),
-            SwerveCommandFactory.setPosition(swerve, () -> kToReef.getStartingHolonomicPose().orElse(Pose2d.kZero)),
+            prefix(swerve, () -> flipIfNecessary(kToReef).getStartingHolonomicPose().orElse(Pose2d.kZero)),
             Commands.parallel(
                 SwerveCommandFactory.followPath(swerve, kToReef),
                 SuperstructureCommandFactory.autoScore(elevator, endEffector, leds, kBranch)
@@ -110,8 +150,7 @@ public class AutoBuilder {
         final ReefBranch kBranch2 = ReefBranch.kL4G1;
 
         return Commands.sequence(
-            prefix(swerve),
-            SwerveCommandFactory.setPosition(swerve, () -> kToReef1.getStartingHolonomicPose().orElse(Pose2d.kZero)),
+            prefix(swerve, () -> flipIfNecessary(kToReef1).getStartingHolonomicPose().orElse(Pose2d.kZero)),
             Commands.parallel(
                 SwerveCommandFactory.followPath(swerve, kToReef1),
                 SuperstructureCommandFactory.autoScore(elevator, endEffector, leds, kBranch1)
@@ -172,9 +211,29 @@ public class AutoBuilder {
     }
 
     public static Command prefix(SwerveSubsystem swerve) {
-        return SwerveCommandFactory.setPosition(
+        return prefix(
             swerve,
             () -> new Pose2d(0, 0, Util.getAlliance() == Alliance.Blue ? Rotation2d.k180deg : Rotation2d.kZero)
         );
+    }
+
+    public static Command prefix(SwerveSubsystem swerve, Supplier<Pose2d> pose) {
+        return SwerveCommandFactory.setPosition(swerve, pose);
+    }
+
+    public static PathPlannerPath flipIfNecessary(PathPlannerPath path) {
+        return shouldFlip() ? path.flipPath() : path;
+    }
+
+    public static Pose2d flipIfNecessary(Pose2d pose) {
+        return shouldFlip() ? FlippingUtil.flipFieldPose(pose) : pose;
+    }
+
+    public static Translation2d flipIfNecessary(Translation2d position) {
+        return shouldFlip() ? FlippingUtil.flipFieldPosition(position) : position;
+    }
+
+    public static boolean shouldFlip() {
+        return Util.getAlliance() == Alliance.Red; // Flip if red alliance
     }
 }
