@@ -21,7 +21,6 @@ import frc.robot.Constants.SwerveConstants.SwerveModuleConstants;
 import frc.robot.util.Conversions;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frc.robot.util.FieldConstants;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 
 public final class Constants {

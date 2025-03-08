@@ -63,6 +63,8 @@ public class RobotContainer {
             )
         );
 
+        m_elevator.setDefaultCommand(ElevatorCommandFactory.debugControllerAxis(m_elevator, m_driverController::getRightTriggerAxis, m_driverController::getLeftTriggerAxis));
+
         // Elevator setpoints
         // m_driverController.cross().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L1));
         // m_driverController.circle().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L2));
