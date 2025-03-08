@@ -58,11 +58,11 @@ public class ElevatorIOSparkMax implements ElevatorIO {
             / inputs.motorSupplyVoltage;
 
         inputs.followerMotorTempCelsius = m_follower.getMotorTemperature();
-        inputs.followerMotorAppliedVolts = m_motor.getAppliedOutput() * m_motor.getBusVoltage();
-        inputs.followerMotorSupplyVoltage = m_motor.getBusVoltage();
-        inputs.followerMotorStatorCurrentAmps = m_motor.getOutputCurrent();
-        inputs.followerMotorSupplyCurrentAmps = (m_motor.getOutputCurrent() * inputs.motorAppliedVolts)
-            / inputs.motorSupplyVoltage;
+        inputs.followerMotorAppliedVolts = m_follower.getAppliedOutput() * m_follower.getBusVoltage();
+        inputs.followerMotorSupplyVoltage = m_follower.getBusVoltage();
+        inputs.followerMotorStatorCurrentAmps = m_follower.getOutputCurrent();
+        inputs.followerMotorSupplyCurrentAmps = (m_follower.getOutputCurrent() * inputs.followerMotorAppliedVolts)
+            / inputs.followerMotorSupplyVoltage;
 
         inputs.motorSoftUpLimited = false;
         inputs.motorSoftDownLimited = false;
