@@ -154,7 +154,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     public double getDesiredPositionElevator() { return m_desiredPositionMeters; }
 
     public double getDesiredPositionElevatorRad() {
-        return Conversions.elevatorMetersToElevatorRadians(m_desiredPositionMeters);
+        return m_inputs.positionRad;
     }
 
     public boolean atDesiredPosition() {
