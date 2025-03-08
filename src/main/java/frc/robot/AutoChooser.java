@@ -78,6 +78,10 @@ public class AutoChooser {
             AutoBuilder.auto_PP_B6_L4G2_Leave(swerve, elevator, endEffector, leds)
         );
         s_autoChooser.addOption(
+            "Comp_PP-B_6-R_L2G2-C_F3-R_L2G1",
+            AutoBuilder.auto_PP_B6_L2G2_F3_L2G1(swerve, elevator, endEffector, leds)
+        );
+        s_autoChooser.addOption(
             "Comp_PP-B_6-R_L4G2-C_F3-R_L4G1-Leave",
             AutoBuilder.auto_PP_B6_L4G2_F3_L4G1_Leave(swerve, elevator, endEffector, leds)
         );
