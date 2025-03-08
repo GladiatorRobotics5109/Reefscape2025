@@ -283,9 +283,9 @@ public final class Constants {
         //        public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
         //            2
         //        )s
-        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1.2);
+        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1);
         public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
-            3
+            2.5
         );
 
         /** Distance between belly pan and elevator base */
