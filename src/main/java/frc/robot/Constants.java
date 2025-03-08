@@ -268,7 +268,8 @@ public final class Constants {
         public static final double kReverseSoftLimitRad = 0.1;
 
         public static final PIDConstants kPID = new PIDConstants(
-            0.13, // V / rad
+            0.0,
+            // 0.13, // V / rad
             0.0,
             0.0
         );
@@ -300,10 +301,7 @@ public final class Constants {
          * Distance from the center of the leading edge of the coral to the floor when the elevator is at its starting
          * configuration
          */
-        public static final double kEndEffectorHeightMeters = kElevatorBaseHeightMeters
-            + EndEffectorConstants.kEndEffectorLengthMeters
-            + FieldConstants.CoralConstants.kCoralOuterRadiusMeters
-                * EndEffectorConstants.kAngle.minus(Rotation2d.kCCW_Pi_2).getSin();
+        public static final double kEndEffectorHeightMeters = Conversions.inchesToMeters(21.5);
 
         public static final double kPositionToleranceMeters = Conversions.inchesToMeters(0.5);
 
