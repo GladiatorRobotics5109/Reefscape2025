@@ -264,7 +264,7 @@ public final class Constants {
         public static final double kElevatorMaxPositionMeters = Conversions.inchesToMeters(69.736220);
 
         public static final double kForwardSoftLimitRad = 29.6;
-        public static final double kReverseSoftLimitRad = 0.1;
+        public static final double kReverseSoftLimitRad = 0.0;
 
         public static final PIDConstants kPID = new PIDConstants(
             0.01,
@@ -309,8 +309,8 @@ public final class Constants {
 
         public static final double kL1HeightMeters = 0.0;
         public static final double kL2HeightMeters = ReefHeight.L2.getHeight() - Conversions.inchesToMeters(14);
-        public static final double kL3HeightMeters = ReefHeight.L3.getHeight() - Conversions.inchesToMeters(28);
-        public static final double kL4HeightMeters = ReefHeight.L4.getHeight() - Conversions.inchesToMeters(28);
+        public static final double kL3HeightMeters = ReefHeight.L3.getHeight() - Conversions.inchesToMeters(14);
+        public static final double kL4HeightMeters = ReefHeight.L4.getHeight() - Conversions.inchesToMeters(14);
     }
 
     public static final class EndEffectorConstants {
