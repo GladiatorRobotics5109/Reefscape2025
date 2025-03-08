@@ -274,7 +274,7 @@ public final class Constants {
         );
         public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(
             0.09,
-            0.23,
+            0.232,
             0.0,
             0.40
             // 0.0860202312 // V
@@ -285,7 +285,7 @@ public final class Constants {
         //        )s
         public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1.25);
         public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
-            4
+            3.5
         );
 
         /** Distance between belly pan and elevator base */
