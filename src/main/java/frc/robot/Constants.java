@@ -274,7 +274,7 @@ public final class Constants {
         );
         public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(
             0.09,
-            0.244,
+            0.247,
             0.0,
             0.40
             // 0.0860202312 // V
