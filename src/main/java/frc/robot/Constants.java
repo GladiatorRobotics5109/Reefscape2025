@@ -274,7 +274,7 @@ public final class Constants {
         );
         public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(
             0.09,
-            0.225,
+            0.235,
             0.0,
             0.40
             // 0.0860202312 // V
@@ -308,9 +308,9 @@ public final class Constants {
         public static final double kAutoElevatorExtendRequiredDistanceMeters = 4.5;
 
         public static final double kL1HeightMeters = 0.0;
-        public static final double kL2HeightMeters = ReefHeight.L2.getHeight() + Conversions.inchesToMeters(2);
-        public static final double kL3HeightMeters = ReefHeight.L3.getHeight() + Conversions.inchesToMeters(2);
-        public static final double kL4HeightMeters = ReefHeight.L4.getHeight() + Conversions.inchesToMeters(2);
+        public static final double kL2HeightMeters = ReefHeight.L2.getHeight() - Conversions.inchesToMeters(2);
+        public static final double kL3HeightMeters = ReefHeight.L3.getHeight() - Conversions.inchesToMeters(2);
+        public static final double kL4HeightMeters = ReefHeight.L4.getHeight() - Conversions.inchesToMeters(2);
     }
 
     public static final class EndEffectorConstants {
