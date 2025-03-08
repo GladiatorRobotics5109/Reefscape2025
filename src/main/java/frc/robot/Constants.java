@@ -276,7 +276,7 @@ public final class Constants {
             0.09,
             0.247,
             0.0,
-            0.35
+            0.40
             // 0.0860202312 // V
         );
         //        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(0.75);

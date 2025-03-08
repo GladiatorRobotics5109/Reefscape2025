@@ -31,7 +31,13 @@ public class ElevatorCommandFactory {
     }
 
     public static Command toHome(ElevatorSubsystem elevator) {
-        return elevator.runOnce(elevator::toHome);
+        return Commands.sequence(
+            elevator.runOnce(elevator::toHome),
+            Commands.waitUntil(elevator::atDesiredPosition),
+            setVoltage(elevator, -0.2),
+            Commands.waitUntil(() -> elevator.getDesiredPositionElevatorRad() <= 0.05),
+            elevator.runOnce(elevator::stop)
+        );
     }
 
     public static Command autoToReefBranch(ElevatorSubsystem elevator, ReefBranch branch) {

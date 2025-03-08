@@ -112,6 +112,10 @@ public class ElevatorSubsystem extends SubsystemBase {
             m_io.setPosition(m_desiredPositionMeters);
     }
 
+    public void stop() {
+        setVoltage(0.0);
+    }
+
     public void setVoltage(double volts) {
         m_hasDesiredPosition = false;
         m_io.setVoltage(volts);
