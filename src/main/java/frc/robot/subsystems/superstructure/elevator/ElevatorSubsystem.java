@@ -107,7 +107,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public void toHome() {
         m_hasDesiredPosition = true;
-        m_desiredPositionMeters = Conversions.elevatorRadiansToElevatorMeters(-0.35);
+        m_desiredPositionMeters = 0.0;
         if (m_useMotorPID)
             m_io.setPosition(m_desiredPositionMeters);
     }

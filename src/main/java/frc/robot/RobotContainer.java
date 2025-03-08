@@ -57,7 +57,12 @@ public class RobotContainer {
             Logger.recordOutput("CommandLog", "Interrupted: " + command.getName() + "\n");
         });
 
-        System.out.println("L4 RAD: " + Conversions.elevatorMetersToElevatorRadians(Conversions.endEffectorMetersToElevatorMeters(ElevatorConstants.kL4HeightMeters)));
+        System.out.println(
+            "L4 RAD: "
+                + Conversions.elevatorMetersToElevatorRadians(
+                    Conversions.endEffectorMetersToElevatorMeters(ElevatorConstants.kL4HeightMeters)
+                )
+        );
     }
 
     private void configureBindings() {
