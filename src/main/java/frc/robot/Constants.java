@@ -264,7 +264,7 @@ public final class Constants {
 
         public static final double kElevatorMaxPositionMeters = Conversions.inchesToMeters(69.736220);
 
-        public static final double kForwardSoftLimitRad = 29.508828889808917;
+        public static final double kForwardSoftLimitRad = 29.6;
         public static final double kReverseSoftLimitRad = 0.1;
 
         public static final PIDConstants kPID = new PIDConstants(
