@@ -37,7 +37,7 @@
   "constraintZones": [
     {
       "name": "NearReef",
-      "minWaypointRelativePos": 0.6563133018230985,
+      "minWaypointRelativePos": 0.75,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 0.1,
