@@ -9,12 +9,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.leds.LEDSubsystem;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
+import frc.robot.util.Conversions;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 import org.littletonrobotics.junction.Logger;
 
@@ -54,6 +56,8 @@ public class RobotContainer {
         CommandScheduler.getInstance().onCommandInterrupt((Command command) -> {
             Logger.recordOutput("CommandLog", "Interrupted: " + command.getName() + "\n");
         });
+
+        System.out.println("L4 RAD: " + Conversions.elevatorMetersToElevatorRadians(Conversions.endEffectorMetersToElevatorMeters(ElevatorConstants.kL4HeightMeters)));
     }
 
     private void configureBindings() {
