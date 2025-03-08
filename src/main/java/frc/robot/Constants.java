@@ -52,7 +52,7 @@ public final class Constants {
             public static final MK4GearRatio kDriveGearRatio = MK4GearRatio.L1;
             public static final double kTurnGearRatio = MK4Constants.kTurnGearRatio;
 
-            public static final double kWheelRadiusMeters = 0.0472659347214289;
+            public static final double kWheelRadiusMeters = 0.0477714396308564;
 
             public static final int kFrontLeftDrivePort = 10;
             public static final int kFrontLeftTurnPort = 20;
@@ -108,7 +108,7 @@ public final class Constants {
 
         public static final boolean kTeleopFieldRelative = true;
 
-        public static final Pose2d kStartingPose = new Pose2d();
+        public static final Pose2d kStartingPose = new Pose2d(0.0, 0.0, Rotation2d.k180deg);
         public static final String kLogPath = "Subsystems/Swerve";
         public static final double kFrameWidth = Conversions.inchesToMeters(29);
         public static final double kFrameHeight = Conversions.inchesToMeters(29);
