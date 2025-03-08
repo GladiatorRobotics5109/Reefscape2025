@@ -139,10 +139,6 @@ public class AutoBuilder {
             Commands.parallel(
                 SwerveCommandFactory.followPath(swerve, kToReef2),
                 SuperstructureCommandFactory.autoScore(elevator, endEffector, leds, kBranch2)
-            ),
-            Commands.parallel(
-                SwerveCommandFactory.followPath(swerve, kLeave),
-                ElevatorCommandFactory.toHome(elevator)
             )
         );
     }
