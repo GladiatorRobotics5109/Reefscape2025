@@ -274,9 +274,9 @@ public final class Constants {
         );
         public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(
             0.09,
-            0.2,
+            0.1,
             0.0,
-            0.10
+            0.40
             // 0.0860202312 // V
         );
         //        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(0.75);
