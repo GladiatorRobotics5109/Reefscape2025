@@ -308,7 +308,7 @@ public final class Constants {
         public static final double kAutoElevatorExtendRequiredDistanceMeters = 4.5;
 
         public static final double kL1HeightMeters = 0.0;
-        public static final double kL2HeightMeters = ReefHeight.L2.getHeight() - Conversions.inchesToMeters(10);
+        public static final double kL2HeightMeters = ReefHeight.L2.getHeight() - Conversions.inchesToMeters(14);
         public static final double kL3HeightMeters = ReefHeight.L3.getHeight() - Conversions.inchesToMeters(28);
         public static final double kL4HeightMeters = ReefHeight.L4.getHeight() - Conversions.inchesToMeters(28);
     }
