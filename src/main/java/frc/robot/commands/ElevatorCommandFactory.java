@@ -31,7 +31,7 @@ public class ElevatorCommandFactory {
     }
 
     public static Command toHome(ElevatorSubsystem elevator) {
-        return toElevatorRelativeHeight(elevator, () -> 0.0);
+        return elevator.runOnce(elevator::toHome);
     }
 
     public static Command autoToReefBranch(ElevatorSubsystem elevator, ReefBranch branch) {

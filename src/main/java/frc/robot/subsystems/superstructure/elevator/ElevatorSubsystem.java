@@ -105,6 +105,13 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_useMotorPID = ElevatorConstants.kUseMotorPID;
     }
 
+    public void toHome() {
+        m_hasDesiredPosition = true;
+        m_desiredPositionMeters = Conversions.elevatorRadiansToElevatorMeters(ElevatorConstants.kReverseSoftLimitRad);
+        if (m_useMotorPID)
+            m_io.setPosition(m_desiredPositionMeters);
+    }
+
     public void setVoltage(double volts) {
         m_hasDesiredPosition = false;
         m_io.setVoltage(volts);
