@@ -267,14 +267,14 @@ public final class Constants {
         public static final double kReverseSoftLimitRad = 0.1;
 
         public static final PIDConstants kPID = new PIDConstants(
-            0.05,
+            0.0,
             // 0.13, // V / rad
             0.0,
             0.0
         );
         public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(
             0.09,
-            0.242,
+            0.244,
             0.0,
             0.40
             // 0.0860202312 // V
