@@ -325,8 +325,8 @@ public final class Constants {
          */
         public static final double kEndEffectorLengthMeters = Conversions.inchesToMeters(11.967);
 
-        public static final int kLeftPort = 50;
-        public static final int kRightPort = 51;
+        public static final int kLeftPort = 51;
+        public static final int kRightPort = 50;
 
         public static final int kCoralSensorPort = 1;
         public static final int kCoralSensorLeadingPort = 0;
