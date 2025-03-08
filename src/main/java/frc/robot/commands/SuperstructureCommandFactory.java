@@ -31,7 +31,7 @@ public class SuperstructureCommandFactory {
                 Translation2d branchPos = AutoBuilder.flipIfNecessary(branch.getBranchPosition().toTranslation2d());
                 boolean withinRadius = currentPos.getDistance(branchPos)
                     - (Constants.kBumperWidthMeters + Constants.kChassisLengthMeters)
-                    <= Conversions.inchesToMeters(1);
+                    <= Conversions.inchesToMeters(0.5);
 
                 // Robot is moving slow enough
                 ChassisSpeeds currentSpeeds = RobotState.getSwerveCurrentChassisSpeeds();
