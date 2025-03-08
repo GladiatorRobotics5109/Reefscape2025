@@ -41,7 +41,7 @@ public class EndEffectorCommandFactory {
             ),
             Commands.runOnce(() -> endEffector.setVoltage(EndEffectorConstants.kIntakeSlowSlowVoltage), endEffector),
             Commands.waitUntil(endEffector::hasLeadingEdgeCoral),
-            Commands.waitSeconds(0.155),
+            Commands.waitSeconds(0.150),
             Commands.runOnce(endEffector::stop, endEffector)
         );
     }
