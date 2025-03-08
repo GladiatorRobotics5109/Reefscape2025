@@ -172,9 +172,10 @@ public class SwerveSubsystem extends SubsystemBase {
         );
 
         PathPlannerLogging.setLogActivePathCallback(
-            (
-                List<Pose2d> path
-            ) -> Logger.recordOutput(SwerveConstants.kLogPath + "/PathPlanner/ActivePath", path.toArray(new Pose2d[0]))
+            (List<Pose2d> path) -> Logger.recordOutput(
+                SwerveConstants.kLogPath + "/PathPlanner/ActivePath",
+                path.toArray(new Pose2d[0])
+            )
         );
         PathPlannerLogging.setLogCurrentPoseCallback(
             (Pose2d pose) -> Logger.recordOutput(SwerveConstants.kLogPath + "/PathPlanner/CurrentPose", pose)
