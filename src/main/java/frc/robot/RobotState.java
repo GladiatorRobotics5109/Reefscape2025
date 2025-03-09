@@ -2,14 +2,12 @@ package frc.robot;
 
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.PeriodicUtil;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
@@ -18,7 +16,6 @@ import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 import org.littletonrobotics.junction.Logger;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 

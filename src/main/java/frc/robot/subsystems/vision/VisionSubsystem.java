@@ -39,7 +39,7 @@ public class VisionSubsystem extends SubsystemBase {
 
     public VisionMeasurement[] getMeasurements() {
         VisionMeasurement[] measurements = m_measurements.toArray(new VisionMeasurement[0]);
-        m_measurements.clear();
+        // m_measurements.clear();
 
         return measurements;
     }
