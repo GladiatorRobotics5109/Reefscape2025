@@ -303,10 +303,12 @@ public class SwerveSubsystem extends SubsystemBase {
     public void updatePose() {
         VisionMeasurement[] measurements = RobotState.getVisionMeasurements();
         for (VisionMeasurement measurement : measurements) {
-            if (measurement.estimatedPose().getTranslation().toTranslation2d().getDistance(FieldConstants.ReefConstants.getAllianceReefPos()) <= Conversions.inchesToMeters(12)) {
+            if (measurement.estimatedPose().getTranslation().toTranslation2d().getDistance(
+                FieldConstants.ReefConstants.getAllianceReefPos()
+            ) <= Conversions.inchesToMeters(12)) {
                 continue;
             }
-            
+
             m_poseEstimator.addVisionMeasurement(measurement.estimatedPose().toPose2d(), measurement.timestamp());
         }
 
