@@ -52,7 +52,7 @@ public final class Constants {
             public static final MK4GearRatio kDriveGearRatio = MK4GearRatio.L1;
             public static final double kTurnGearRatio = MK4Constants.kTurnGearRatio;
 
-            public static final double kWheelRadiusMeters = 0.0477714396308564;
+            public static final double kWheelRadiusMeters = 0.0478881398248718;
 
             public static final int kFrontLeftDrivePort = 10;
             public static final int kFrontLeftTurnPort = 20;
