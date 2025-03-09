@@ -126,6 +126,11 @@ public final class Constants {
             0,
             0
         );
+        
+        public static final PIDConstants kSimpleAutoScoreXPID = new PIDConstants(5.0, 0.0, 0.0);
+        public static final PIDConstants kSimpleAutoScoreYPID = new PIDConstants(5.0, 0.0, 0.0);
+        public static final PIDConstants kSimpleAutoScoreRotPID = new PIDConstants(5.0, 0.0, 0.0);
+        public static final double kSimpleAutoScoreRate = 0.1;
 
         // TODO: replace with correct values
         public static final RobotConfig kPPConfig = new RobotConfig(
