@@ -312,7 +312,7 @@ public class SwerveSubsystem extends SubsystemBase {
             m_poseEstimator.addVisionMeasurement(measurement.estimatedPose().toPose2d(), measurement.timestamp());
         }
 
-        System.out.println("LEN: " + measurements.length);
+        // System.out.println("LEN: " + measurements.length);
 
         m_poseEstimator.update(m_gyro.getYaw(), getModulePositions());
     }
