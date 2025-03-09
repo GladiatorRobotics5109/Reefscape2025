@@ -195,7 +195,7 @@ public final class SwerveCommandFactory {
         SwerveModule[] modules = swerve.getSwerveModules();
 
         Timer timer = new Timer();
-        final double kRampRateVoltsPerSec = 0.1;
+        final double kRampRateVoltsPerSec = 0.01;
         final String kLogPath = SwerveConstants.kLogPath + "/SysIdDrive";
         final double kSpeedThresholdMetersPerSec = Conversions.inchesToMeters(0.1);
 
