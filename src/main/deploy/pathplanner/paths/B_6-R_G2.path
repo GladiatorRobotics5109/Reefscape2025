@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 5.262602459016393,
-        "y": 5.0379610655737705
+        "x": 5.238627049180328,
+        "y": 5.0499487704918025
       },
       "prevControl": {
-        "x": 5.718135245901638,
-        "y": 5.63734631147541
+        "x": 5.694159836065573,
+        "y": 5.649334016393442
       },
       "nextControl": null,
       "isLocked": false,
@@ -37,7 +37,7 @@
   "constraintZones": [
     {
       "name": "NearReef",
-      "minWaypointRelativePos": 0.8,
+      "minWaypointRelativePos": 0.7994598244429388,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 0.25,
