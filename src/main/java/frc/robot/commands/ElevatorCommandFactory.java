@@ -38,9 +38,9 @@ public class ElevatorCommandFactory {
 
         return Commands.sequence(
             elevator.runOnce(elevator::toHome),
-            Commands.waitUntil(() -> elevator.getDesiredPositionElevatorRad() <= 0.4),
+            Commands.waitUntil(() -> elevator.getDesiredPositionElevatorRad() <= 1.0),
             setVoltage(elevator, -0.2),
-            Commands.waitUntil(() -> elevator.getDesiredPositionElevatorRad() <= 0.01),
+            Commands.waitUntil(() -> elevator.getDesiredPositionElevatorRad() <= 0.005),
             elevator.runOnce(elevator::stop)
         );
     }

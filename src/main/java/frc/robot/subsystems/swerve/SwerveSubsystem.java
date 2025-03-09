@@ -21,6 +21,8 @@ import frc.robot.Constants.SwerveConstants;
 import frc.robot.RobotState;
 import frc.robot.subsystems.swerve.swervemodule.*;
 import frc.robot.subsystems.vision.VisionMeasurement;
+import frc.robot.util.Conversions;
+import frc.robot.util.FieldConstants;
 import frc.robot.util.Util;
 import org.littletonrobotics.junction.Logger;
 
@@ -301,6 +303,10 @@ public class SwerveSubsystem extends SubsystemBase {
     public void updatePose() {
         VisionMeasurement[] measurements = RobotState.getVisionMeasurements();
         for (VisionMeasurement measurement : measurements) {
+            if (measurement.estimatedPose().getTranslation().toTranslation2d().getDistance(FieldConstants.ReefConstants.getAllianceReefPos()) <= Conversions.inchesToMeters(12)) {
+                continue;
+            }
+            
             m_poseEstimator.addVisionMeasurement(measurement.estimatedPose().toPose2d(), measurement.timestamp());
         }
 
