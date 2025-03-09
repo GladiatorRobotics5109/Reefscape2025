@@ -79,7 +79,7 @@ public final class Constants {
                 0
             );
 
-            public static final FeedforwardConstants kDriveFeedforward = new FeedforwardConstants(0.14, 6);
+            public static final FeedforwardConstants kDriveFeedforward = new FeedforwardConstants(0.125, 6);
 
             public static final PIDConstants kTurnPID = new PIDConstants(
                 12 / Conversions.rotationsToRadians(0.01), // Volts per radian error
