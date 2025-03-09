@@ -200,6 +200,18 @@ public class AutoBuilder {
         );
     }
 
+    public static Command auto_PP_BC_L2H1(SwerveSubsystem swerve, ElevatorSubsystem elevator, EndEffectorSubsystem endEffector, LEDSubsystem leds) {
+        final PathPlannerPath kToReef = Paths.ppPaths.get("B_C-R_H1");
+        final ReefBranch kBranch = ReefBranch.kL2H1;
+        
+        return Commands.sequence(
+            prefix(swerve, () -> flipIfNecessary(kToReef).getStartingHolonomicPose().orElse(Pose2d.kZero)),
+            SwerveCommandFactory.followPath(swerve, kToReef),
+            SuperstructureCommandFactory.autoScore(elevator, endEffector, leds, kBranch),
+            ElevatorCommandFactory.toHome(elevator)
+        );
+    }
+    
     public static Command makeAutoScoreCommand(
         ReefBranch branch,
         SwerveSubsystem swerve,
