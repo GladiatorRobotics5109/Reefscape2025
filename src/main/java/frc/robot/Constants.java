@@ -105,16 +105,16 @@ public final class Constants {
 
             public static final LinearVelocity kDriveMaxFreeSpeed = Units.FeetPerSecond.of(12.9);
 
-            public static final Map<Integer, Double> kEncoderOffsets = Map.of(
-                30,
-                0.0,
-                31,
-                0.0,
-                32,
-                0.0,
-                33,
-                0.0
-            );
+            // public static final Map<Integer, Double> kEncoderOffsets = Map.of(
+            //     30,
+            //     0.0,
+            //     31,
+            //     0.0,
+            //     32,
+            //     0.0,
+            //     33,
+            //     0.0
+            // );
         }
 
         public static final int kPigeonPort = 40;
@@ -222,32 +222,32 @@ public final class Constants {
 
         public static final PhotonCameraConfiguration[] kCameras = new PhotonCameraConfiguration[] {
             new PhotonCameraConfiguration(
-                "FrontCameraL",
+                "FrontCamera",
                 new Transform3d(
-                    0.27,
-                    0.15,
-                    SwerveModuleConstants.kWheelRadiusMeters + (65.0 / 1000.0) + (7.037 / 1000.0),
-                    new Rotation3d(0.0, Conversions.degreesToRadians(5), Conversions.degreesToRadians(5))
+                    Conversions.inchesToMeters(-3.059),
+                    Conversions.inchesToMeters(13.825),
+                    SwerveModuleConstants.kWheelRadiusMeters + 0.148,
+                    new Rotation3d(0.0, Conversions.degreesToRadians(5), 0.0)
                 )
             ),
-            new PhotonCameraConfiguration(
-                "FrontCameraR",
-                new Transform3d(
-                    0.27,
-                    -0.15,
-                    SwerveModuleConstants.kWheelRadiusMeters + (65.0 / 1000.0) + (7.037 / 1000.0),
-                    new Rotation3d(0.0, Conversions.degreesToRadians(5), Conversions.degreesToRadians(-5))
-                )
-            ),
-            new PhotonCameraConfiguration(
-                "RearCamera",
-                new Transform3d(
-                    -0.27,
-                    0.0,
-                    SwerveModuleConstants.kWheelRadiusMeters + (65.0 / 1000.0) + (7.037 / 1000.0),
-                    new Rotation3d(0.0, Conversions.degreesToRadians(25), Conversions.degreesToRadians(220))
-                )
-            )
+            // new PhotonCameraConfiguration(
+            //     "FrontCameraR",
+            //     new Transform3d(
+            //         0.27,
+            //         -0.15,
+            //         SwerveModuleConstants.kWheelRadiusMeters + (65.0 / 1000.0) + (7.037 / 1000.0),
+            //         new Rotation3d(0.0, Conversions.degreesToRadians(5), Conversions.degreesToRadians(-5))
+            //     )
+            // ),
+            // new PhotonCameraConfiguration(
+            //     "RearCamera",
+            //     new Transform3d(
+            //         -0.27,
+            //         0.0,
+            //         SwerveModuleConstants.kWheelRadiusMeters + (65.0 / 1000.0) + (7.037 / 1000.0),
+            //         new Rotation3d(0.0, Conversions.degreesToRadians(25), Conversions.degreesToRadians(220))
+            //     )
+            // )
         };
 
         public static final String kLogPath = "Subsystems/Vision";
@@ -296,9 +296,9 @@ public final class Constants {
         //        public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
         //            2
         //        )s
-        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1);
+        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1.25);
         public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
-            2.5
+            2.75
         );
 
         /** Distance between belly pan and elevator base */
