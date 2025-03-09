@@ -305,7 +305,7 @@ public class SwerveSubsystem extends SubsystemBase {
         for (VisionMeasurement measurement : measurements) {
             if (measurement.estimatedPose().getTranslation().toTranslation2d().getDistance(
                 FieldConstants.ReefConstants.getAllianceReefPos()
-            ) <= Conversions.inchesToMeters(12)) {
+            ) <= Conversions.inchesToMeters(6)) {
                 continue;
             }
 
