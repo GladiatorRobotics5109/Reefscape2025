@@ -15,7 +15,8 @@ public class LEDIOCANdle implements LEDIO {
 
     @Override
     public void setCTREAnimation(Animation anim) {
-        m_candle.animate(anim);
+        m_anim = anim;
+        m_candle.animate(m_anim);
     }
 
     @Override

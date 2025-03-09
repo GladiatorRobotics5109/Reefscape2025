@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.Map;
+
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.Mode;
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.constants.swerveModuleConstants.SwerveDriveSpecialtiesConstants.MK4Constants;
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.constants.swerveModuleConstants.SwerveDriveSpecialtiesConstants.MK4Constants.MK4GearRatio;
@@ -102,6 +104,17 @@ public final class Constants {
             public static final int kTurnSupplyCurrentLimit = 30;
 
             public static final LinearVelocity kDriveMaxFreeSpeed = Units.FeetPerSecond.of(12.9);
+
+            public static final Map<Integer, Double> kEncoderOffsets = Map.of(
+                30,
+                0.0,
+                31,
+                0.0,
+                32,
+                0.0,
+                33,
+                0.0
+            );
         }
 
         public static final int kPigeonPort = 40;
