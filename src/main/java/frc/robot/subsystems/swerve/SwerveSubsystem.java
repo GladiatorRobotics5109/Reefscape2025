@@ -297,6 +297,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public ChassisSpeeds getCurrentChassisSpeeds() { return m_kinematics.toChassisSpeeds(getModuleStates()); }
 
     public void setPosition(Pose2d pose) {
+        m_gyro.setYaw(pose.getRotation());
         m_poseEstimator.resetPosition(m_gyro.getYaw(), getModulePositions(), pose);
     }
 
