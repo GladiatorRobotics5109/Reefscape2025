@@ -19,13 +19,13 @@ public class VisionSubsystem extends SubsystemBase {
         m_inputs = new VisionIOInputs[VisionConstants.kCameras.length];
 
         switch (Constants.kCurrentMode) {
-                       case REAL:
-                           for (int i = 0; i < VisionConstants.kCameras.length; i++) {
-                               m_ios[i] = new VisionIOPhotonVision(VisionConstants.kCameras[i]);
-                               m_inputs[i] = new VisionIOInputs();
-                           }
-            
-                           break;
+            case REAL:
+                for (int i = 0; i < VisionConstants.kCameras.length; i++) {
+                    m_ios[i] = new VisionIOPhotonVision(VisionConstants.kCameras[i]);
+                    m_inputs[i] = new VisionIOInputs();
+                }
+
+                break;
             default:
                 for (int i = 0; i < VisionConstants.kCameras.length; i++) {
                     m_ios[i] = new VisionIO() {};

@@ -1,7 +1,5 @@
 package frc.robot;
 
-import java.util.Map;
-
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.Mode;
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.constants.swerveModuleConstants.SwerveDriveSpecialtiesConstants.MK4Constants;
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.constants.swerveModuleConstants.SwerveDriveSpecialtiesConstants.MK4Constants.MK4GearRatio;

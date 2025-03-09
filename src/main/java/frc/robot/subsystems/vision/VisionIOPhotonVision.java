@@ -39,7 +39,6 @@ public class VisionIOPhotonVision implements VisionIO {
                 m_camera.getDistCoeffs()
             );
             if (estimatedPose.isEmpty()) {
-                DriverStation.reportWarning("Failed to estimate vision position!", true);
                 continue;
             }
 
