@@ -133,7 +133,7 @@ public final class Constants {
             0
         );
         public static final com.pathplanner.lib.config.PIDConstants kPPRotaitonPID = new com.pathplanner.lib.config.PIDConstants(
-            7,
+            3,
             0,
             0
         );
