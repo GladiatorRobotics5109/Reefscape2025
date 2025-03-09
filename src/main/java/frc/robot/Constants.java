@@ -170,7 +170,7 @@ public final class Constants {
 
         public static final SwerveDriveConfiguration kTeleopConfig = new SwerveDriveConfiguration(
             SwerveModuleConstants.kDriveMaxFreeSpeed,
-            Units.MetersPerSecond.of(0.5),
+            Units.MetersPerSecond.of(1),
             // Units.RotationsPerSecond.of(0.2),
             Units.RotationsPerSecond.of(2),
             Units.RotationsPerSecond.of(1),
@@ -310,7 +310,7 @@ public final class Constants {
         public static final double kL1HeightMeters = 0.0;
         public static final double kL2HeightMeters = ReefHeight.L2.getHeight() - Conversions.inchesToMeters(14);
         public static final double kL3HeightMeters = ReefHeight.L3.getHeight() - Conversions.inchesToMeters(22);
-        public static final double kL4HeightMeters = ReefHeight.L4.getHeight() - Conversions.inchesToMeters(35.8);
+        public static final double kL4HeightMeters = ReefHeight.L4.getHeight() - Conversions.inchesToMeters(35.5);
     }
 
     public static final class EndEffectorConstants {
