@@ -13,6 +13,10 @@ public class EndEffectorCommandFactory {
     }
 
     public static Command score(EndEffectorSubsystem endEffector) {
+        if (Util.isSim()) {
+            return Commands.sequence(endEffector.runOnce(endEffector::setScore), Commands.waitSeconds(2));
+        }
+
         return Commands.sequence(
             endEffector.runOnce(endEffector::setScore),
             Commands.waitUntil(() -> !endEffector.hasCoral())
@@ -24,22 +28,20 @@ public class EndEffectorCommandFactory {
     }
 
     public static Command intake(EndEffectorSubsystem endEffector) {
+        if (Util.isSim()) {
+            return Commands.waitSeconds(2.0);
+        }
+
         return Commands.sequence(
             Commands.runOnce(endEffector::setIntake, endEffector),
-            Commands.either(
-                // If sim, don't wait for coral bc coral sensor is not simulated
-                Commands.waitSeconds(1),
-                Commands.waitUntil(endEffector::hasLeadingEdgeCoral),
-                Util::isSim
-            ),
+            Commands.waitUntil(endEffector::hasLeadingEdgeCoral),
             Commands.waitSeconds(0.08),
             Commands.runOnce(endEffector::setIntakeSlow, endEffector),
-            Commands.either(
-                Commands.waitSeconds(1),
-                Commands.waitUntil(() -> !endEffector.hasLeadingEdgeCoral()),
-                Util::isSim
+            Commands.waitUntil(() -> !endEffector.hasLeadingEdgeCoral()),
+            Commands.runOnce(
+                () -> endEffector.setVoltage(EndEffectorConstants.kIntakeSlowSlowVoltage),
+                endEffector
             ),
-            Commands.runOnce(() -> endEffector.setVoltage(EndEffectorConstants.kIntakeSlowSlowVoltage), endEffector),
             Commands.waitUntil(endEffector::hasLeadingEdgeCoral),
             Commands.waitSeconds(0.150),
             Commands.runOnce(endEffector::stop, endEffector)

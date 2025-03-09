@@ -73,6 +73,9 @@ public class AutoChooser {
         );
         s_autoChooser.addOption("Comp_PP-B_6_L1G2", AutoBuilder.auto_PP_B6_L1G2(swerve, elevator, endEffector, leds));
         s_autoChooser.addOption("Comp_PP-B_6_L2G2", AutoBuilder.auto_PP_B6_L2G2(swerve, elevator, endEffector, leds));
+        s_autoChooser.addOption("Comp_PP_B_C_L2H1", AutoBuilder.auto_PP_BC_L2H1(swerve, elevator, endEffector, leds));
+        s_autoChooser.addOption("Comp_PP_B_6_3L2", AutoBuilder.auto_PP_B6_3L2(swerve, elevator, endEffector, leds));
+        s_autoChooser.addOption("Comp_PP_B_6_3L4", AutoBuilder.auto_PP_B6_3L4(swerve, elevator, endEffector, leds));
         s_autoChooser.addOption(
             "Comp_PP-B_6-R_L4G2-Leave",
             AutoBuilder.auto_PP_B6_L4G2_Leave(swerve, elevator, endEffector, leds)
