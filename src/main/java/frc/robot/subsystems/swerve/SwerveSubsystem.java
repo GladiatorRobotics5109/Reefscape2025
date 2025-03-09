@@ -239,7 +239,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public Pose2d getPose() { return m_poseEstimator.getEstimatedPosition(); }
 
-    public Rotation2d getHeading() { return getPose().getRotation(); }
+    public Rotation2d getHeading() { return m_gyro.getYaw(); }
 
     public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {
