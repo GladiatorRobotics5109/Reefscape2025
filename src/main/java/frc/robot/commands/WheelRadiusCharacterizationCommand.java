@@ -24,7 +24,7 @@ import java.util.function.DoubleSupplier;
 public class WheelRadiusCharacterizationCommand extends Command {
     private static final LoggedNetworkNumber characterizationSpeed = new LoggedNetworkNumber(
         "Subsystems/Swerve/WheelRadiusCharacterization/SpeedRadsPerSec",
-        0.1
+        0.15
     );
     private static final double driveRadius = SwerveConstants.kDriveBaseRadiusMeters;
     private static final DoubleSupplier gyroYawRadsSupplier = () -> RobotState.getSwervePose().getRotation()

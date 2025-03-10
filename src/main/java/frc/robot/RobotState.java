@@ -73,6 +73,12 @@ public class RobotState {
         Logger.recordOutput(SwerveConstants.kLogPath + "/CurrentPose", getSwervePose());
         Logger.recordOutput(SwerveConstants.kLogPath + "/CurrentModuleStates", getSwerveModuleStates());
 
+        // Logger.recordOutput(
+        //     VisionConstants.kLogPath + "/EstimatedPoses",
+        //     Arrays.stream(getVisionMeasurements()).map((VisionMeasurement measurement) -> measurement.estimatedPose())
+        //         .toArray(Pose3d[]::new)
+        // );
+
         Logger.recordOutput(ElevatorConstants.kLogPath + "/CurrentPositionMeters", getElevatorCurrentPositionMeters());
         Logger.recordOutput(ElevatorConstants.kLogPath + "/DesiredPositionMeters", getElevatorDesiredPositionMeters());
         Logger.recordOutput(ElevatorConstants.kLogPath + "/AtDesiredPosition", getElevatorAtDesiredPosition());

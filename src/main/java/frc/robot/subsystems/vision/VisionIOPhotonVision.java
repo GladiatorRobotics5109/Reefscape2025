@@ -11,7 +11,6 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.VisionConstants.PhotonCameraConfiguration;
 
@@ -39,7 +38,6 @@ public class VisionIOPhotonVision implements VisionIO {
                 m_camera.getDistCoeffs()
             );
             if (estimatedPose.isEmpty()) {
-                DriverStation.reportWarning("Failed to estimate vision position!", true);
                 continue;
             }
 

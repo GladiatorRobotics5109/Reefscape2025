@@ -21,11 +21,10 @@ import frc.robot.Constants.SwerveConstants.SwerveModuleConstants;
 import frc.robot.util.Conversions;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frc.robot.util.FieldConstants;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 
 public final class Constants {
-    public static final Mode kCurrentMode = Mode.SIM;
+    public static final Mode kCurrentMode = Mode.REAL;
 
     public static final Alliance kDefaultAlliance = Alliance.Blue;
 
@@ -53,7 +52,7 @@ public final class Constants {
             public static final MK4GearRatio kDriveGearRatio = MK4GearRatio.L1;
             public static final double kTurnGearRatio = MK4Constants.kTurnGearRatio;
 
-            public static final double kWheelRadiusMeters = 0.0472659347214289;
+            public static final double kWheelRadiusMeters = 0.0478881398248718;
 
             public static final int kFrontLeftDrivePort = 10;
             public static final int kFrontLeftTurnPort = 20;
@@ -80,7 +79,7 @@ public final class Constants {
                 0
             );
 
-            public static final FeedforwardConstants kDriveFeedforward = new FeedforwardConstants(0.14, 6);
+            public static final FeedforwardConstants kDriveFeedforward = new FeedforwardConstants(0.125, 6);
 
             public static final PIDConstants kTurnPID = new PIDConstants(
                 12 / Conversions.rotationsToRadians(0.01), // Volts per radian error
@@ -103,13 +102,24 @@ public final class Constants {
             public static final int kTurnSupplyCurrentLimit = 30;
 
             public static final LinearVelocity kDriveMaxFreeSpeed = Units.FeetPerSecond.of(12.9);
+
+            // public static final Map<Integer, Double> kEncoderOffsets = Map.of(
+            //     30,
+            //     0.0,
+            //     31,
+            //     0.0,
+            //     32,
+            //     0.0,
+            //     33,
+            //     0.0
+            // );
         }
 
         public static final int kPigeonPort = 40;
 
         public static final boolean kTeleopFieldRelative = true;
 
-        public static final Pose2d kStartingPose = new Pose2d();
+        public static final Pose2d kStartingPose = new Pose2d(0.0, 0.0, Rotation2d.k180deg);
         public static final String kLogPath = "Subsystems/Swerve";
         public static final double kFrameWidth = Conversions.inchesToMeters(29);
         public static final double kFrameHeight = Conversions.inchesToMeters(29);
@@ -118,12 +128,12 @@ public final class Constants {
         );
 
         public static final com.pathplanner.lib.config.PIDConstants kPPTranslationPID = new com.pathplanner.lib.config.PIDConstants(
-            5,
+            7,
             0,
             0
         );
         public static final com.pathplanner.lib.config.PIDConstants kPPRotaitonPID = new com.pathplanner.lib.config.PIDConstants(
-            5,
+            4.5,
             0,
             0
         );
@@ -171,7 +181,7 @@ public final class Constants {
 
         public static final SwerveDriveConfiguration kTeleopConfig = new SwerveDriveConfiguration(
             SwerveModuleConstants.kDriveMaxFreeSpeed,
-            Units.MetersPerSecond.of(0.5),
+            Units.MetersPerSecond.of(1),
             // Units.RotationsPerSecond.of(0.2),
             Units.RotationsPerSecond.of(2),
             Units.RotationsPerSecond.of(1),
@@ -210,32 +220,32 @@ public final class Constants {
 
         public static final PhotonCameraConfiguration[] kCameras = new PhotonCameraConfiguration[] {
             new PhotonCameraConfiguration(
-                "FrontCameraL",
+                "FrontCamera",
                 new Transform3d(
-                    0.27,
-                    0.15,
-                    SwerveModuleConstants.kWheelRadiusMeters + (65.0 / 1000.0) + (7.037 / 1000.0),
-                    new Rotation3d(0.0, Conversions.degreesToRadians(5), Conversions.degreesToRadians(5))
+                    Conversions.inchesToMeters(-3.059),
+                    Conversions.inchesToMeters(13.825),
+                    SwerveModuleConstants.kWheelRadiusMeters + 0.148,
+                    new Rotation3d(0.0, Conversions.degreesToRadians(5), 0.0)
                 )
             ),
-            new PhotonCameraConfiguration(
-                "FrontCameraR",
-                new Transform3d(
-                    0.27,
-                    -0.15,
-                    SwerveModuleConstants.kWheelRadiusMeters + (65.0 / 1000.0) + (7.037 / 1000.0),
-                    new Rotation3d(0.0, Conversions.degreesToRadians(5), Conversions.degreesToRadians(-5))
-                )
-            ),
-            new PhotonCameraConfiguration(
-                "RearCamera",
-                new Transform3d(
-                    -0.27,
-                    0.0,
-                    SwerveModuleConstants.kWheelRadiusMeters + (65.0 / 1000.0) + (7.037 / 1000.0),
-                    new Rotation3d(0.0, Conversions.degreesToRadians(25), Conversions.degreesToRadians(220))
-                )
-            )
+            // new PhotonCameraConfiguration(
+            //     "FrontCameraR",
+            //     new Transform3d(
+            //         0.27,
+            //         -0.15,
+            //         SwerveModuleConstants.kWheelRadiusMeters + (65.0 / 1000.0) + (7.037 / 1000.0),
+            //         new Rotation3d(0.0, Conversions.degreesToRadians(5), Conversions.degreesToRadians(-5))
+            //     )
+            // ),
+            // new PhotonCameraConfiguration(
+            //     "RearCamera",
+            //     new Transform3d(
+            //         -0.27,
+            //         0.0,
+            //         SwerveModuleConstants.kWheelRadiusMeters + (65.0 / 1000.0) + (7.037 / 1000.0),
+            //         new Rotation3d(0.0, Conversions.degreesToRadians(25), Conversions.degreesToRadians(220))
+            //     )
+            // )
         };
 
         public static final String kLogPath = "Subsystems/Vision";
@@ -264,28 +274,29 @@ public final class Constants {
 
         public static final double kElevatorMaxPositionMeters = Conversions.inchesToMeters(69.736220);
 
-        public static final double kForwardSoftLimitRad = 29.5;
-        public static final double kReverseSoftLimitRad = 0.1;
+        public static final double kForwardSoftLimitRad = 29.6;
+        public static final double kReverseSoftLimitRad = -0.03;
 
         public static final PIDConstants kPID = new PIDConstants(
-            0.13, // V / rad
+            0.01,
+            // 0.13, // V / rad
             0.0,
             0.0
         );
         public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(
-            0.09,
-            0.2,
+            0.1,
+            0.247,
             0.0,
-            0.10
+            0.40
             // 0.0860202312 // V
         );
         //        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(0.75);
         //        public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
         //            2
         //        )s
-        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1.25);
+        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1.0);
         public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
-            4
+            2.5
         );
 
         /** Distance between belly pan and elevator base */
@@ -300,10 +311,7 @@ public final class Constants {
          * Distance from the center of the leading edge of the coral to the floor when the elevator is at its starting
          * configuration
          */
-        public static final double kEndEffectorHeightMeters = kElevatorBaseHeightMeters
-            + EndEffectorConstants.kEndEffectorLengthMeters
-            + FieldConstants.CoralConstants.kCoralOuterRadiusMeters
-                * EndEffectorConstants.kAngle.minus(Rotation2d.kCCW_Pi_2).getSin();
+        public static final double kEndEffectorHeightMeters = Conversions.inchesToMeters(21.5);
 
         public static final double kPositionToleranceMeters = Conversions.inchesToMeters(0.5);
 
@@ -311,9 +319,9 @@ public final class Constants {
         public static final double kAutoElevatorExtendRequiredDistanceMeters = 4.5;
 
         public static final double kL1HeightMeters = 0.0;
-        public static final double kL2HeightMeters = ReefHeight.L2.getHeight() + Conversions.inchesToMeters(2);
-        public static final double kL3HeightMeters = ReefHeight.L3.getHeight() + Conversions.inchesToMeters(2);
-        public static final double kL4HeightMeters = ReefHeight.L4.getHeight() + Conversions.inchesToMeters(2);
+        public static final double kL2HeightMeters = ReefHeight.L2.getHeight() - Conversions.inchesToMeters(14);
+        public static final double kL3HeightMeters = ReefHeight.L3.getHeight() - Conversions.inchesToMeters(22);
+        public static final double kL4HeightMeters = ReefHeight.L4.getHeight() - Conversions.inchesToMeters(35.5);
     }
 
     public static final class EndEffectorConstants {
@@ -325,8 +333,8 @@ public final class Constants {
          */
         public static final double kEndEffectorLengthMeters = Conversions.inchesToMeters(11.967);
 
-        public static final int kLeftPort = 50;
-        public static final int kRightPort = 51;
+        public static final int kLeftPort = 51;
+        public static final int kRightPort = 50;
 
         public static final int kCoralSensorPort = 1;
         public static final int kCoralSensorLeadingPort = 0;

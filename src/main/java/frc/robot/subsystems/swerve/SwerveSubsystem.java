@@ -21,6 +21,8 @@ import frc.robot.Constants.SwerveConstants;
 import frc.robot.RobotState;
 import frc.robot.subsystems.swerve.swervemodule.*;
 import frc.robot.subsystems.vision.VisionMeasurement;
+import frc.robot.util.Conversions;
+import frc.robot.util.FieldConstants;
 import frc.robot.util.Util;
 import org.littletonrobotics.junction.Logger;
 
@@ -239,7 +241,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public Pose2d getPose() { return m_poseEstimator.getEstimatedPosition(); }
 
-    public Rotation2d getHeading() { return getPose().getRotation(); }
+    public Rotation2d getHeading() { return m_gyro.getYaw(); }
 
     public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {
@@ -295,14 +297,23 @@ public class SwerveSubsystem extends SubsystemBase {
     public ChassisSpeeds getCurrentChassisSpeeds() { return m_kinematics.toChassisSpeeds(getModuleStates()); }
 
     public void setPosition(Pose2d pose) {
+        m_gyro.setYaw(pose.getRotation());
         m_poseEstimator.resetPosition(m_gyro.getYaw(), getModulePositions(), pose);
     }
 
     public void updatePose() {
         VisionMeasurement[] measurements = RobotState.getVisionMeasurements();
         for (VisionMeasurement measurement : measurements) {
+            if (measurement.estimatedPose().getTranslation().toTranslation2d().getDistance(
+                FieldConstants.ReefConstants.getAllianceReefPos()
+            ) <= Conversions.inchesToMeters(6)) {
+                continue;
+            }
+
             m_poseEstimator.addVisionMeasurement(measurement.estimatedPose().toPose2d(), measurement.timestamp());
         }
+
+        // System.out.println("LEN: " + measurements.length);
 
         m_poseEstimator.update(m_gyro.getYaw(), getModulePositions());
     }

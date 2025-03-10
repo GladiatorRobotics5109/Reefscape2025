@@ -105,6 +105,17 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_useMotorPID = ElevatorConstants.kUseMotorPID;
     }
 
+    public void toHome() {
+        m_hasDesiredPosition = true;
+        m_desiredPositionMeters = 0.0;
+        if (m_useMotorPID)
+            m_io.setPosition(m_desiredPositionMeters);
+    }
+
+    public void stop() {
+        setVoltage(0.0);
+    }
+
     public void setVoltage(double volts) {
         m_hasDesiredPosition = false;
         m_io.setVoltage(volts);
@@ -142,9 +153,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public double getDesiredPositionElevator() { return m_desiredPositionMeters; }
 
-    public double getDesiredPositionElevatorRad() {
-        return Conversions.elevatorMetersToElevatorRadians(m_desiredPositionMeters);
-    }
+    public double getDesiredPositionElevatorRad() { return m_inputs.positionRad; }
 
     public boolean atDesiredPosition() {
         return MathUtil.isNear(

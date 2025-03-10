@@ -9,6 +9,7 @@ import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.util.Conversions;
 import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
+import frc.robot.util.Util;
 import org.littletonrobotics.junction.Logger;
 
 import java.util.function.DoubleSupplier;
@@ -31,7 +32,17 @@ public class ElevatorCommandFactory {
     }
 
     public static Command toHome(ElevatorSubsystem elevator) {
-        return toElevatorRelativeHeight(elevator, () -> 0.0);
+        if (Util.isSim()) {
+            return elevator.runOnce(elevator::toHome);
+        }
+
+        return Commands.sequence(
+            elevator.runOnce(elevator::toHome),
+            Commands.waitUntil(() -> elevator.getDesiredPositionElevatorRad() <= 1.0),
+            setVoltage(elevator, -0.2),
+            Commands.waitUntil(() -> elevator.getDesiredPositionElevatorRad() <= 0.005),
+            elevator.runOnce(elevator::stop)
+        );
     }
 
     public static Command autoToReefBranch(ElevatorSubsystem elevator, ReefBranch branch) {
