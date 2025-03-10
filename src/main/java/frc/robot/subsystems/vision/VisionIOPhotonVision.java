@@ -1,22 +1,31 @@
 package frc.robot.subsystems.vision;
 
-import java.util.List;
-import java.util.Optional;
-
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.numbers.N8;
+import frc.robot.Constants.VisionConstants;
+import frc.robot.Constants.VisionConstants.PhotonCameraConfiguration;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
-import edu.wpi.first.math.geometry.Pose3d;
-import frc.robot.Constants.VisionConstants;
-import frc.robot.Constants.VisionConstants.PhotonCameraConfiguration;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Queue;
 
 public class VisionIOPhotonVision implements VisionIO {
     private PhotonCamera m_camera;
     private PhotonPoseEstimator m_poseEstimator;
+
+    private final Optional<Matrix<N3, N3>> m_cameraMatrix;
+    private final Optional<Matrix<N8, N1>> m_distCoeffs;
+
+    private final Queue<EstimatedRobotPose> m_scratchBuff;
 
     public VisionIOPhotonVision(PhotonCameraConfiguration cameraConfigs) {
         m_camera = new PhotonCamera(cameraConfigs.cameraName());
@@ -25,6 +34,11 @@ public class VisionIOPhotonVision implements VisionIO {
             PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
             cameraConfigs.robotToCamera()
         );
+
+        m_cameraMatrix = m_camera.getCameraMatrix();
+        m_distCoeffs = m_camera.getDistCoeffs();
+
+        m_scratchBuff = new LinkedList<>();
     }
 
     @Override
@@ -34,21 +48,22 @@ public class VisionIOPhotonVision implements VisionIO {
         for (PhotonPipelineResult result : results) {
             Optional<EstimatedRobotPose> estimatedPose = m_poseEstimator.update(
                 result,
-                m_camera.getCameraMatrix(),
-                m_camera.getDistCoeffs()
+                m_cameraMatrix,
+                m_distCoeffs
             );
             if (estimatedPose.isEmpty()) {
                 continue;
             }
 
-            inputs.posees.add(estimatedPose.get().estimatedPose);
-            inputs.timestamps.add(estimatedPose.get().timestampSeconds);
-            for (PhotonTrackedTarget target : estimatedPose.get().targetsUsed) {
-                Optional<Pose3d> pose = VisionConstants.kAprilTagFieldLayout.getTagPose(target.fiducialId);
-                if (pose.isEmpty())
-                    continue;
-                inputs.targetsUsed.add(pose.get());
-            }
+            m_scratchBuff.add(estimatedPose.get());
         }
+
+        inputs.poses = m_scratchBuff.stream().map((pose) -> pose.estimatedPose).toArray(Pose3d[]::new);
+        inputs.timestamps = m_scratchBuff.stream().mapToDouble((pose) -> pose.timestampSeconds).toArray();
+        inputs.targetsUsed = m_scratchBuff.stream().map(
+            (pose) -> pose.targetsUsed.stream().map(
+                (target) -> VisionConstants.kAprilTagFieldLayout.getTagPose(target.fiducialId).orElse(Pose3d.kZero)
+            ).toArray(Pose3d[]::new)
+        ).toArray(Pose3d[][]::new);
     }
 }

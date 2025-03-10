@@ -5,14 +5,15 @@ import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.vision.VisionIO.VisionIOInputs;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class VisionSubsystem extends SubsystemBase {
-    private VisionIO[] m_ios;
-    private VisionIOInputs[] m_inputs;
+    private final VisionIO[] m_ios;
+    private final VisionIOInputs[] m_inputs;
 
-    private List<VisionMeasurement> m_measurements;
+    private final Queue<VisionMeasurement> m_measurements;
 
     public VisionSubsystem() {
         m_ios = new VisionIO[VisionConstants.kCameras.length];
@@ -34,13 +35,13 @@ public class VisionSubsystem extends SubsystemBase {
                 break;
         }
 
-        m_measurements = new ArrayList<>();
+        m_measurements = new LinkedList<>();
     }
 
     public VisionMeasurement[] getMeasurements() {
-        VisionMeasurement[] measurements = m_measurements.toArray(VisionMeasurement[]::new);
-        m_measurements.clear();
-
+        VisionMeasurement[] measurements = new VisionMeasurement[m_measurements.size()];
+        m_measurements.removeAll(List.of(measurements));
+        
         return measurements;
     }
 
@@ -49,7 +50,7 @@ public class VisionSubsystem extends SubsystemBase {
         for (int i = 0; i < m_ios.length; i++) {
             m_ios[i].updateInputs(m_inputs[i]);
 
-            m_measurements.addAll(VisionMeasurement.fromInputs(m_inputs[i]));
+            m_measurements.addAll(List.of(VisionMeasurement.fromInputs(m_inputs[i])));
         }
 
         // TODO: figure out why no log targets here :(

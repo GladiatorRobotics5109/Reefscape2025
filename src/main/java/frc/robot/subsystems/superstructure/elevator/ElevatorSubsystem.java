@@ -153,7 +153,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public double getDesiredPositionElevator() { return m_desiredPositionMeters; }
 
-    public double getDesiredPositionElevatorRad() { return m_inputs.positionRad; }
+    public double getCurrentPositionRad() { return m_inputs.positionRad; }
 
     public boolean atDesiredPosition() {
         return MathUtil.isNear(

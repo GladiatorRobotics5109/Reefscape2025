@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -24,6 +25,8 @@ public class ElevatorCommandFactory {
     }
 
     public static Command toReefHeight(ElevatorSubsystem elevator, ReefHeight height) {
+        if (height == ReefHeight.L4) return toL4(elevator);
+        
         return elevator.runOnce(() -> elevator.setDesiredPositionEndEffector(height));
     }
 
@@ -38,10 +41,24 @@ public class ElevatorCommandFactory {
 
         return Commands.sequence(
             elevator.runOnce(elevator::toHome),
-            Commands.waitUntil(() -> elevator.getDesiredPositionElevatorRad() <= 1.0),
+            Commands.waitUntil(() -> elevator.getCurrentPositionRad() <= 1.0),
             setVoltage(elevator, -0.2),
-            Commands.waitUntil(() -> elevator.getDesiredPositionElevatorRad() <= 0.005),
+            Commands.waitUntil(() -> elevator.getCurrentPositionRad() <= 0.005),
             elevator.runOnce(elevator::stop)
+        );
+    }
+    
+    public static Command toL4(ElevatorSubsystem elevator) {
+        if (Util.isSim()) {
+            return elevator.runOnce(elevator::toHome);
+        }
+        
+        return Commands.sequence(
+            elevator.runOnce(() -> elevator.setDesiredPositionEndEffector(ReefHeight.L4)),
+            Commands.waitUntil(() -> MathUtil.isNear(Conversions.elevatorMetersToElevatorRadians(ElevatorConstants.kL4HeightMeters), elevator.getCurrentPositionRad(), 0.5)),
+            setVoltage(elevator, ElevatorConstants.kFeedForward.ks() + ElevatorConstants.kFeedForward.kg() + 0.25),
+            Commands.waitUntil(() -> elevator.getCurrentPositionRad() >= ElevatorConstants.kForwardSoftLimitRad),
+            setVoltage(elevator, ElevatorConstants.kFeedForward.ks() + ElevatorConstants.kFeedForward.kg())
         );
     }
 
