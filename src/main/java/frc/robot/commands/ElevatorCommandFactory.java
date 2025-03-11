@@ -64,7 +64,7 @@ public class ElevatorCommandFactory {
             ),
             setVoltage(elevator, ElevatorConstants.kFeedForward.ks() + ElevatorConstants.kFeedForward.kg() + 0.25),
             Commands.waitUntil(() -> elevator.getCurrentPositionRad() >= ElevatorConstants.kForwardSoftLimitRad),
-            setVoltage(elevator, ElevatorConstants.kFeedForward.ks() + ElevatorConstants.kFeedForward.kg())
+            setVoltage(elevator, ElevatorConstants.kFeedForward.kg())
         );
     }
 
