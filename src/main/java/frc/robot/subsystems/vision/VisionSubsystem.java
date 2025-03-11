@@ -3,60 +3,52 @@ package frc.robot.subsystems.vision;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.subsystems.vision.VisionIO.VisionIOInputs;
+import org.littletonrobotics.junction.Logger;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.function.Consumer;
 
 public class VisionSubsystem extends SubsystemBase {
     private final VisionIO[] m_ios;
-    private final VisionIOInputs[] m_inputs;
+    private final VisionIOInputsAutoLogged[] m_inputs;
 
-    private final Queue<VisionMeasurement> m_measurements;
+    private final Consumer<VisionMeasurement[]> m_addVisionMeasurements;
 
-    public VisionSubsystem() {
+    public VisionSubsystem(Consumer<VisionMeasurement[]> addVisionMeasurements) {
         m_ios = new VisionIO[VisionConstants.kCameras.length];
-        m_inputs = new VisionIOInputs[VisionConstants.kCameras.length];
+        m_inputs = new VisionIOInputsAutoLogged[VisionConstants.kCameras.length];
+        m_addVisionMeasurements = addVisionMeasurements;
 
         switch (Constants.kCurrentMode) {
-            // case REAL:
-            //     for (int i = 0; i < VisionConstants.kCameras.length; i++) {
-            //         m_ios[i] = new VisionIOPhotonVision(VisionConstants.kCameras[i]);
-            //         m_inputs[i] = new VisionIOInputs();
-            //     }
-
-            //     break;
+            //             case REAL:
+            //                 for (int i = 0; i < VisionConstants.kCameras.length; i++) {
+            //                     m_ios[i] = new VisionIOPhotonVision(VisionConstants.kCameras[i]);
+            //                     m_inputs[i] = new VisionIOInputs();
+            //                 }
+            //
+            //                 break;
+//            case SIM:
+//                for (int i = 0; i < VisionConstants.kCameras.length; i++) {
+//                    m_ios[i] = new VisionIOSim();
+//                    m_inputs[i] = new VisionIOInputsAutoLogged();
+//                }
+//
+//                break;
             default:
                 for (int i = 0; i < VisionConstants.kCameras.length; i++) {
                     m_ios[i] = new VisionIO() {};
-                    m_inputs[i] = new VisionIOInputs();
+                    m_inputs[i] = new VisionIOInputsAutoLogged();
                 }
+
                 break;
         }
-
-        m_measurements = new LinkedList<>();
-    }
-
-    public VisionMeasurement[] getMeasurements() {
-        VisionMeasurement[] measurements = new VisionMeasurement[m_measurements.size()];
-        m_measurements.removeAll(List.of(measurements));
-        
-        return measurements;
     }
 
     @Override
     public void periodic() {
         for (int i = 0; i < m_ios.length; i++) {
             m_ios[i].updateInputs(m_inputs[i]);
-
-            m_measurements.addAll(List.of(VisionMeasurement.fromInputs(m_inputs[i])));
+            Logger.processInputs(VisionConstants.kLogPath + "/" + m_inputs[i].cameraName, m_inputs[i]);
+            m_addVisionMeasurements.accept(VisionMeasurement.fromInputs(m_inputs[i]));
         }
-
-        // TODO: figure out why no log targets here :(
-        //        Logger.recordOutput(
-        //            VisionConstants.kLogPath.concat("/Measurements"),
-        //            m_measurements.toArray(new VisionMeasurement[0])
-        //        );
     }
 }

@@ -27,8 +27,11 @@ public class VisionIOPhotonVision implements VisionIO {
 
     private final Queue<EstimatedRobotPose> m_scratchBuff;
 
+    private final String m_cameraName;
+
     public VisionIOPhotonVision(PhotonCameraConfiguration cameraConfigs) {
-        m_camera = new PhotonCamera(cameraConfigs.cameraName());
+        m_cameraName = cameraConfigs.cameraName();
+        m_camera = new PhotonCamera(m_cameraName);
         m_poseEstimator = new PhotonPoseEstimator(
             VisionConstants.kAprilTagFieldLayout,
             PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
@@ -65,5 +68,7 @@ public class VisionIOPhotonVision implements VisionIO {
                 (target) -> VisionConstants.kAprilTagFieldLayout.getTagPose(target.fiducialId).orElse(Pose3d.kZero)
             ).toArray(Pose3d[]::new)
         ).toArray(Pose3d[][]::new);
+
+        inputs.cameraName = m_cameraName;
     }
 }

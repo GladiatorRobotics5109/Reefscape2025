@@ -89,7 +89,8 @@ public class AutoChooser {
             AutoBuilder.auto_PP_B6_L4G2_F3_L4G1_Leave(swerve, elevator, endEffector, leds)
         );
 
-        s_autoChooser.addOption("Test", AutoBuilder.testAuto(swerve, elevator, endEffector, leds));
+        s_autoChooser.addOption("Test_TestAuto", AutoBuilder.testAuto(swerve, elevator, endEffector, leds));
+        s_autoChooser.addOption("Test_TestPath", AutoBuilder.followTestPath(swerve));
 
         s_autoChooser.addOption(
             "SysId_WheelRadius",

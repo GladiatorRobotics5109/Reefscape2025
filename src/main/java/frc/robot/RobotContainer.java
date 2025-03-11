@@ -32,7 +32,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         m_swerve = new SwerveSubsystem();
-        m_vision = new VisionSubsystem();
+        m_vision = new VisionSubsystem(m_swerve::addVisionMeasurements);
         m_elevator = new ElevatorSubsystem();
         m_endEffector = new EndEffectorSubsystem();
         //        m_climb = new ClimbSubsystem();
