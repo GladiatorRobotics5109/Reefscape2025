@@ -41,7 +41,7 @@ public class VisionSubsystem extends SubsystemBase {
     public VisionMeasurement[] getMeasurements() {
         VisionMeasurement[] measurements = new VisionMeasurement[m_measurements.size()];
         m_measurements.removeAll(List.of(measurements));
-        
+
         return measurements;
     }
 

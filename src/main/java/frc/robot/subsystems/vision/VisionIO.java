@@ -6,9 +6,9 @@ import org.littletonrobotics.junction.AutoLog;
 public interface VisionIO {
     @AutoLog
     public static class VisionIOInputs {
-        public Pose3d[] poses;
-        public double[] timestamps;
-        public Pose3d[][] targetsUsed;
+        public Pose3d[] poses = new Pose3d[0];
+        public double[] timestamps = new double[0];
+        public Pose3d[][] targetsUsed = new Pose3d[0][];
     }
 
     default void updateInputs(VisionIOInputs inputs) {}
