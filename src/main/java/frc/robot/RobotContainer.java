@@ -44,7 +44,7 @@ public class RobotContainer {
         //        m_operatorController = new CommandXboxController(Constants.DriveTeamConstants.kOperatorControllerPort);
 
         configureBindings();
-        
+
         m_leds.setDefaultCommand(new LEDCommandFactory.LEDRGBCommand(m_leds, 1.0, 1.0, false));
 
         CommandScheduler.getInstance().onCommandInitialize((Command command) -> {

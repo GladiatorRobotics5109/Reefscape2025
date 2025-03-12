@@ -17,7 +17,7 @@ public class LEDIOCANdle implements LEDIO {
         m_candle.configVBatOutput(VBatOutputMode.Off);
         m_candle.configV5Enabled(true);
     }
-    
+
     @Override
     public void updateInputs(LEDIOInputs inputs) {
         inputs.voltage5V = m_candle.get5VRailVoltage();
