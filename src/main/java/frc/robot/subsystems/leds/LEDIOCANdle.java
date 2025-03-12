@@ -2,6 +2,8 @@ package frc.robot.subsystems.leds;
 
 import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdle;
+import com.ctre.phoenix.led.CANdle.LEDStripType;
+import com.ctre.phoenix.led.CANdle.VBatOutputMode;
 import edu.wpi.first.wpilibj.util.Color;
 
 public class LEDIOCANdle implements LEDIO {
@@ -11,6 +13,17 @@ public class LEDIOCANdle implements LEDIO {
 
     public LEDIOCANdle(int port) {
         m_candle = new CANdle(port);
+        m_candle.configLEDType(LEDStripType.GRB);
+        m_candle.configVBatOutput(VBatOutputMode.Off);
+        m_candle.configV5Enabled(true);
+    }
+    
+    @Override
+    public void updateInputs(LEDIOInputs inputs) {
+        inputs.voltage5V = m_candle.get5VRailVoltage();
+        inputs.outputCurrentAmps = m_candle.getCurrent();
+        inputs.supplyVoltage = m_candle.getBusVoltage();
+        inputs.tempCelius = m_candle.getTemperature();
     }
 
     @Override

@@ -28,7 +28,7 @@ public class RobotContainer {
 
     private final CommandXboxController m_driverController;
 
-    private final CommandXboxController m_operatorController;
+    //    private final CommandXboxController m_operatorController;
 
     public RobotContainer() {
         m_swerve = new SwerveSubsystem();
@@ -41,7 +41,7 @@ public class RobotContainer {
         AutoChooser.init(m_swerve, m_elevator, m_endEffector, m_leds);
 
         m_driverController = new CommandXboxController(Constants.DriveTeamConstants.kDriveControllerPort);
-        m_operatorController = new CommandXboxController(Constants.DriveTeamConstants.kOperatorControllerPort);
+        //        m_operatorController = new CommandXboxController(Constants.DriveTeamConstants.kOperatorControllerPort);
 
         configureBindings();
 
@@ -88,7 +88,7 @@ public class RobotContainer {
             ElevatorCommandFactory.setVoltage(m_elevator, 0.0)
         );
 
-        //manual elevator binded to right and left trigger
+        //manual elevator bound to right and left trigger
         // m_driverController.rightTrigger().whileTrue(ElevatorCommandFactory.setVoltage(m_elevator, 5)).onFalse(
         //     ElevatorCommandFactory.setVoltage(m_elevator, 0.0)
         // );

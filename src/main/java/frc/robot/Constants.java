@@ -375,7 +375,7 @@ public final class Constants {
 
     public static final class LEDConstants {
         public static final int kCANdlePort = 60;
-        public static final int kLEDCount = 10;
+        public static final int kLEDCount = 8 + 0;
     }
 
     public static final class ClimbConstants {
