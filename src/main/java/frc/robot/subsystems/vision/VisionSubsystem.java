@@ -3,6 +3,7 @@ package frc.robot.subsystems.vision;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
+
 import org.littletonrobotics.junction.Logger;
 
 import java.util.function.Consumer;
@@ -19,20 +20,20 @@ public class VisionSubsystem extends SubsystemBase {
         m_addVisionMeasurements = addVisionMeasurements;
 
         switch (Constants.kCurrentMode) {
-            //             case REAL:
-            //                 for (int i = 0; i < VisionConstants.kCameras.length; i++) {
-            //                     m_ios[i] = new VisionIOPhotonVision(VisionConstants.kCameras[i]);
-            //                     m_inputs[i] = new VisionIOInputs();
-            //                 }
+            case REAL:
+                for (int i = 0; i < VisionConstants.kCameras.length; i++) {
+                    m_ios[i] = new VisionIOPhotonVision(VisionConstants.kCameras[i]);
+                    m_inputs[i] = new VisionIOInputsAutoLogged();
+                }
+
+                break;
+            //            case SIM:
+            //                for (int i = 0; i < VisionConstants.kCameras.length; i++) {
+            //                    m_ios[i] = new VisionIOSim();
+            //                    m_inputs[i] = new VisionIOInputsAutoLogged();
+            //                }
             //
-            //                 break;
-//            case SIM:
-//                for (int i = 0; i < VisionConstants.kCameras.length; i++) {
-//                    m_ios[i] = new VisionIOSim();
-//                    m_inputs[i] = new VisionIOInputsAutoLogged();
-//                }
-//
-//                break;
+            //                break;
             default:
                 for (int i = 0; i < VisionConstants.kCameras.length; i++) {
                     m_ios[i] = new VisionIO() {};

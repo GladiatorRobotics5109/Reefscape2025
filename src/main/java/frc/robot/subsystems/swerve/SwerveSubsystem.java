@@ -309,7 +309,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 measurement
             );
 
-            m_poseEstimator.addVisionMeasurement(measurement.estimatedPose().toPose2d(), measurement.timestamp());
+            m_poseEstimator.addVisionMeasurement(measurement.estimatedPose(), measurement.timestamp());
         }
     }
 
