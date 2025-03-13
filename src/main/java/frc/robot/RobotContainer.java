@@ -41,11 +41,8 @@ public class RobotContainer {
         AutoChooser.init(m_swerve, m_elevator, m_endEffector, m_leds);
 
         m_driverController = new CommandXboxController(Constants.DriveTeamConstants.kDriveControllerPort);
-        //        m_operatorController = new CommandXboxController(Constants.DriveTeamConstants.kOperatorControllerPort);
 
         configureBindings();
-
-        m_leds.setDefaultCommand(new LEDCommandFactory.LEDRGBCommand(m_leds, 1.0, 1.0, false));
 
         CommandScheduler.getInstance().onCommandInitialize((Command command) -> {
             Logger.recordOutput("CommandLog", "Started: " + command.getName() + "\n");

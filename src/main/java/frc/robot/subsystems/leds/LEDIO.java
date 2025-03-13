@@ -18,4 +18,6 @@ public interface LEDIO {
     default void setCTREAnimation(Animation anim) {}
 
     default void setLEDs(Color clr, int start, int count) {}
+
+    default void periodic() {}
 }

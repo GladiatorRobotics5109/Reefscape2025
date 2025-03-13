@@ -1,6 +1,8 @@
 package frc.robot.subsystems.leds;
 
 import com.ctre.phoenix.led.Animation;
+import com.ctre.phoenix.led.RainbowAnimation;
+
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -24,6 +26,8 @@ public class LEDSubsystem extends SubsystemBase {
         }
 
         m_inputs = new LEDIOInputsAutoLogged();
+
+        setCTREAnimation(new RainbowAnimation(1.0, 0.1, LEDConstants.kLEDCount));
     }
 
     public void setCTREAnimation(Animation anim) {
@@ -36,6 +40,8 @@ public class LEDSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        m_io.periodic();
+
         m_io.updateInputs(m_inputs);
         Logger.processInputs(LEDConstants.kLogPath, m_inputs);
     }

@@ -5,6 +5,7 @@ import com.ctre.phoenix.led.StrobeAnimation;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.Constants;
 import frc.robot.RobotState;
 import frc.robot.subsystems.leds.LEDSubsystem;
@@ -92,7 +93,8 @@ public class LEDCommandFactory {
         final double kStrobeLength = 0.1;
         final int kNumStrobes = 3;
 
-        return new LEDStrobeCommand(leds, Color.kGreen, kStrobeLength).withTimeout(kNumStrobes * kStrobeLength);
+        return new LEDStrobeCommand(leds, Color.kGreen, kStrobeLength).withTimeout(kNumStrobes * kStrobeLength)
+            .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
     private static int getColorR(Color clr) { return (int)(255 * clr.red); }

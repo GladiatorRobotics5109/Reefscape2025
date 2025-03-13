@@ -376,7 +376,7 @@ public final class Constants {
     public static final class LEDConstants {
         public static final String kLogPath = "Subsystems/LEDs";
         public static final int kCANdlePort = 61;
-        public static final int kLEDCount = 8 + 0;
+        public static final int kLEDCount = 96;
     }
 
     public static final class ClimbConstants {
