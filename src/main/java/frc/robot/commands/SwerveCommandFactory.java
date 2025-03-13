@@ -96,6 +96,15 @@ public final class SwerveCommandFactory {
         return AutoBuilder.followPath(path);
     }
 
+    public static Command driveToPose(SwerveSubsystem swerve, Pose2d pose) {
+        return new SwerveDriveToPoseCommand(
+            swerve,
+            pose,
+            SwerveConstants.kDriveToPoseTranslationPID,
+            SwerveConstants.kDriveToPoseRotationPID
+        );
+    }
+
     public static Command followPathControllerInfluence(
         SwerveSubsystem swerve,
         PathPlannerPath path,

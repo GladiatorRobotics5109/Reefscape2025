@@ -72,6 +72,10 @@ public class ElevatorCommandFactory {
         return Commands.waitUntil(elevator::canAutoExtend).withTimeout(2).andThen(toReefBranch(elevator, branch));
     }
 
+    public static Command waitSetpoint(ElevatorSubsystem elevator) {
+        return Commands.waitUntil(elevator::atDesiredPosition);
+    }
+
     public static Command debugControllerAxis(
         ElevatorSubsystem elevator,
         DoubleSupplier upAxis,
