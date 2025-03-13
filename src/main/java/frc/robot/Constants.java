@@ -27,7 +27,7 @@ import frc.robot.util.Conversions;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 
 public final class Constants {
-    public static final Mode kCurrentMode = Mode.REAL;
+    public static final Mode kCurrentMode = Mode.SIM;
 
     public static final Alliance kDefaultAlliance = Alliance.Blue;
 
@@ -141,6 +141,23 @@ public final class Constants {
             4.5,
             0,
             0
+        );
+
+        public static final double kDriveToPoseTranslationToleranceMeters = Conversions.inchesToMeters(1);
+        public static final double kDriveToPoseRotationToleranceRad = Conversions.degreesToRadians(1);
+        public static final double kDriveToPoseTranslationVelocityToleranceMetersPerSec = Conversions.inchesToMeters(1);
+        public static final double kDriveToPoseRotationVelocityToleranceRadPerSec = Conversions.degreesToRadians(0.05);
+        public static final PIDConstants kDriveToPoseTranslationPID = new PIDConstants(1, 0.0, 0.0);
+        public static final PIDConstants kDriveToPoseRotationPID = new PIDConstants(
+            1,
+            0,
+            0,
+            PIDConstants.kIZone,
+            true,
+            -Math.PI,
+            Math.PI,
+            PIDConstants.kPositionTolerance,
+            PIDConstants.kVelocityTolerance
         );
 
         // TODO: replace with correct values
