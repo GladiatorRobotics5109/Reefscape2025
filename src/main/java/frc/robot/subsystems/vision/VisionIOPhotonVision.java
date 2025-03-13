@@ -63,11 +63,11 @@ public class VisionIOPhotonVision implements VisionIO {
 
         inputs.poses = m_scratchBuff.stream().map((pose) -> pose.estimatedPose).toArray(Pose3d[]::new);
         inputs.timestamps = m_scratchBuff.stream().mapToDouble((pose) -> pose.timestampSeconds).toArray();
-        inputs.targetsUsed = m_scratchBuff.stream().map(
-            (pose) -> pose.targetsUsed.stream().map(
-                (target) -> VisionConstants.kAprilTagFieldLayout.getTagPose(target.fiducialId).orElse(Pose3d.kZero)
-            ).toArray(Pose3d[]::new)
-        ).toArray(Pose3d[][]::new);
+        // inputs.targetsUsed = m_scratchBuff.stream().map(
+        //     (pose) -> pose.targetsUsed.stream().map(
+        //         (target) -> VisionConstants.kAprilTagFieldLayout.getTagPose(target.fiducialId).orElse(Pose3d.kZero)
+        //     ).toArray(Pose3d[]::new)
+        // ).toArray(Pose3d[][]::new);
 
         inputs.cameraName = m_cameraName;
     }
