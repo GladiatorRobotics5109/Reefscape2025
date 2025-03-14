@@ -149,7 +149,10 @@ public final class SwerveCommandFactory {
     }
 
     public static Command driveToReefScore(SwerveSubsystem swerve, ReefBranch branch) {
-        return driveToPoseThenFollowPath(SwerveConstants.kPPPathFindConstraints, branch.getInnerPath());
+        return Commands.sequence(
+            driveToPoseThenFollowPath(SwerveConstants.kPPPathFindConstraints, branch.getInnerPath()),
+            driveToPose(swerve, branch.getSwerveTargetPoseInner())
+        );
     }
 
     public static Command makeSysIdTurn(SwerveSubsystem swerve) {

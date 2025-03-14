@@ -70,5 +70,7 @@ public class VisionIOPhotonVision implements VisionIO {
         // ).toArray(Pose3d[][]::new);
 
         inputs.cameraName = m_cameraName;
+
+        m_scratchBuff.clear();
     }
 }

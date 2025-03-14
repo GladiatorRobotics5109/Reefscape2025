@@ -249,7 +249,13 @@ public final class Constants {
                     SwerveModuleConstants.kWheelRadiusMeters + 0.148,
                     new Rotation3d(0.0, Conversions.degreesToRadians(5), 0.0)
                 )
-            ),
+            )
+            //           new PhotonCameraConfiguration(
+            //               "RearCamera",
+            //               new Transform3d(
+            //
+            //               )
+            //           )
             // new PhotonCameraConfiguration(
             //     "FrontCameraR",
             //     new Transform3d(
@@ -259,15 +265,6 @@ public final class Constants {
             //         new Rotation3d(0.0, Conversions.degreesToRadians(5), Conversions.degreesToRadians(-5))
             //     )
             // ),
-            // new PhotonCameraConfiguration(
-            //     "RearCamera",
-            //     new Transform3d(
-            //         -0.27,
-            //         0.0,
-            //         SwerveModuleConstants.kWheelRadiusMeters + (65.0 / 1000.0) + (7.037 / 1000.0),
-            //         new Rotation3d(0.0, Conversions.degreesToRadians(25), Conversions.degreesToRadians(220))
-            //     )
-            // )
         };
 
         public static final String kLogPath = "Subsystems/Vision";
