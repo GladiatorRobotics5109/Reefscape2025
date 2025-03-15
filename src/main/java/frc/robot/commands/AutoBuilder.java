@@ -130,7 +130,7 @@ public class AutoBuilder {
             SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, false),
             ElevatorCommandFactory.toReefHeight(elevator, height),
             // ElevatorCommandFactory.waitSetpoint(elevator),
-            Commands.waitSeconds(3.5 ),
+            Commands.waitSeconds(3.5),
             EndEffectorCommandFactory.scoreWithTimeout(endEffector),
             LEDCommandFactory.goodThingHappenedCommand(leds)
         );
