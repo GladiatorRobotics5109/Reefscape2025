@@ -187,7 +187,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             TrapezoidProfile.State desiredState = m_pid.getSetpoint();
             double desiredVoltage = pidOut + m_feedforward.calculate(desiredState.velocity);
 
-            Logger.recordOutput("/MotionProfile/ElevatorDesiredVoltage", desiredVoltage);
+            Logger.recordOutput(ElevatorConstants.kLogPath + "/MotionProfile/ElevatorDesiredVoltage", desiredVoltage);
 
             m_io.setVoltage(desiredVoltage);
 
