@@ -212,7 +212,7 @@ public class SwerveSubsystem extends SubsystemBase {
         //     ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, getHeading().plus(headingOffset))
         //     : new ChassisSpeeds(vx, vy, vrot);
         ChassisSpeeds desiredSpeeds = fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, m_gyro.getYaw().plus(headingOffset))
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, m_gyro.getYaw())
             : new ChassisSpeeds(vx, vy, vrot);
         desiredSpeeds = ChassisSpeeds.discretize(desiredSpeeds, Constants.kLoopPeriodSecs);
 
