@@ -255,7 +255,10 @@ public final class Constants {
                 new Transform3d(
                     Conversions.inchesToMeters(-14),
                     Conversions.inchesToMeters(-6.875),
-                    SwerveModuleConstants.kWheelRadiusMeters + Conversions.inchesToMeters(13) + 0.09 + Conversions.inchesToMeters(4.875),
+                    SwerveModuleConstants.kWheelRadiusMeters
+                        + Conversions.inchesToMeters(13)
+                        + 0.09
+                        + Conversions.inchesToMeters(4.875),
                     new Rotation3d(0.0, Conversions.degreesToRadians(35), Conversions.degreesToRadians(45))
                 )
             )

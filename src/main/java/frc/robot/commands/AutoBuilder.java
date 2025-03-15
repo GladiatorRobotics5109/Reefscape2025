@@ -126,11 +126,11 @@ public class AutoBuilder {
                 () -> new Pose2d(0.0, 0.0, Util.getAlliance() == Alliance.Blue ? Rotation2d.kZero : Rotation2d.k180deg)
             ),
             SwerveCommandFactory.drive(swerve, driveSpeedMetersPerSecond, 0.0, 0.0, false),
-            Commands.waitSeconds((1 / driveSpeedMetersPerSecond) * driveDistanceMeters),
+            Commands.waitSeconds((1 / driveSpeedMetersPerSecond) * driveDistanceMeters + 0.1),
             SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, false),
             ElevatorCommandFactory.toReefHeight(elevator, height),
-            ElevatorCommandFactory.waitSetpoint(elevator),
-            Commands.waitSeconds(1.0),
+            // ElevatorCommandFactory.waitSetpoint(elevator),
+            Commands.waitSeconds(3.5 ),
             EndEffectorCommandFactory.scoreWithTimeout(endEffector),
             LEDCommandFactory.goodThingHappenedCommand(leds)
         );
