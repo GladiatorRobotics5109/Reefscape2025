@@ -69,12 +69,12 @@ public class AutoChooser {
 
         s_autoChooser.addDefaultOption("Comp_None", AutoBuilder.none(swerve));
         s_autoChooser.addOption("Comp_SimpleTaxi", AutoBuilder.simpleTaxiForward(swerve));
-        s_autoChooser.addOption(
-            "Comp_SimpleL2",
-            AutoBuilder.simpleL2(swerve, elevator, endEffector, leds).beforeStarting(
-                SwerveCommandFactory.setPosition(swerve, () -> new Pose2d(8.0, 4.191, Rotation2d.kPi))
-            )
-        );
+        // s_autoChooser.addOption(
+        //     "Comp_SimpleL2",
+        //     AutoBuilder.simpleL2(swerve, elevator, endEffector, leds).beforeStarting(
+        //         SwerveCommandFactory.setPosition(swerve, () -> new Pose2d(8.0, 4.191, Rotation2d.kPi))
+        //     )
+        // );
         s_autoChooser.addOption(
             "Comp_SimpleL4",
             AutoBuilder.simpleL4(swerve, elevator, endEffector, leds).beforeStarting(

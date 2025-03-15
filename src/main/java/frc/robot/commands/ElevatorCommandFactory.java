@@ -57,7 +57,7 @@ public class ElevatorCommandFactory {
             elevator.runOnce(() -> elevator.setDesiredPositionEndEffector(ReefHeight.L4)),
             Commands.waitUntil(
                 () -> MathUtil.isNear(
-                    Conversions.elevatorMetersToElevatorRadians(ElevatorConstants.kL4HeightMeters),
+                    ElevatorConstants.kForwardSoftLimitRad,
                     elevator.getCurrentPositionRad(),
                     0.5
                 )

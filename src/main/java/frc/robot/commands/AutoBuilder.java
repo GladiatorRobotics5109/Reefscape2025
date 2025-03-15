@@ -77,22 +77,22 @@ public class AutoBuilder {
         ).withName("AutoBuilder::simpleTaxiForward");
     }
 
-    public static Command simpleL2(
-        SwerveSubsystem swerve,
-        ElevatorSubsystem elevator,
-        EndEffectorSubsystem endEffector,
-        LEDSubsystem leds
-    ) {
-        return simpleReefHeight(
-            0.4,
-            Conversions.inchesToMeters(87.947),
-            ReefHeight.L2,
-            swerve,
-            elevator,
-            endEffector,
-            leds
-        );
-    }
+    // public static Command simpleL2(
+    //     SwerveSubsystem swerve,
+    //     ElevatorSubsystem elevator,
+    //     EndEffectorSubsystem endEffector,
+    //     LEDSubsystem leds
+    // ) {
+    //     return simpleReefHeight(
+    //         0.4,
+    //         Conversions.inchesToMeters(87.947),
+    //         ReefHeight.L2,
+    //         swerve,
+    //         elevator,
+    //         endEffector,
+    //         leds
+    //     );
+    // }
 
     public static Command simpleL4(
         SwerveSubsystem swerve,
