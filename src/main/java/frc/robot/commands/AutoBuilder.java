@@ -21,6 +21,8 @@ import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 import frc.robot.util.Paths;
 import frc.robot.util.Util;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import java.util.function.Supplier;
 
 public class AutoBuilder {
@@ -121,6 +123,7 @@ public class AutoBuilder {
         LEDSubsystem leds
     ) {
         return Commands.sequence(
+            prefix(swerve, () -> new Pose2d(0.0, 0.0, Util.getAlliance() == Alliance.Blue ? Rotation2d.kZero : Rotation2d.k180deg)),
             SwerveCommandFactory.drive(swerve, driveSpeedMetersPerSecond, 0.0, 0.0, false),
             Commands.waitSeconds((1 / driveSpeedMetersPerSecond) * driveDistanceMeters),
             SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, false),
