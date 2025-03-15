@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModule;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModuleIO;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModuleIOSimTalonFx;
@@ -174,6 +175,13 @@ public class SwerveSubsystem extends SubsystemBase {
             frc.robot.commands.AutoBuilder::shouldFlip,
             this
         );
+
+        for (int i = 0; i < VisionConstants.kCameras.length; i++) {
+            Logger.recordOutput(
+                SwerveConstants.kLogPath + "/VisionMeasurements/" + VisionConstants.kCameras[i].cameraName(),
+                new VisionMeasurement(VisionConstants.kCameras[i].cameraName(), new Pose2d(), 0.0)
+            );
+        }
 
         PathPlannerLogging.setLogActivePathCallback(
             (List<Pose2d> path) -> Logger.recordOutput(
