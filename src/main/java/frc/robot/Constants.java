@@ -27,7 +27,7 @@ import frc.robot.util.Conversions;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 
 public final class Constants {
-    public static final Mode kCurrentMode = Mode.REAL;
+    public static final Mode kCurrentMode = Mode.REPLAY;
 
     public static final Alliance kDefaultAlliance = Alliance.Blue;
 
@@ -321,7 +321,7 @@ public final class Constants {
         //        )s
         public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1.15);
         public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
-            2.5
+            1.5
         );
 
         /** Distance between belly pan and elevator base */
