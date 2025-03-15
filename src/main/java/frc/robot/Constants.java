@@ -249,7 +249,7 @@ public final class Constants {
                     SwerveModuleConstants.kWheelRadiusMeters + 0.148,
                     new Rotation3d(0.0, Conversions.degreesToRadians(5), 0.0)
                 )
-            )
+            ),
                       new PhotonCameraConfiguration(
                           "RearCamera",
                           new Transform3d(
