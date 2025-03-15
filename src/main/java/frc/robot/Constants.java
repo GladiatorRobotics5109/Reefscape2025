@@ -319,7 +319,7 @@ public final class Constants {
         //        public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
         //            2
         //        )s
-        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1.0);
+        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1.15);
         public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
             2.5
         );
@@ -382,7 +382,7 @@ public final class Constants {
 
         public static final double kScoreTimeoutSeconds = 2;
 
-        public static final double kScoreVoltage = 9;
+        public static final double kScoreVoltage = 7.5;
         public static final double kIntakeVoltage = 6;
         public static final double kIntakeSlowVoltage = 5;
         public static final double kIntakeSlowSlowVoltage = -1.75;
