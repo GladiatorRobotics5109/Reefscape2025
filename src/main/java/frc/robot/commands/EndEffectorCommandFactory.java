@@ -45,8 +45,8 @@ public class EndEffectorCommandFactory {
         return Commands.sequence(
             endEffector.runOnce(
                 () -> endEffector.setVoltage(
-                    7.0,
-                    4.0
+                    6.0,
+                    3.0
                 )
             ),
             Commands.waitUntil(() -> !endEffector.hasCoral()),
