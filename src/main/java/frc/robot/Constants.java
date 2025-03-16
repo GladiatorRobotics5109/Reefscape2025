@@ -149,7 +149,7 @@ public final class Constants {
         public static final double kDriveToPoseRotationVelocityToleranceRadPerSec = Conversions.degreesToRadians(0.05);
         public static final PIDConstants kDriveToPoseTranslationPID = new PIDConstants(1, 0.0, 0.0);
         public static final PIDConstants kDriveToPoseRotationPID = new PIDConstants(
-            1,
+            1.25,
             0,
             0,
             PIDConstants.kIZone,

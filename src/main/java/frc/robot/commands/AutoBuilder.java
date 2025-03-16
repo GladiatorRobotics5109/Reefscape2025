@@ -4,6 +4,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -151,10 +152,10 @@ public class AutoBuilder {
                 () -> new Pose2d(0.0, 0.0, Util.getAlliance() == Alliance.Blue ? Rotation2d.kZero : Rotation2d.k180deg)
             ),
             SwerveCommandFactory.drive(swerve, kDriveSpeed, 0.0, 0.0, false),
-            Commands.waitSeconds((1 / kDriveSpeed) * kDriveDistance - 0.25),
+            Commands.waitSeconds((1 / kDriveSpeed) * kDriveDistance - 0.5),
             SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, false),
             ElevatorCommandFactory.toReefHeight(elevator, ReefHeight.L4),
-            SwerveCommandFactory.driveToPose(swerve, ReefBranch.kL4H1.getSwerveTargetPoseInner()).withTimeout(2),
+            SwerveCommandFactory.driveToPose(swerve, ReefBranch.kL4H1.getSwerveTargetPoseInner().plus(new Transform2d(Conversions.inchesToMeters(Util.getAlliance() == Alliance.Blue ? 2 : -2), 0.0, Rotation2d.kZero))).withTimeout(2),
             // ElevatorCommandFactory.waitSetpoint(elevator),
             Commands.waitSeconds(3.5),
             EndEffectorCommandFactory.scoreWithTimeout(endEffector),
