@@ -245,7 +245,7 @@ public final class Constants {
                 "FrontCamera",
                 new Transform3d(
                     Conversions.inchesToMeters(-3.059),
-                    Conversions.inchesToMeters(13.825),
+                    Conversions.inchesToMeters(5),
                     SwerveModuleConstants.kWheelRadiusMeters + 0.148,
                     new Rotation3d(0.0, Conversions.degreesToRadians(5), 0.0)
                 )
@@ -343,7 +343,7 @@ public final class Constants {
         // The distance from the center of the reef that the elevator will be allowed to autonomously extend
         public static final double kAutoElevatorExtendRequiredDistanceMeters = 4.5;
 
-        public static final double kL1HeightMeters = Conversions.inchesToMeters(2.5);
+        public static final double kL1HeightMeters = Conversions.inchesToMeters(5);
         public static final double kL2HeightMeters = ReefHeight.L2.getHeight() - Conversions.inchesToMeters(14);
         public static final double kL3HeightMeters = ReefHeight.L3.getHeight() - Conversions.inchesToMeters(22);
         public static final double kL4HeightMeters = ReefHeight.L4.getHeight() - Conversions.inchesToMeters(35.5);
