@@ -118,7 +118,7 @@ public final class Constants {
             // );
         }
 
-        public static final Matrix<N3, N1> kVisionStdDevs = MatBuilder.fill(Nat.N3(), Nat.N1(), 0.85, 0.85, 0.9);
+        public static final Matrix<N3, N1> kVisionStdDevs = MatBuilder.fill(Nat.N3(), Nat.N1(), 0.9, 0.9, 0.95);
 
         public static final int kPigeonPort = 40;
 
