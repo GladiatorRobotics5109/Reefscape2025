@@ -362,7 +362,7 @@ public final class Constants {
         public static final int kRightPort = 50;
 
         public static final int kCoralSensorPort = 1;
-        public static final int kCoralSensorLeadingPort = 0;
+        public static final int kCoralSensorLeadingPort = 2;
 
         public static final double kSupplyCurrentLimit = 40;
         public static final double kStatorCurrentLimit = 1.75 * kSupplyCurrentLimit;
