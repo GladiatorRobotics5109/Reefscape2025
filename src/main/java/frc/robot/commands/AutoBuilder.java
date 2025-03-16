@@ -15,7 +15,6 @@ import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.util.Conversions;
-import frc.robot.util.FieldConstants;
 import frc.robot.util.FieldConstants.CoralStationConstants.CoralStation;
 import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
