@@ -116,7 +116,10 @@ public class AutoBuilder {
             // ElevatorCommandFactory.waitSetpoint(elevator),
             Commands.waitSeconds(3.5),
             EndEffectorCommandFactory.scoreL1WithTimeout(endEffector),
-            LEDCommandFactory.goodThingHappenedCommand(leds)
+            LEDCommandFactory.goodThingHappenedCommand(leds),
+            SwerveCommandFactory.drive(swerve, -kDriveSpeed, 0.0, 0.0, false),
+            Commands.waitSeconds(0.6),
+            SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, false)
         );
     }
 
@@ -152,10 +155,19 @@ public class AutoBuilder {
                 () -> new Pose2d(0.0, 0.0, Util.getAlliance() == Alliance.Blue ? Rotation2d.kZero : Rotation2d.k180deg)
             ),
             SwerveCommandFactory.drive(swerve, kDriveSpeed, 0.0, 0.0, false),
-            Commands.waitSeconds((1 / kDriveSpeed) * kDriveDistance - 0.5),
+            Commands.waitSeconds((1 / kDriveSpeed) * kDriveDistance - 1),
             SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, false),
             ElevatorCommandFactory.toReefHeight(elevator, ReefHeight.L4),
-            SwerveCommandFactory.driveToPose(swerve, ReefBranch.kL4H1.getSwerveTargetPoseInner().plus(new Transform2d(Conversions.inchesToMeters(Util.getAlliance() == Alliance.Blue ? 2 : -2), 0.0, Rotation2d.kZero))).withTimeout(2),
+            SwerveCommandFactory.driveToPose(
+                swerve,
+                ReefBranch.kL4H1.getSwerveTargetPoseInner().plus(
+                    new Transform2d(
+                        Conversions.inchesToMeters(Util.getAlliance() == Alliance.Blue ? 2 : -2),
+                        0.0,
+                        Rotation2d.kZero
+                    )
+                )
+            ).withTimeout(2),
             // ElevatorCommandFactory.waitSetpoint(elevator),
             Commands.waitSeconds(3.5),
             EndEffectorCommandFactory.scoreWithTimeout(endEffector),

@@ -149,7 +149,7 @@ public final class Constants {
         public static final double kDriveToPoseRotationVelocityToleranceRadPerSec = Conversions.degreesToRadians(0.05);
         public static final PIDConstants kDriveToPoseTranslationPID = new PIDConstants(1, 0.0, 0.0);
         public static final PIDConstants kDriveToPoseRotationPID = new PIDConstants(
-            1.25,
+            1.5,
             0,
             0,
             PIDConstants.kIZone,
@@ -343,7 +343,7 @@ public final class Constants {
         // The distance from the center of the reef that the elevator will be allowed to autonomously extend
         public static final double kAutoElevatorExtendRequiredDistanceMeters = 4.5;
 
-        public static final double kL1HeightMeters = Conversions.inchesToMeters(5);
+        public static final double kL1HeightMeters = Conversions.inchesToMeters(25.);
         public static final double kL2HeightMeters = ReefHeight.L2.getHeight() - Conversions.inchesToMeters(14);
         public static final double kL3HeightMeters = ReefHeight.L3.getHeight() - Conversions.inchesToMeters(22);
         public static final double kL4HeightMeters = ReefHeight.L4.getHeight() - Conversions.inchesToMeters(35.5);
@@ -382,7 +382,7 @@ public final class Constants {
 
         public static final double kScoreTimeoutSeconds = 2;
 
-        public static final double kScoreVoltage = 7.5;
+        public static final double kScoreVoltage = 6;
         public static final double kIntakeVoltage = 6;
         public static final double kIntakeSlowVoltage = 5;
         public static final double kIntakeSlowSlowVoltage = -1.75;

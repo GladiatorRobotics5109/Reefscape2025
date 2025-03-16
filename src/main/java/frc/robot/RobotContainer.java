@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.leds.LEDSubsystem;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
@@ -86,6 +87,10 @@ public class RobotContainer {
         m_driverController.povDown().whileTrue(ElevatorCommandFactory.setVoltage(m_elevator, -2)).onFalse(
             ElevatorCommandFactory.setVoltage(m_elevator, 0.0)
         );
+
+        m_driverController.povRight().onTrue(
+            EndEffectorCommandFactory.setVoltage(m_endEffector, -EndEffectorConstants.kScoreVoltage)
+        ).onFalse(EndEffectorCommandFactory.setVoltage(m_endEffector, 0.0));
 
         //manual elevator bound to right and left trigger
         // m_driverController.rightTrigger().whileTrue(ElevatorCommandFactory.setVoltage(m_elevator, 5)).onFalse(
