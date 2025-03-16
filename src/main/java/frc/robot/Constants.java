@@ -244,8 +244,8 @@ public final class Constants {
             new PhotonCameraConfiguration(
                 "FrontCamera",
                 new Transform3d(
+                    Conversions.inchesToMeters(13.825),
                     Conversions.inchesToMeters(-3.059),
-                    Conversions.inchesToMeters(5),
                     SwerveModuleConstants.kWheelRadiusMeters + 0.148,
                     new Rotation3d(0.0, Conversions.degreesToRadians(5), 0.0)
                 )
