@@ -94,6 +94,26 @@ public class AutoBuilder {
     //     );
     // }
 
+    public static Command simpleL1(SwerveSubsystem swerve, ElevatorSubsystem elevator, EndEffectorSubsystem endEffector, LEDSubsystem leds) {
+        final double kDriveSpeed = 0.4;
+        final double kDriveDistance = Conversions.inchesToMeters(87.947);
+
+        return Commands.sequence(
+            prefix(
+                swerve,
+                () -> new Pose2d(0.0, 0.0, Util.getAlliance() == Alliance.Blue ? Rotation2d.kZero : Rotation2d.k180deg)
+            ),
+            SwerveCommandFactory.drive(swerve, kDriveSpeed, 0.0, 0.0, false),
+            Commands.waitSeconds((1 / kDriveSpeed) * kDriveDistance + 0.1),
+            SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, false),
+            ElevatorCommandFactory.toReefHeight(elevator, ReefHeight.L1),
+            // ElevatorCommandFactory.waitSetpoint(elevator),
+            Commands.waitSeconds(3.5),
+            EndEffectorCommandFactory.scoreWithTimeout(endEffector),
+            LEDCommandFactory.goodThingHappenedCommand(leds)
+        );
+    }
+
     public static Command simpleL4(
         SwerveSubsystem swerve,
         ElevatorSubsystem elevator,

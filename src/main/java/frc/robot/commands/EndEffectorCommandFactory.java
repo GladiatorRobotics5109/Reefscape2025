@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -26,6 +27,22 @@ public class EndEffectorCommandFactory {
 
     public static Command scoreWithTimeout(EndEffectorSubsystem endEffector) {
         return score(endEffector).withTimeout(EndEffectorConstants.kScoreTimeoutSeconds);
+    }
+
+    public static Command scoreL1(EndEffectorSubsystem endEffector) {
+        if (Util.isSim()) {
+            return Commands.sequence(endEffector.runOnce(() -> endEffector.setVoltage(EndEffectorConstants.kScoreVoltage, MathUtil.clamp(EndEffectorConstants.kScoreVoltage - 2, 0, 12.0))), Commands.waitSeconds(2));
+        }
+
+        return Commands.sequence(
+            endEffector.runOnce(() -> endEffector.setVoltage(EndEffectorConstants.kScoreVoltage, MathUtil.clamp(EndEffectorConstants.kScoreVoltage - 2, 0, 12.0))),
+            Commands.waitUntil(() -> !endEffector.hasCoral()),
+            Commands.waitSeconds(1)
+        ).finallyDo(endEffector::stop).withInterruptBehavior(InterruptionBehavior.kCancelSelf);
+    }
+    
+    public static Command scoreL1WithTimeout(EndEffectorSubsystem endEffector) {
+        return scoreL1(endEffector).withTimeout(EndEffectorConstants.kScoreTimeoutSeconds);
     }
 
     public static Command intake(EndEffectorSubsystem endEffector) {
