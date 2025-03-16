@@ -94,7 +94,12 @@ public class AutoBuilder {
     //     );
     // }
 
-    public static Command simpleL1(SwerveSubsystem swerve, ElevatorSubsystem elevator, EndEffectorSubsystem endEffector, LEDSubsystem leds) {
+    public static Command simpleL1(
+        SwerveSubsystem swerve,
+        ElevatorSubsystem elevator,
+        EndEffectorSubsystem endEffector,
+        LEDSubsystem leds
+    ) {
         final double kDriveSpeed = 0.4;
         final double kDriveDistance = Conversions.inchesToMeters(87.947);
 
@@ -109,7 +114,7 @@ public class AutoBuilder {
             ElevatorCommandFactory.toReefHeight(elevator, ReefHeight.L1),
             // ElevatorCommandFactory.waitSetpoint(elevator),
             Commands.waitSeconds(3.5),
-            EndEffectorCommandFactory.scoreWithTimeout(endEffector),
+            EndEffectorCommandFactory.scoreL1WithTimeout(endEffector),
             LEDCommandFactory.goodThingHappenedCommand(leds)
         );
     }
