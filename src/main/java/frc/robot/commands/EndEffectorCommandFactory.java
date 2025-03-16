@@ -45,8 +45,8 @@ public class EndEffectorCommandFactory {
         return Commands.sequence(
             endEffector.runOnce(
                 () -> endEffector.setVoltage(
-                    EndEffectorConstants.kScoreVoltage,
-                    MathUtil.clamp(EndEffectorConstants.kScoreVoltage - 3, 0, 12.0)
+                    7.0,
+                    4.0
                 )
             ),
             Commands.waitUntil(() -> !endEffector.hasCoral()),
