@@ -15,6 +15,7 @@ import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.util.Conversions;
+import frc.robot.util.FieldConstants;
 import frc.robot.util.FieldConstants.CoralStationConstants.CoralStation;
 import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
@@ -133,6 +134,32 @@ public class AutoBuilder {
             elevator,
             endEffector,
             leds
+        );
+    }
+
+    public static Command lessSimpleL4(
+        SwerveSubsystem swerve,
+        ElevatorSubsystem elevator,
+        EndEffectorSubsystem endEffector,
+        LEDSubsystem leds
+    ) {
+        final double kDriveSpeed = 0.4;
+        final double kDriveDistance = Conversions.inchesToMeters(87.947);
+
+        return Commands.sequence(
+            prefix(
+                swerve,
+                () -> new Pose2d(0.0, 0.0, Util.getAlliance() == Alliance.Blue ? Rotation2d.kZero : Rotation2d.k180deg)
+            ),
+            SwerveCommandFactory.drive(swerve, kDriveSpeed, 0.0, 0.0, false),
+            Commands.waitSeconds((1 / kDriveSpeed) * kDriveDistance - 0.25),
+            SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, false),
+            ElevatorCommandFactory.toReefHeight(elevator, ReefHeight.L1),
+            SwerveCommandFactory.driveToPose(swerve, ReefBranch.kL4H1.getSwerveTargetPoseInner()),
+            // ElevatorCommandFactory.waitSetpoint(elevator),
+            Commands.waitSeconds(3.5),
+            EndEffectorCommandFactory.scoreWithTimeout(endEffector),
+            LEDCommandFactory.goodThingHappenedCommand(leds)
         );
     }
 

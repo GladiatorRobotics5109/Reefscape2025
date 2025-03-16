@@ -77,15 +77,15 @@ public class AutoChooser {
         // );
         s_autoChooser.addOption(
             "Comp_SimpleL4",
-            AutoBuilder.simpleL4(swerve, elevator, endEffector, leds).beforeStarting(
-                SwerveCommandFactory.setPosition(swerve, () -> new Pose2d(8.0, 4.191, Rotation2d.kPi))
-            )
+            AutoBuilder.simpleL4(swerve, elevator, endEffector, leds)
+        );
+        s_autoChooser.addOption(
+            "Comp_LessSimpleL4",
+            AutoBuilder.lessSimpleL4(swerve, elevator, endEffector, leds)
         );
         s_autoChooser.addOption(
             "Comp_SimpleL1",
-            AutoBuilder.simpleL1(swerve, elevator, endEffector, leds).beforeStarting(
-                SwerveCommandFactory.setPosition(swerve, () -> new Pose2d(8.0, 4.191, Rotation2d.kPi))
-            )
+            AutoBuilder.simpleL1(swerve, elevator, endEffector, leds)
         );
         s_autoChooser.addOption(
             "Comp_CustomizableAuto",
