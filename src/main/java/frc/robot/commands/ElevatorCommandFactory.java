@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -9,6 +10,7 @@ import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.util.Conversions;
 import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
+import frc.robot.util.Util;
 import org.littletonrobotics.junction.Logger;
 
 import java.util.function.DoubleSupplier;
@@ -23,6 +25,8 @@ public class ElevatorCommandFactory {
     }
 
     public static Command toReefHeight(ElevatorSubsystem elevator, ReefHeight height) {
+        if (height == ReefHeight.L4) return toL4(elevator);
+
         return elevator.runOnce(() -> elevator.setDesiredPositionEndEffector(height));
     }
 
@@ -31,11 +35,45 @@ public class ElevatorCommandFactory {
     }
 
     public static Command toHome(ElevatorSubsystem elevator) {
-        return toElevatorRelativeHeight(elevator, () -> 0.0);
+        if (Util.isSim()) {
+            return elevator.runOnce(elevator::toHome);
+        }
+
+        return Commands.sequence(
+            elevator.runOnce(elevator::toHome),
+            Commands.waitUntil(() -> elevator.getCurrentPositionRad() <= 1.0),
+            setVoltage(elevator, -0.2),
+            Commands.waitUntil(() -> elevator.getCurrentPositionRad() <= 0.005),
+            elevator.runOnce(elevator::stop)
+        );
+    }
+
+    public static Command toL4(ElevatorSubsystem elevator) {
+        if (Util.isSim()) {
+            return elevator.runOnce(elevator::toHome);
+        }
+
+        return Commands.sequence(
+            elevator.runOnce(() -> elevator.setDesiredPositionEndEffector(ReefHeight.L4)),
+            Commands.waitUntil(
+                () -> MathUtil.isNear(
+                    ElevatorConstants.kForwardSoftLimitRad,
+                    elevator.getCurrentPositionRad(),
+                    0.5
+                )
+            ),
+            setVoltage(elevator, ElevatorConstants.kFeedForward.ks() + ElevatorConstants.kFeedForward.kg() + 0.25),
+            Commands.waitUntil(() -> elevator.getCurrentPositionRad() >= 30.0).withTimeout(2.0),
+            setVoltage(elevator, ElevatorConstants.kFeedForward.kg())
+        );
     }
 
     public static Command autoToReefBranch(ElevatorSubsystem elevator, ReefBranch branch) {
         return Commands.waitUntil(elevator::canAutoExtend).withTimeout(2).andThen(toReefBranch(elevator, branch));
+    }
+
+    public static Command waitSetpoint(ElevatorSubsystem elevator) {
+        return Commands.waitUntil(elevator::atDesiredPosition);
     }
 
     public static Command debugControllerAxis(

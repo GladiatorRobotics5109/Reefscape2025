@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.RobotState;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModule;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModuleIO;
 import frc.robot.subsystems.swerve.swervemodule.SwerveModuleIOSimTalonFx;
@@ -163,6 +163,8 @@ public class SwerveSubsystem extends SubsystemBase {
             SwerveConstants.kStartingPose
         );
 
+        m_poseEstimator.setVisionMeasurementStdDevs(SwerveConstants.kVisionStdDevs);
+
         AutoBuilder.configure(
             this::getPose,
             m_poseEstimator::resetPose,
@@ -170,14 +172,22 @@ public class SwerveSubsystem extends SubsystemBase {
             (speeds, feedForward) -> drive(speeds, false),
             new PPHolonomicDriveController(SwerveConstants.kPPTranslationPID, SwerveConstants.kPPRotaitonPID),
             SwerveConstants.kPPConfig,
-            () -> Util.getAlliance() == Alliance.Red, // Flip if red alliance
+            frc.robot.commands.AutoBuilder::shouldFlip,
             this
         );
 
+        for (int i = 0; i < VisionConstants.kCameras.length; i++) {
+            Logger.recordOutput(
+                SwerveConstants.kLogPath + "/VisionMeasurements/" + VisionConstants.kCameras[i].cameraName(),
+                new VisionMeasurement(VisionConstants.kCameras[i].cameraName(), new Pose2d(), 0.0)
+            );
+        }
+
         PathPlannerLogging.setLogActivePathCallback(
-            (
-                List<Pose2d> path
-            ) -> Logger.recordOutput(SwerveConstants.kLogPath + "/PathPlanner/ActivePath", path.toArray(new Pose2d[0]))
+            (List<Pose2d> path) -> Logger.recordOutput(
+                SwerveConstants.kLogPath + "/PathPlanner/ActivePath",
+                path.toArray(new Pose2d[0])
+            )
         );
         PathPlannerLogging.setLogCurrentPoseCallback(
             (Pose2d pose) -> Logger.recordOutput(SwerveConstants.kLogPath + "/PathPlanner/CurrentPose", pose)
@@ -198,8 +208,11 @@ public class SwerveSubsystem extends SubsystemBase {
         Rotation2d headingOffset = Util.getAlliance() == Alliance.Red
             ? Rotation2d.fromDegrees(180)
             : Rotation2d.fromDegrees(0);
+        // ChassisSpeeds desiredSpeeds = fieldRelative
+        //     ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, getHeading().plus(headingOffset))
+        //     : new ChassisSpeeds(vx, vy, vrot);
         ChassisSpeeds desiredSpeeds = fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, getHeading().plus(headingOffset))
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, m_gyro.getYaw())
             : new ChassisSpeeds(vx, vy, vrot);
         desiredSpeeds = ChassisSpeeds.discretize(desiredSpeeds, Constants.kLoopPeriodSecs);
 
@@ -300,12 +313,18 @@ public class SwerveSubsystem extends SubsystemBase {
         m_poseEstimator.resetPosition(m_gyro.getYaw(), getModulePositions(), pose);
     }
 
-    public void updatePose() {
-        VisionMeasurement[] measurements = RobotState.getVisionMeasurements();
+    public void addVisionMeasurements(VisionMeasurement... measurements) {
         for (VisionMeasurement measurement : measurements) {
-            m_poseEstimator.addVisionMeasurement(measurement.estimatedPose().toPose2d(), measurement.timestamp());
-        }
+            Logger.recordOutput(
+                SwerveConstants.kLogPath + "/VisionMeasurements/" + measurement.cameraName(),
+                measurement
+            );
 
+            m_poseEstimator.addVisionMeasurement(measurement.estimatedPose(), measurement.timestamp());
+        }
+    }
+
+    public void updatePose() {
         m_poseEstimator.update(m_gyro.getYaw(), getModulePositions());
     }
 

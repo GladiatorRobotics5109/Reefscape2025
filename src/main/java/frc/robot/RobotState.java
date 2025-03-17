@@ -11,7 +11,6 @@ import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
-import frc.robot.subsystems.vision.VisionMeasurement;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 import org.littletonrobotics.junction.Logger;
@@ -42,8 +41,6 @@ public class RobotState {
 
         PeriodicUtil.registerPeriodic(RobotState::log);
     }
-
-    public static VisionMeasurement[] getVisionMeasurements() { return s_vision.getMeasurements(); }
 
     public static Pose2d getSwervePose() { return s_swerve.getPose(); }
 

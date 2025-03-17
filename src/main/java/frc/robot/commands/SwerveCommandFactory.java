@@ -96,6 +96,15 @@ public final class SwerveCommandFactory {
         return AutoBuilder.followPath(path);
     }
 
+    public static Command driveToPose(SwerveSubsystem swerve, Pose2d pose) {
+        return new SwerveDriveToPoseCommand(
+            swerve,
+            pose,
+            SwerveConstants.kDriveToPoseTranslationPID,
+            SwerveConstants.kDriveToPoseRotationPID
+        );
+    }
+
     public static Command followPathControllerInfluence(
         SwerveSubsystem swerve,
         PathPlannerPath path,
@@ -140,7 +149,10 @@ public final class SwerveCommandFactory {
     }
 
     public static Command driveToReefScore(SwerveSubsystem swerve, ReefBranch branch) {
-        return driveToPoseThenFollowPath(SwerveConstants.kPPPathFindConstraints, branch.getInnerPath());
+        return Commands.sequence(
+            driveToPoseThenFollowPath(SwerveConstants.kPPPathFindConstraints, branch.getInnerPath()),
+            driveToPose(swerve, branch.getSwerveTargetPoseInner())
+        );
     }
 
     public static Command makeSysIdTurn(SwerveSubsystem swerve) {
@@ -195,7 +207,7 @@ public final class SwerveCommandFactory {
         SwerveModule[] modules = swerve.getSwerveModules();
 
         Timer timer = new Timer();
-        final double kRampRateVoltsPerSec = 0.1;
+        final double kRampRateVoltsPerSec = 0.01;
         final String kLogPath = SwerveConstants.kLogPath + "/SysIdDrive";
         final double kSpeedThresholdMetersPerSec = Conversions.inchesToMeters(0.1);
 

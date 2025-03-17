@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -13,9 +14,14 @@ public class EndEffectorCommandFactory {
     }
 
     public static Command score(EndEffectorSubsystem endEffector) {
+        if (Util.isSim()) {
+            return Commands.sequence(endEffector.runOnce(endEffector::setScore), Commands.waitSeconds(2));
+        }
+
         return Commands.sequence(
             endEffector.runOnce(endEffector::setScore),
-            Commands.waitUntil(() -> !endEffector.hasCoral())
+            Commands.waitUntil(() -> !endEffector.hasCoral()),
+            Commands.waitSeconds(1)
         ).finallyDo(endEffector::stop).withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
@@ -23,25 +29,52 @@ public class EndEffectorCommandFactory {
         return score(endEffector).withTimeout(EndEffectorConstants.kScoreTimeoutSeconds);
     }
 
+    public static Command scoreL1(EndEffectorSubsystem endEffector) {
+        if (Util.isSim()) {
+            return Commands.sequence(
+                endEffector.runOnce(
+                    () -> endEffector.setVoltage(
+                        EndEffectorConstants.kScoreVoltage,
+                        MathUtil.clamp(EndEffectorConstants.kScoreVoltage - 2, 0, 12.0)
+                    )
+                ),
+                Commands.waitSeconds(2)
+            );
+        }
+
+        return Commands.sequence(
+            endEffector.runOnce(
+                () -> endEffector.setVoltage(
+                    6.0,
+                    3.0
+                )
+            ),
+            Commands.waitUntil(() -> !endEffector.hasCoral()),
+            Commands.waitSeconds(1)
+        ).finallyDo(endEffector::stop).withInterruptBehavior(InterruptionBehavior.kCancelSelf);
+    }
+
+    public static Command scoreL1WithTimeout(EndEffectorSubsystem endEffector) {
+        return scoreL1(endEffector).withTimeout(EndEffectorConstants.kScoreTimeoutSeconds);
+    }
+
     public static Command intake(EndEffectorSubsystem endEffector) {
+        if (Util.isSim()) {
+            return Commands.waitSeconds(2.0);
+        }
+
         return Commands.sequence(
             Commands.runOnce(endEffector::setIntake, endEffector),
-            Commands.either(
-                // If sim, don't wait for coral bc coral sensor is not simulated
-                Commands.waitSeconds(1),
-                Commands.waitUntil(endEffector::hasLeadingEdgeCoral),
-                Util::isSim
-            ),
+            Commands.waitUntil(endEffector::hasLeadingEdgeCoral),
             Commands.waitSeconds(0.08),
             Commands.runOnce(endEffector::setIntakeSlow, endEffector),
-            Commands.either(
-                Commands.waitSeconds(1),
-                Commands.waitUntil(() -> !endEffector.hasLeadingEdgeCoral()),
-                Util::isSim
+            Commands.waitUntil(() -> !endEffector.hasLeadingEdgeCoral()),
+            Commands.runOnce(
+                () -> endEffector.setVoltage(EndEffectorConstants.kIntakeSlowSlowVoltage),
+                endEffector
             ),
-            Commands.runOnce(() -> endEffector.setVoltage(EndEffectorConstants.kIntakeSlowSlowVoltage), endEffector),
             Commands.waitUntil(endEffector::hasLeadingEdgeCoral),
-            Commands.waitSeconds(0.155),
+            Commands.waitSeconds(0.150),
             Commands.runOnce(endEffector::stop, endEffector)
         );
     }

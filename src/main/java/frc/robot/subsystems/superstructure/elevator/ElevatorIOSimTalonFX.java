@@ -17,7 +17,7 @@ public class ElevatorIOSimTalonFX extends ElevatorIOTalonFX {
         m_sim = new ElevatorSim(
             DCMotor.getKrakenX60Foc(2),
             ElevatorConstants.kGearRatio,
-            Conversions.poundsToKilograms(20),
+            Conversions.poundsToKilograms(85),
             ElevatorConstants.kSprocketRadiusMeters,
             0.0,
             ElevatorConstants.kElevatorMaxPositionMeters,

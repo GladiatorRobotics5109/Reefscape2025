@@ -28,11 +28,11 @@ public class RobotContainer {
 
     private final CommandXboxController m_driverController;
 
-    private final CommandXboxController m_operatorController;
+    //    private final CommandXboxController m_operatorController;
 
     public RobotContainer() {
         m_swerve = new SwerveSubsystem();
-        m_vision = new VisionSubsystem();
+        m_vision = new VisionSubsystem(m_swerve::addVisionMeasurements);
         m_elevator = new ElevatorSubsystem();
         m_endEffector = new EndEffectorSubsystem();
         //        m_climb = new ClimbSubsystem();
@@ -41,7 +41,6 @@ public class RobotContainer {
         AutoChooser.init(m_swerve, m_elevator, m_endEffector, m_leds);
 
         m_driverController = new CommandXboxController(Constants.DriveTeamConstants.kDriveControllerPort);
-        m_operatorController = new CommandXboxController(Constants.DriveTeamConstants.kOperatorControllerPort);
 
         configureBindings();
 
@@ -63,12 +62,20 @@ public class RobotContainer {
             )
         );
 
+        // m_elevator.setDefaultCommand(
+        //     ElevatorCommandFactory.debugControllerAxis(
+        //         m_elevator,
+        //         m_driverController::getRightTriggerAxis,
+        //         m_driverController::getLeftTriggerAxis
+        //     )
+        // );
+
         // Elevator setpoints
         // m_driverController.cross().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L1));
         // m_driverController.circle().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L2));
         // m_driverController.triangle().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3));
         // m_driverController.square().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4));
-        m_driverController.a().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L1));
+        m_driverController.a().onTrue(ElevatorCommandFactory.toHome(m_elevator));
         m_driverController.b().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L2));
         m_driverController.y().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3));
         m_driverController.x().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4));
@@ -80,7 +87,11 @@ public class RobotContainer {
             ElevatorCommandFactory.setVoltage(m_elevator, 0.0)
         );
 
-        //manual elevator binded to right and left trigger
+        m_driverController.povRight().onTrue(
+            EndEffectorCommandFactory.setVoltage(m_endEffector, -5.0)
+        ).onFalse(EndEffectorCommandFactory.setVoltage(m_endEffector, 0.0));
+
+        //manual elevator bound to right and left trigger
         // m_driverController.rightTrigger().whileTrue(ElevatorCommandFactory.setVoltage(m_elevator, 5)).onFalse(
         //     ElevatorCommandFactory.setVoltage(m_elevator, 0.0)
         // );
