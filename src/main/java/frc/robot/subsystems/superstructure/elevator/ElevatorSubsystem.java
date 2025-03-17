@@ -20,12 +20,12 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 
 public class ElevatorSubsystem extends SubsystemBase {
-    public static double getHeightOffsetMeters(ReefHeight height) {
+    public static double getReefHeightMeters(ReefHeight height) {
         return switch (height) {
-            case L1 -> ElevatorConstants.kL1OffsetMeters;
-            case L2 -> ElevatorConstants.kL2OffsetMeters;
-            case L3 -> ElevatorConstants.kL3OffsetMeters;
-            case L4 -> ElevatorConstants.kL4OffsetMeters;
+            case L1 -> ElevatorConstants.kL1HeightMeters;
+            case L2 -> ElevatorConstants.kL2HeightMeters;
+            case L3 -> ElevatorConstants.kL3HeightMeters;
+            case L4 -> ElevatorConstants.kL4HeightMeters;
         };
     }
 
@@ -105,6 +105,17 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_useMotorPID = ElevatorConstants.kUseMotorPID;
     }
 
+    public void toHome() {
+        m_hasDesiredPosition = true;
+        m_desiredPositionMeters = 0.0;
+        if (m_useMotorPID)
+            m_io.setPosition(m_desiredPositionMeters);
+    }
+
+    public void stop() {
+        setVoltage(0.0);
+    }
+
     public void setVoltage(double volts) {
         m_hasDesiredPosition = false;
         m_io.setVoltage(volts);
@@ -125,7 +136,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void setDesiredPositionEndEffector(ReefHeight height) {
-        setDesiredPositionEndEffector(height.getHeight() + getHeightOffsetMeters(height));
+        setDesiredPositionEndEffector(getReefHeightMeters(height));
     }
 
     public double getCurrentPositionElevator() {
@@ -142,9 +153,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public double getDesiredPositionElevator() { return m_desiredPositionMeters; }
 
-    public double getDesiredPositionElevatorRad() {
-        return Conversions.elevatorMetersToElevatorRadians(m_desiredPositionMeters);
-    }
+    public double getCurrentPositionRad() { return m_inputs.positionRad; }
 
     public boolean atDesiredPosition() {
         return MathUtil.isNear(
@@ -176,10 +185,11 @@ public class ElevatorSubsystem extends SubsystemBase {
             );
 
             TrapezoidProfile.State desiredState = m_pid.getSetpoint();
+            double desiredVoltage = pidOut + m_feedforward.calculate(desiredState.velocity);
 
-            m_io.setVoltage(
-                pidOut + m_feedforward.calculate(desiredState.velocity)
-            );
+            Logger.recordOutput(ElevatorConstants.kLogPath + "/MotionProfile/ElevatorDesiredVoltage", desiredVoltage);
+
+            m_io.setVoltage(desiredVoltage);
 
             Logger.recordOutput(
                 ElevatorConstants.kLogPath + "/MotionProfile/DesiredPositionRad",

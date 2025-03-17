@@ -13,18 +13,18 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotState;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.RobotState;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
-
-import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
+
+import java.util.function.DoubleSupplier;
 
 public class WheelRadiusCharacterizationCommand extends Command {
     private static final LoggedNetworkNumber characterizationSpeed = new LoggedNetworkNumber(
         "Subsystems/Swerve/WheelRadiusCharacterization/SpeedRadsPerSec",
-        0.1
+        0.15
     );
     private static final double driveRadius = SwerveConstants.kDriveBaseRadiusMeters;
     private static final DoubleSupplier gyroYawRadsSupplier = () -> RobotState.getSwervePose().getRotation()
@@ -105,4 +105,7 @@ public class WheelRadiusCharacterizationCommand extends Command {
             System.out.println("Effective Wheel Radius: " + currentEffectiveWheelRadius + " m");
         }
     }
+
+    @Override
+    public boolean isFinished() { return accumGyroYawRads >= (Math.PI * 2.0) + (Math.PI / 4); }
 }

@@ -15,16 +15,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.units.measure.LinearVelocity;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -34,7 +24,6 @@ import frc.robot.subsystems.swerve.swervemodule.SwerveModule;
 import frc.robot.util.Conversions;
 import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 import frc.robot.util.Util;
-import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.Logger;
 
 import java.util.function.DoubleSupplier;
@@ -107,6 +96,15 @@ public final class SwerveCommandFactory {
         return AutoBuilder.followPath(path);
     }
 
+    public static Command driveToPose(SwerveSubsystem swerve, Pose2d pose) {
+        return new SwerveDriveToPoseCommand(
+            swerve,
+            pose,
+            SwerveConstants.kDriveToPoseTranslationPID,
+            SwerveConstants.kDriveToPoseRotationPID
+        );
+    }
+
     public static Command followPathControllerInfluence(
         SwerveSubsystem swerve,
         PathPlannerPath path,
@@ -151,7 +149,10 @@ public final class SwerveCommandFactory {
     }
 
     public static Command driveToReefScore(SwerveSubsystem swerve, ReefBranch branch) {
-        return driveToPoseThenFollowPath(SwerveConstants.kPPPathFindConstraints, branch.getInnerPath());
+        return Commands.sequence(
+            driveToPoseThenFollowPath(SwerveConstants.kPPPathFindConstraints, branch.getInnerPath()),
+            driveToPose(swerve, branch.getSwerveTargetPoseInner())
+        );
     }
 
     public static Command makeSysIdTurn(SwerveSubsystem swerve) {
@@ -206,9 +207,11 @@ public final class SwerveCommandFactory {
         SwerveModule[] modules = swerve.getSwerveModules();
 
         Timer timer = new Timer();
-        final double kRampRateVoltsPerSec = 0.1;
+        final double kRampRateVoltsPerSec = 0.01;
         final String kLogPath = SwerveConstants.kLogPath + "/SysIdDrive";
         final double kSpeedThresholdMetersPerSec = Conversions.inchesToMeters(0.1);
+
+        final double[] appliedVolts = { 0.0 };
 
         return Commands.sequence(
             swerve.runOnce(() -> {
@@ -220,18 +223,21 @@ public final class SwerveCommandFactory {
             new FunctionalCommand(
                 timer::restart, // OnInit
                 () -> { // Execute
-                    double volts = kRampRateVoltsPerSec * timer.get();
+                    appliedVolts[0] = kRampRateVoltsPerSec * timer.get();
                     for (var module : modules) {
-                        module.setDriveVoltage(volts);
+                        module.setDriveVoltage(appliedVolts[0]);
                     }
 
-                    Logger.recordOutput(kLogPath + "/AppliedVolts", volts);
+                    Logger.recordOutput(kLogPath + "/AppliedVolts", appliedVolts[0]);
                     Logger.recordOutput(kLogPath + "/CurrentStates", swerve.getModuleStates());
                 },
                 (Boolean interrupted) -> { // End
                     for (var module : modules) {
                         module.setDesiredState(new SwerveModuleState(), false);
                     }
+
+                    Logger.recordOutput(kLogPath + "/K_s", appliedVolts[0]);
+                    System.out.println("K_s: " + appliedVolts[0]);
 
                     timer.stop();
                 },
