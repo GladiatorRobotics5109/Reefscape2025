@@ -57,13 +57,13 @@ public class ElevatorCommandFactory {
             elevator.runOnce(() -> elevator.setDesiredPositionEndEffector(ReefHeight.L4)),
             Commands.waitUntil(
                 () -> MathUtil.isNear(
-                    Conversions.elevatorMetersToElevatorRadians(ElevatorConstants.kL4HeightMeters),
+                    ElevatorConstants.kForwardSoftLimitRad,
                     elevator.getCurrentPositionRad(),
                     0.5
                 )
             ),
             setVoltage(elevator, ElevatorConstants.kFeedForward.ks() + ElevatorConstants.kFeedForward.kg() + 0.25),
-            Commands.waitUntil(() -> elevator.getCurrentPositionRad() >= ElevatorConstants.kForwardSoftLimitRad),
+            Commands.waitUntil(() -> elevator.getCurrentPositionRad() >= 30.0).withTimeout(2.0),
             setVoltage(elevator, ElevatorConstants.kFeedForward.kg())
         );
     }

@@ -118,7 +118,7 @@ public final class Constants {
             // );
         }
 
-        public static final Matrix<N3, N1> kVisionStdDevs = MatBuilder.fill(Nat.N3(), Nat.N1(), 0.85, 0.85, 0.9);
+        public static final Matrix<N3, N1> kVisionStdDevs = MatBuilder.fill(Nat.N3(), Nat.N1(), 0.9, 0.9, 0.95);
 
         public static final int kPigeonPort = 40;
 
@@ -149,7 +149,7 @@ public final class Constants {
         public static final double kDriveToPoseRotationVelocityToleranceRadPerSec = Conversions.degreesToRadians(0.05);
         public static final PIDConstants kDriveToPoseTranslationPID = new PIDConstants(1, 0.0, 0.0);
         public static final PIDConstants kDriveToPoseRotationPID = new PIDConstants(
-            1,
+            1.5,
             0,
             0,
             PIDConstants.kIZone,
@@ -205,7 +205,7 @@ public final class Constants {
             SwerveModuleConstants.kDriveMaxFreeSpeed,
             Units.MetersPerSecond.of(1),
             // Units.RotationsPerSecond.of(0.2),
-            Units.RotationsPerSecond.of(2),
+            Units.RotationsPerSecond.of(1),
             Units.RotationsPerSecond.of(1),
             kTeleopFieldRelative
         );
@@ -244,18 +244,24 @@ public final class Constants {
             new PhotonCameraConfiguration(
                 "FrontCamera",
                 new Transform3d(
-                    Conversions.inchesToMeters(-3.059),
                     Conversions.inchesToMeters(13.825),
+                    Conversions.inchesToMeters(-3.059),
                     SwerveModuleConstants.kWheelRadiusMeters + 0.148,
                     new Rotation3d(0.0, Conversions.degreesToRadians(5), 0.0)
                 )
-            )
-            //           new PhotonCameraConfiguration(
-            //               "RearCamera",
-            //               new Transform3d(
-            //
-            //               )
-            //           )
+            ),
+            // new PhotonCameraConfiguration(
+            //     "RearCamera",
+            //     new Transform3d(
+            //         Conversions.inchesToMeters(-14),
+            //         Conversions.inchesToMeters(-6.875),
+            //         SwerveModuleConstants.kWheelRadiusMeters
+            //             + Conversions.inchesToMeters(13)
+            //             + 0.09
+            //             + Conversions.inchesToMeters(4.875),
+            //         new Rotation3d(0.0, Conversions.degreesToRadians(35), Conversions.degreesToRadians(45))
+            //     )
+            // )
             // new PhotonCameraConfiguration(
             //     "FrontCameraR",
             //     new Transform3d(
@@ -293,7 +299,7 @@ public final class Constants {
 
         public static final double kElevatorMaxPositionMeters = Conversions.inchesToMeters(69.736220);
 
-        public static final double kForwardSoftLimitRad = 29.8;
+        public static final double kForwardSoftLimitRad = 29.95;
         public static final double kReverseSoftLimitRad = -0.03;
 
         public static final PIDConstants kPID = new PIDConstants(
@@ -313,9 +319,9 @@ public final class Constants {
         //        public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
         //            2
         //        )s
-        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1.0);
+        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(1.15);
         public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(
-            2.5
+            1.5
         );
 
         /** Distance between belly pan and elevator base */
@@ -337,7 +343,7 @@ public final class Constants {
         // The distance from the center of the reef that the elevator will be allowed to autonomously extend
         public static final double kAutoElevatorExtendRequiredDistanceMeters = 4.5;
 
-        public static final double kL1HeightMeters = 0.0;
+        public static final double kL1HeightMeters = Conversions.inchesToMeters(10);
         public static final double kL2HeightMeters = ReefHeight.L2.getHeight() - Conversions.inchesToMeters(14);
         public static final double kL3HeightMeters = ReefHeight.L3.getHeight() - Conversions.inchesToMeters(22);
         public static final double kL4HeightMeters = ReefHeight.L4.getHeight() - Conversions.inchesToMeters(35.5);
@@ -356,7 +362,7 @@ public final class Constants {
         public static final int kRightPort = 50;
 
         public static final int kCoralSensorPort = 1;
-        public static final int kCoralSensorLeadingPort = 0;
+        public static final int kCoralSensorLeadingPort = 2;
 
         public static final double kSupplyCurrentLimit = 40;
         public static final double kStatorCurrentLimit = 1.75 * kSupplyCurrentLimit;
@@ -376,7 +382,7 @@ public final class Constants {
 
         public static final double kScoreTimeoutSeconds = 2;
 
-        public static final double kScoreVoltage = 10;
+        public static final double kScoreVoltage = 5;
         public static final double kIntakeVoltage = 6;
         public static final double kIntakeSlowVoltage = 5;
         public static final double kIntakeSlowSlowVoltage = -1.75;

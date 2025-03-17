@@ -7,7 +7,7 @@
       "height": 674,
       "state": {
         "sidebar": {
-          "width": 0,
+          "width": 329,
           "expanded": [
             "/AdvantageKit/RealOutputs/Subsystems/Swerve/SwerveModule0/desiredState",
             "/AdvantageKit/RealOutputs/Subsystems/Swerve/SwerveModule0/currentState",
@@ -27,33 +27,30 @@
             "/AdvantageKit/RealOutputs/Subsystems/Swerve/SysIdTurn/CurrentStates",
             "/AdvantageKit/RealOutputs",
             "/AdvantageKit/RealOutputs/ScoredBranches/0",
-            "/AdvantageKit/RealOutputs/Subsystems/Elevator",
             "/AdvantageKit/RealOutputs/Subsystems/Vision",
             "/AdvantageKit/RealOutputs/Subsystems/VisionCameraPoses",
             "/AdvantageKit/RealOutputs/Subsystems/Vision/CameraPoses",
             "/RealOutputs/Subsystems/Swerve/CurrentPose",
             "/Subsystems/Swerve/SwerveModule0",
-            "/AdvantageKit/RealOutputs/Subsystems",
-            "/AdvantageKit/RealOutputs/Subsystems/Swerve",
-            "/AdvantageKit/RealOutputs/Subsystems/Swerve/CurrentPose",
             "/Subsystems/Swerve",
-            "/Subsystems",
             "/AdvantageKit/Subsystems/Climb",
-            "/AdvantageKit/Subsystems/Swerve",
-            "/AdvantageKit/Subsystems/Swerve/SwerveModule3",
-            "/AdvantageKit/RealOutputs/Subsystems/Swerve/SwerveModule3",
             "/AdvantageKit/RealOutputs/Subsystems/Swerve/SwerveModule3/desiredState",
             "/AdvantageKit/RealOutputs/Subsystems/Swerve/SwerveModule3/desiredState/angle",
-            "/AdvantageKit/RealOutputs/Subsystems/Swerve/CurrentModuleStates",
             "/AdvantageKit/RealOutputs/Subsystems/Swerve/CurrentModuleStates/0",
             "/AdvantageKit/RealOutputs/Subsystems/Swerve/CurrentModuleStates/3",
             "/AdvantageKit/RealOutputs/Subsystems/Swerve/CurrentModuleStates/3/angle",
             "/AdvantageKit/RealOutputs/Subsystems/Swerve/CurrentModuleStates/0/angle",
-            "/AdvantageKit/RealOutputs/Subsystems/Swerve/SwerveModule0"
+            "/AdvantageKit/RealOutputs/Subsystems/Swerve/VisionMeasurements",
+            "/AdvantageKit/RealOutputs/Subsystems/Swerve/VisionMeasurements/0",
+            "/AdvantageKit/RealOutputs/Subsystems/Swerve/VisionMeasurements/Sim",
+            "/AdvantageKit/Subsystems/Vision/Sim",
+            "/AdvantageKit/Subsystems/Vision/Sim/TargetsUsed",
+            "/AdvantageKit/RealOutputs/SwerveDriveToPoseCommand",
+            "/AdvantageKit/Subsystems/Swerve/SwerveModule0"
           ]
         },
         "tabs": {
-          "selected": 2,
+          "selected": 1,
           "tabs": [
             {
               "type": 0,
@@ -112,6 +109,36 @@
                     "options": {
                       "variant": "Coral"
                     }
+                  },
+                  {
+                    "type": "ghost",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Swerve/VisionMeasurements/Sim/estimatedPose",
+                    "logType": "Pose3d",
+                    "visible": true,
+                    "options": {
+                      "model": "2025 KitBot",
+                      "color": "#00ff00"
+                    }
+                  },
+                  {
+                    "type": "vision",
+                    "logKey": "NT:/AdvantageKit/Subsystems/Vision/Sim/TargetsUsed/0",
+                    "logType": "Pose3d[]",
+                    "visible": true,
+                    "options": {
+                      "color": "#00ff00",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "ghost",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/SwerveDriveToPoseCommand/DesiredPose",
+                    "logType": "Pose2d",
+                    "visible": true,
+                    "options": {
+                      "model": "2025 KitBot",
+                      "color": "#00ff00"
+                    }
                   }
                 ],
                 "game": "2025 Field (Welded)",
@@ -122,14 +149,14 @@
                 "cameraIndex": -1,
                 "orbitFov": 50,
                 "cameraPosition": [
-                  7.418506143450561,
-                  8.228958303556004,
-                  0.23503286540225998
+                  12.106434776877336,
+                  10.88643004161624,
+                  8.229242756696435
                 ],
                 "cameraTarget": [
-                  4.0499341867009,
-                  0.9449021590997506,
-                  -0.3523679729252184
+                  5.7911178909310825,
+                  0.44681834530624787,
+                  -0.040100026738035054
                 ]
               },
               "controlsHeight": 0
@@ -190,6 +217,62 @@
               "controllerUUID": "qdu7km3yia1sdyfyao28inf2ai10w2s3",
               "renderer": null,
               "controlsHeight": 85
+            },
+            {
+              "type": 1,
+              "title": "Mod0Drive",
+              "controller": {
+                "leftSources": [
+                  {
+                    "type": "stepped",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Swerve/SwerveModule0/currentState/speed",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#e5b31b",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Swerve/SwerveModule0/desiredState/speed",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#af2437",
+                      "size": "normal"
+                    }
+                  }
+                ],
+                "rightSources": [
+                  {
+                    "type": "stepped",
+                    "logKey": "NT:/AdvantageKit/Subsystems/Swerve/SwerveModule0/DriveAppliedVolts",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#2b66a2",
+                      "size": "normal"
+                    }
+                  }
+                ],
+                "discreteSources": [],
+                "leftLockedRange": null,
+                "rightLockedRange": null,
+                "leftUnitConversion": {
+                  "type": null,
+                  "factor": 1
+                },
+                "rightUnitConversion": {
+                  "type": null,
+                  "factor": 1
+                },
+                "leftFilter": 0,
+                "rightFilter": 0
+              },
+              "controllerUUID": "5zcwc65x9frbhtfgdjt3zlcd75q5np3z",
+              "renderer": null,
+              "controlsHeight": 200
             },
             {
               "type": 1,
@@ -520,6 +603,129 @@
             },
             {
               "type": 1,
+              "title": "SwerveDriveToPoseCommand",
+              "controller": {
+                "leftSources": [
+                  {
+                    "type": "stepped",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/SwerveDriveToPoseCommand/ErrorX",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#2b66a2",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/SwerveDriveToPoseCommand/ErrorY",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#e5b31b",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/SwerveDriveToPoseCommand/ErrorRot",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#c0b487",
+                      "size": "normal"
+                    }
+                  }
+                ],
+                "rightSources": [
+                  {
+                    "type": "stepped",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/SwerveDriveToPoseCommand/VelRot",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#af2437",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/SwerveDriveToPoseCommand/VelX",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#80588e",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/SwerveDriveToPoseCommand/VelY",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#e48b32",
+                      "size": "normal"
+                    }
+                  }
+                ],
+                "discreteSources": [
+                  {
+                    "type": "stripes",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/SwerveDriveToPoseCommand/AtTranslation",
+                    "logType": "Boolean",
+                    "visible": true,
+                    "options": {
+                      "color": "#3b875a"
+                    }
+                  },
+                  {
+                    "type": "stripes",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/SwerveDriveToPoseCommand/AtTranslationVel",
+                    "logType": "Boolean",
+                    "visible": true,
+                    "options": {
+                      "color": "#5f4528"
+                    }
+                  },
+                  {
+                    "type": "stripes",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/SwerveDriveToPoseCommand/AtRotation",
+                    "logType": "Boolean",
+                    "visible": true,
+                    "options": {
+                      "color": "#858584"
+                    }
+                  },
+                  {
+                    "type": "stripes",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/SwerveDriveToPoseCommand/AtRotationVel",
+                    "logType": "Boolean",
+                    "visible": true,
+                    "options": {
+                      "color": "#d993aa"
+                    }
+                  }
+                ],
+                "leftLockedRange": null,
+                "rightLockedRange": null,
+                "leftUnitConversion": {
+                  "type": null,
+                  "factor": 1
+                },
+                "rightUnitConversion": {
+                  "type": null,
+                  "factor": 1
+                },
+                "leftFilter": 0,
+                "rightFilter": 0
+              },
+              "controllerUUID": "bsny155rxnltuy2j1gxde9xln2q9g5qd",
+              "renderer": null,
+              "controlsHeight": 200
+            },
+            {
+              "type": 1,
               "title": "SwerveSysIdDrive",
               "controller": {
                 "leftSources": [
@@ -677,10 +883,10 @@
   ],
   "satellites": [
     {
-      "x": 1101,
+      "x": 1102,
       "y": 38,
-      "width": 411,
-      "height": 439,
+      "width": 410,
+      "height": 438,
       "state": {
         "type": 9,
         "visualizer": null

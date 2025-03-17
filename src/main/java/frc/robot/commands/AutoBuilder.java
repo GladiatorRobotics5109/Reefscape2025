@@ -4,6 +4,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -77,20 +78,48 @@ public class AutoBuilder {
         ).withName("AutoBuilder::simpleTaxiForward");
     }
 
-    public static Command simpleL2(
+    // public static Command simpleL2(
+    //     SwerveSubsystem swerve,
+    //     ElevatorSubsystem elevator,
+    //     EndEffectorSubsystem endEffector,
+    //     LEDSubsystem leds
+    // ) {
+    //     return simpleReefHeight(
+    //         0.4,
+    //         Conversions.inchesToMeters(87.947),
+    //         ReefHeight.L2,
+    //         swerve,
+    //         elevator,
+    //         endEffector,
+    //         leds
+    //     );
+    // }
+
+    public static Command simpleL1(
         SwerveSubsystem swerve,
         ElevatorSubsystem elevator,
         EndEffectorSubsystem endEffector,
         LEDSubsystem leds
     ) {
-        return simpleReefHeight(
-            0.4,
-            Conversions.inchesToMeters(87.947),
-            ReefHeight.L2,
-            swerve,
-            elevator,
-            endEffector,
-            leds
+        final double kDriveSpeed = 0.4;
+        final double kDriveDistance = Conversions.inchesToMeters(87.947);
+
+        return Commands.sequence(
+            prefix(
+                swerve,
+                () -> new Pose2d(0.0, 0.0, Util.getAlliance() == Alliance.Blue ? Rotation2d.kZero : Rotation2d.k180deg)
+            ),
+            SwerveCommandFactory.drive(swerve, kDriveSpeed, 0.0, 0.0, false),
+            Commands.waitSeconds((1 / kDriveSpeed) * kDriveDistance + 0.1),
+            SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, false),
+            ElevatorCommandFactory.toReefHeight(elevator, ReefHeight.L1),
+            // ElevatorCommandFactory.waitSetpoint(elevator),
+            Commands.waitSeconds(3.5),
+            EndEffectorCommandFactory.scoreL1WithTimeout(endEffector),
+            LEDCommandFactory.goodThingHappenedCommand(leds),
+            SwerveCommandFactory.drive(swerve, -kDriveSpeed, 0.0, 0.0, false),
+            Commands.waitSeconds(0.6),
+            SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, false)
         );
     }
 
@@ -111,6 +140,41 @@ public class AutoBuilder {
         );
     }
 
+    public static Command lessSimpleL4(
+        SwerveSubsystem swerve,
+        ElevatorSubsystem elevator,
+        EndEffectorSubsystem endEffector,
+        LEDSubsystem leds
+    ) {
+        final double kDriveSpeed = 0.4;
+        final double kDriveDistance = Conversions.inchesToMeters(87.947);
+
+        return Commands.sequence(
+            prefix(
+                swerve,
+                () -> new Pose2d(0.0, 0.0, Util.getAlliance() == Alliance.Blue ? Rotation2d.kZero : Rotation2d.k180deg)
+            ),
+            SwerveCommandFactory.drive(swerve, kDriveSpeed, 0.0, 0.0, false),
+            Commands.waitSeconds((1 / kDriveSpeed) * kDriveDistance - 1),
+            SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, false),
+            ElevatorCommandFactory.toReefHeight(elevator, ReefHeight.L4),
+            SwerveCommandFactory.driveToPose(
+                swerve,
+                ReefBranch.kL4H1.getSwerveTargetPoseInner().plus(
+                    new Transform2d(
+                        Conversions.inchesToMeters(Util.getAlliance() == Alliance.Blue ? 2 : -2),
+                        0.0,
+                        Rotation2d.kZero
+                    )
+                )
+            ).withTimeout(2),
+            // ElevatorCommandFactory.waitSetpoint(elevator),
+            Commands.waitSeconds(3.5),
+            EndEffectorCommandFactory.scoreWithTimeout(endEffector),
+            LEDCommandFactory.goodThingHappenedCommand(leds)
+        );
+    }
+
     public static Command simpleReefHeight(
         double driveSpeedMetersPerSecond,
         double driveDistanceMeters,
@@ -121,12 +185,16 @@ public class AutoBuilder {
         LEDSubsystem leds
     ) {
         return Commands.sequence(
+            prefix(
+                swerve,
+                () -> new Pose2d(0.0, 0.0, Util.getAlliance() == Alliance.Blue ? Rotation2d.kZero : Rotation2d.k180deg)
+            ),
             SwerveCommandFactory.drive(swerve, driveSpeedMetersPerSecond, 0.0, 0.0, false),
-            Commands.waitSeconds((1 / driveSpeedMetersPerSecond) * driveDistanceMeters),
+            Commands.waitSeconds((1 / driveSpeedMetersPerSecond) * driveDistanceMeters + 0.1),
             SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, false),
             ElevatorCommandFactory.toReefHeight(elevator, height),
-            ElevatorCommandFactory.waitSetpoint(elevator),
-            Commands.waitSeconds(1.0),
+            // ElevatorCommandFactory.waitSetpoint(elevator),
+            Commands.waitSeconds(3.5),
             EndEffectorCommandFactory.scoreWithTimeout(endEffector),
             LEDCommandFactory.goodThingHappenedCommand(leds)
         );

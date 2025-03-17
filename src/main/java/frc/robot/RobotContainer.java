@@ -87,6 +87,10 @@ public class RobotContainer {
             ElevatorCommandFactory.setVoltage(m_elevator, 0.0)
         );
 
+        m_driverController.povRight().onTrue(
+            EndEffectorCommandFactory.setVoltage(m_endEffector, -5.0)
+        ).onFalse(EndEffectorCommandFactory.setVoltage(m_endEffector, 0.0));
+
         //manual elevator bound to right and left trigger
         // m_driverController.rightTrigger().whileTrue(ElevatorCommandFactory.setVoltage(m_elevator, 5)).onFalse(
         //     ElevatorCommandFactory.setVoltage(m_elevator, 0.0)

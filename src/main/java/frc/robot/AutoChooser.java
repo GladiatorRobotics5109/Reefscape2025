@@ -1,7 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.AutoBuilder;
@@ -69,17 +67,23 @@ public class AutoChooser {
 
         s_autoChooser.addDefaultOption("Comp_None", AutoBuilder.none(swerve));
         s_autoChooser.addOption("Comp_SimpleTaxi", AutoBuilder.simpleTaxiForward(swerve));
-        s_autoChooser.addOption(
-            "Comp_SimpleL2",
-            AutoBuilder.simpleL2(swerve, elevator, endEffector, leds).beforeStarting(
-                SwerveCommandFactory.setPosition(swerve, () -> new Pose2d(8.0, 4.191, Rotation2d.kPi))
-            )
-        );
+        // s_autoChooser.addOption(
+        //     "Comp_SimpleL2",
+        //     AutoBuilder.simpleL2(swerve, elevator, endEffector, leds).beforeStarting(
+        //         SwerveCommandFactory.setPosition(swerve, () -> new Pose2d(8.0, 4.191, Rotation2d.kPi))
+        //     )
+        // );
         s_autoChooser.addOption(
             "Comp_SimpleL4",
-            AutoBuilder.simpleL4(swerve, elevator, endEffector, leds).beforeStarting(
-                SwerveCommandFactory.setPosition(swerve, () -> new Pose2d(8.0, 4.191, Rotation2d.kPi))
-            )
+            AutoBuilder.simpleL4(swerve, elevator, endEffector, leds)
+        );
+        s_autoChooser.addOption(
+            "Comp_LessSimpleL4",
+            AutoBuilder.lessSimpleL4(swerve, elevator, endEffector, leds)
+        );
+        s_autoChooser.addOption(
+            "Comp_SimpleL1",
+            AutoBuilder.simpleL1(swerve, elevator, endEffector, leds)
         );
         s_autoChooser.addOption(
             "Comp_CustomizableAuto",
