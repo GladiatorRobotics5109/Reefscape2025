@@ -425,4 +425,15 @@ public final class Constants {
 
         public static final double kPositionToleranceRad = Conversions.degreesToRadians(2);
     }
+
+    public static final class CheckDeploy {
+        public static void main(String... args) {
+            if (Constants.kCurrentMode != Mode.REAL) {
+                System.err.println(
+                    "\nWrong mode, Constants.kCurrentMode is " + Constants.kCurrentMode + ", must be REAL."
+                );
+                System.exit(1);
+            }
+        }
+    }
 }
