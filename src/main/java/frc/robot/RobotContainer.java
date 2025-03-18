@@ -9,7 +9,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.*;
+import frc.robot.commands.ElevatorCommandFactory;
+import frc.robot.commands.EndEffectorCommandFactory;
+import frc.robot.commands.SuperstructureCommandFactory;
+import frc.robot.commands.SwerveCommandFactory;
 import frc.robot.subsystems.leds.LEDSubsystem;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
@@ -123,7 +126,10 @@ public class RobotContainer {
         // );
     }
 
-    public Command getAutonomousCommand() { return AutoChooser.get(); }
+    public Command getAutonomousCommand() {
+        //        return ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4);
+        return AutoChooser.get();
+    }
 
     public Command getTeleopCommand() {
         // return new AutomatedTeleopControllerListenerCommand(

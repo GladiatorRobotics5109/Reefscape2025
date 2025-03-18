@@ -4,7 +4,6 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -35,30 +34,14 @@ public class AutoBuilder {
         EndEffectorSubsystem endEffectorSubsystem,
         LEDSubsystem leds
     ) {
-        //        return Commands.sequence(
-        //            SwerveCommandFactory.setPosition(swerve, () -> new Pose2d(8.5, 7.6, Rotation2d.fromDegrees(180))),
-        //            Commands.waitSeconds(4),
-        //            makeScoreCommand(ReefBranch.kL4G1, swerve, elevator, endEffectorSubsystem),
-        //            makeIntakeCommand(CoralStation.kF3, swerve, elevator, endEffectorSubsystem),
-        //            makeScoreCommand(ReefBranch.kL3F2, swerve, elevator, endEffectorSubsystem),
-        //            makeIntakeCommand(CoralStation.kF1, swerve, elevator, endEffectorSubsystem),
-        //            makeScoreCommand(ReefBranch.kL2E1, swerve, elevator, endEffectorSubsystem),
-        //            makeIntakeCommand(CoralStation.kC2, swerve, elevator, endEffectorSubsystem),
-        //            makeScoreCommand(ReefBranch.kL3I2, swerve, elevator, endEffectorSubsystem)
-        //        ).withName("AutoBuilder::testAuto");
-
         return Commands.sequence(
-            makeAutoDecideScoreCommand(ReefHeight.L4, swerve, elevator, endEffectorSubsystem, leds),
-            makeIntakeCommand(CoralStation.kC3, swerve, elevator, endEffectorSubsystem),
-            makeAutoDecideScoreCommand(ReefHeight.L4, swerve, elevator, endEffectorSubsystem, leds),
-            makeIntakeCommand(CoralStation.kC3, swerve, elevator, endEffectorSubsystem),
-            makeAutoDecideScoreCommand(ReefHeight.L4, swerve, elevator, endEffectorSubsystem, leds),
-            makeIntakeCommand(CoralStation.kC3, swerve, elevator, endEffectorSubsystem),
-            makeAutoDecideScoreCommand(ReefHeight.L4, swerve, elevator, endEffectorSubsystem, leds),
-            makeIntakeCommand(CoralStation.kC3, swerve, elevator, endEffectorSubsystem),
-            makeAutoDecideScoreCommand(ReefHeight.L4, swerve, elevator, endEffectorSubsystem, leds),
-            makeIntakeCommand(CoralStation.kC3, swerve, elevator, endEffectorSubsystem),
-            makeAutoDecideScoreCommand(ReefHeight.L4, swerve, elevator, endEffectorSubsystem, leds)
+            prefix(
+                swerve,
+                () -> flipIfNecessary(
+                    new Pose2d(8, 4.01, Util.getAlliance() == Alliance.Blue ? Rotation2d.kPi : Rotation2d.kZero)
+                )
+            ),
+            score(ReefBranch.kL4H1, swerve, elevator, endEffectorSubsystem, leds)
         );
     }
 
@@ -152,26 +135,12 @@ public class AutoBuilder {
         return Commands.sequence(
             prefix(
                 swerve,
-                () -> new Pose2d(0.0, 0.0, Util.getAlliance() == Alliance.Blue ? Rotation2d.kZero : Rotation2d.k180deg)
+                () -> new Pose2d(7.0, 4.0, Util.getAlliance() == Alliance.Blue ? Rotation2d.kPi : Rotation2d.kZero)
             ),
             SwerveCommandFactory.drive(swerve, kDriveSpeed, 0.0, 0.0, false),
             Commands.waitSeconds((1 / kDriveSpeed) * kDriveDistance - 1),
             SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, false),
-            ElevatorCommandFactory.toReefHeight(elevator, ReefHeight.L4),
-            SwerveCommandFactory.driveToPose(
-                swerve,
-                ReefBranch.kL4H1.getSwerveTargetPoseInner().plus(
-                    new Transform2d(
-                        Conversions.inchesToMeters(Util.getAlliance() == Alliance.Blue ? 2 : -2),
-                        0.0,
-                        Rotation2d.kZero
-                    )
-                )
-            ).withTimeout(2),
-            // ElevatorCommandFactory.waitSetpoint(elevator),
-            Commands.waitSeconds(3.5),
-            EndEffectorCommandFactory.scoreWithTimeout(endEffector),
-            LEDCommandFactory.goodThingHappenedCommand(leds)
+            score(ReefBranch.kL4H1, swerve, elevator, endEffector, leds)
         );
     }
 
@@ -398,6 +367,28 @@ public class AutoBuilder {
             followReefPathAndScore(kToReef3, kBranch3, swerve, elevator, endEffector, leds),
             ElevatorCommandFactory.toHome(elevator)
         );
+    }
+
+    public static Command score(
+        ReefBranch branch,
+        SwerveSubsystem swerve,
+        ElevatorSubsystem elevator,
+        EndEffectorSubsystem endEffector,
+        LEDSubsystem leds
+    ) {
+        Pose2d targetPose = branch.getSwerveTargetPoseInner();
+
+        return Commands.sequence(
+            Commands.parallel(
+                SwerveCommandFactory.driveToPose(swerve, targetPose),
+                ElevatorCommandFactory.toReefBranch(elevator, branch)
+            ),
+            Commands.waitUntil(elevator::atDesiredPosition),
+            EndEffectorCommandFactory.scoreWithTimeout(endEffector, branch),
+            ElevatorCommandFactory.toHome(elevator),
+            LEDCommandFactory.goodThingHappenedCommand(leds),
+            Commands.waitUntil(elevator::isSafeToAccelerate)
+        ).withName("Score " + branch);
     }
 
     public static Command makeAutoScoreCommand(

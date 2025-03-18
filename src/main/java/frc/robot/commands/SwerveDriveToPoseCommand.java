@@ -77,6 +77,8 @@ public class SwerveDriveToPoseCommand extends Command {
             m_desiredPose.getRotation().getRadians()
         );
 
+        m_swerve.drive(xVel, yVel, rotVel, true);
+
         m_atTranslation = m_currentPose.getTranslation().getDistance(m_desiredPose.getTranslation())
             <= SwerveConstants.kDriveToPoseTranslationToleranceMeters;
         m_atRotation = m_currentPose.getRotation().getRadians() - m_desiredPose.getRotation().getRadians()
@@ -98,12 +100,10 @@ public class SwerveDriveToPoseCommand extends Command {
         Logger.recordOutput(kLogPath + "/AtRotation", m_atRotation);
         Logger.recordOutput(kLogPath + "/AtTranslationVel", m_atTranslationVel);
         Logger.recordOutput(kLogPath + "/AtRotationVel", m_atRotationVel);
-
-        m_swerve.drive(xVel, yVel, rotVel, true);
     }
 
     @Override
-    public boolean isFinished() { return m_atTranslation & m_atRotation; }
+    public boolean isFinished() { return m_atTranslation && m_atRotation && m_atTranslationVel && m_atRotationVel; }
 
     @Override
     public void end(boolean interrupted) {

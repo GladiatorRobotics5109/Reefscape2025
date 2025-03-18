@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import frc.robot.Constants.ElevatorConstants;
@@ -50,7 +51,7 @@ public class ElevatorCommandFactory {
 
     public static Command toL4(ElevatorSubsystem elevator) {
         if (Util.isSim()) {
-            return elevator.runOnce(elevator::toHome);
+            return elevator.runOnce(() -> elevator.setDesiredPositionEndEffector(ReefHeight.L4));
         }
 
         return Commands.sequence(
@@ -69,7 +70,8 @@ public class ElevatorCommandFactory {
     }
 
     public static Command autoToReefBranch(ElevatorSubsystem elevator, ReefBranch branch) {
-        return Commands.waitUntil(elevator::canAutoExtend).withTimeout(2).andThen(toReefBranch(elevator, branch));
+        return Commands.waitUntil(() -> elevator.canAutoExtend(branch)).andThen(toReefBranch(elevator, branch))
+            .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
     public static Command waitSetpoint(ElevatorSubsystem elevator) {

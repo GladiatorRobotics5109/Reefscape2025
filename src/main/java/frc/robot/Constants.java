@@ -338,10 +338,12 @@ public final class Constants {
          */
         public static final double kEndEffectorHeightMeters = Conversions.inchesToMeters(21.5);
 
-        public static final double kPositionToleranceMeters = Conversions.inchesToMeters(0.5);
+        public static final double kPositionToleranceRad = 0.2;
 
         // The distance from the center of the reef that the elevator will be allowed to autonomously extend
-        public static final double kAutoElevatorExtendRequiredDistanceMeters = 4.5;
+        public static final double kAutoElevatorExtendRequiredDistanceMeters = Conversions.inchesToMeters(40);
+
+        public static final double kSafeAccelerationPositionThresholdRad = 15.0;
 
         public static final double kL1HeightMeters = Conversions.inchesToMeters(10);
         public static final double kL2HeightMeters = ReefHeight.L2.getHeight() - Conversions.inchesToMeters(14);
@@ -380,7 +382,7 @@ public final class Constants {
         // Angle of coral measured from the horizontal
         public static final Rotation2d kAngle = Rotation2d.fromDegrees(35);
 
-        public static final double kScoreTimeoutSeconds = 2;
+        public static final double kScoreTimeoutSeconds = 5;
 
         public static final double kScoreVoltage = 5;
         public static final double kIntakeVoltage = 6;
