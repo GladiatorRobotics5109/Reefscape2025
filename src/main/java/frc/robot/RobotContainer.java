@@ -13,11 +13,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.DriveTeamConstants;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.commands.ElevatorCommandFactory;
-import frc.robot.commands.EndEffectorCommandFactory;
-import frc.robot.commands.SuperstructureCommandFactory;
-import frc.robot.commands.SwerveCommandFactory;
+import frc.robot.commands.*;
 import frc.robot.subsystems.leds.LEDSubsystem;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
@@ -38,7 +36,7 @@ public class RobotContainer {
 
     private final CommandXboxController m_driverController;
 
-    //    private final CommandXboxController m_operatorController;
+    private CommandXboxController m_operatorController;
 
     public RobotContainer() {
         m_swerve = new SwerveSubsystem();
@@ -52,6 +50,8 @@ public class RobotContainer {
         AutoChooser.init(m_swerve, m_elevator, m_intake, m_endEffector, m_leds);
 
         m_driverController = new CommandXboxController(Constants.DriveTeamConstants.kDriveControllerPort);
+        m_operatorController = new CommandXboxController(DriveTeamConstants.kOperatorControllerPort);
+//        m_operatorController = null;
 
         configureBindings();
 
@@ -119,6 +119,15 @@ public class RobotContainer {
             EndEffectorCommandFactory.setVoltage(m_endEffector, 7)
         ).toggleOnFalse((EndEffectorCommandFactory.setVoltage(m_endEffector, 0.0)));
 
+        if (m_operatorController != null) {
+            m_operatorController.y().onTrue(
+                Commands.runOnce(() -> m_swerve.setUsePoseEstimateForHeading(!m_swerve.getUsePoseEstimateForHeading()))
+            );
+            m_operatorController.x().onTrue(IntakeCommandFactory.reverse(m_intake)).onFalse(
+                IntakeCommandFactory.stop(m_intake)
+            );
+            m_operatorController.a().onTrue(SwerveCommandFactory.alignModules(m_swerve));
+        }
         //        m_driverController.povUp().onTrue(ClimbCommandFactory.prepareClimb(m_climb));
         //        m_driverController.povDown().onTrue(ClimbCommandFactory.climb(m_climb));
 

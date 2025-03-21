@@ -155,6 +155,10 @@ public final class SwerveCommandFactory {
         );
     }
 
+    public static Command alignModules(SwerveSubsystem swerve) {
+        return swerve.runOnce(swerve::alignModules);
+    }
+
     public static Command makeSysIdTurn(SwerveSubsystem swerve) {
         SwerveModule[] modules = swerve.getSwerveModules();
 

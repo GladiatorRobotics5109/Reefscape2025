@@ -118,6 +118,8 @@ public final class Constants {
             // );
         }
 
+        public static final boolean kUsePoseEstimateForHeadingDefault = true;
+
         public static final Matrix<N3, N1> kVisionStdDevs = MatBuilder.fill(Nat.N3(), Nat.N1(), 0.9, 0.9, 0.95);
 
         public static final int kPigeonPort = 40;
