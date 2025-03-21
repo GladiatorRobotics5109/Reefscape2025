@@ -11,4 +11,6 @@ public class IntakeCommandFactory {
     public static Command stop(IntakeSubsystem intake) {
         return intake.runOnce(intake::stop);
     }
+
+    public static Command reverse(IntakeSubsystem intake) { return intake.runOnce(intake::reverse); }
 }

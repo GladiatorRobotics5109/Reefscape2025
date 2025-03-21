@@ -36,6 +36,10 @@ public class IntakeSubsystem extends SubsystemBase {
         setVoltage(IntakeConstants.kIntakeVoltage);
     }
 
+    public void reverse() {
+        setVoltage(IntakeConstants.kReverseVoltage);
+    }
+
     @Override
     public void periodic() {
         m_io.updateInputs(m_inputs);
