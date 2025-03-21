@@ -437,6 +437,14 @@ public class AutoBuilder {
         );
     }
 
+    public static Command pushTaxi(SwerveSubsystem swerve) {
+        return Commands.sequence(
+            SwerveCommandFactory.drive(swerve, -1.0, 0.0, 0.0, false),
+            Commands.waitSeconds(0.5),
+            SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, false)
+        );
+    }
+
     public static Command makeAutoDecideScoreCommand(
         ReefHeight height,
         SwerveSubsystem swerve,

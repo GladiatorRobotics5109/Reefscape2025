@@ -147,7 +147,7 @@ public class RobotContainer {
         // );
         return Commands.none();
     }
-    
+
     private void logCameraPosition() {
         PeriodicUtil.registerPeriodic(() -> {
             Pose2d pose = RobotState.getSwervePose();
