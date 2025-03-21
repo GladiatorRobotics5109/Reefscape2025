@@ -21,6 +21,7 @@ import frc.robot.commands.SwerveCommandFactory;
 import frc.robot.subsystems.leds.LEDSubsystem;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
+import frc.robot.subsystems.superstructure.intake.IntakeSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
@@ -30,6 +31,7 @@ public class RobotContainer {
     private SwerveSubsystem m_swerve;
     private VisionSubsystem m_vision;
     private ElevatorSubsystem m_elevator;
+    private IntakeSubsystem m_intake;
     private EndEffectorSubsystem m_endEffector;
     //    private ClimbSubsystem m_climb;
     private LEDSubsystem m_leds;
@@ -42,11 +44,12 @@ public class RobotContainer {
         m_swerve = new SwerveSubsystem();
         m_vision = new VisionSubsystem(m_swerve::addVisionMeasurements);
         m_elevator = new ElevatorSubsystem();
+        m_intake = new IntakeSubsystem();
         m_endEffector = new EndEffectorSubsystem();
         //        m_climb = new ClimbSubsystem();
         m_leds = new LEDSubsystem();
         RobotState.init(m_swerve, m_vision, m_elevator, m_endEffector);
-        AutoChooser.init(m_swerve, m_elevator, m_endEffector, m_leds);
+        AutoChooser.init(m_swerve, m_elevator, m_intake, m_endEffector, m_leds);
 
         m_driverController = new CommandXboxController(Constants.DriveTeamConstants.kDriveControllerPort);
 
@@ -108,7 +111,9 @@ public class RobotContainer {
         //     ElevatorCommandFactory.setVoltage(m_elevator, 0.0)
         // );
 
-        m_driverController.leftBumper().onTrue(SuperstructureCommandFactory.intake(m_elevator, m_endEffector));
+        m_driverController.leftBumper().onTrue(
+            SuperstructureCommandFactory.intake(m_elevator, m_intake, m_endEffector)
+        );
         // m_driverController.rightBumper().onTrue(EndEffectorCommandFactory.score(m_endEffector));
         m_driverController.rightBumper().toggleOnTrue(
             EndEffectorCommandFactory.setVoltage(m_endEffector, 7)
@@ -147,7 +152,7 @@ public class RobotContainer {
         // );
         return Commands.none();
     }
-    
+
     private void logCameraPosition() {
         PeriodicUtil.registerPeriodic(() -> {
             Pose2d pose = RobotState.getSwervePose();

@@ -435,6 +435,21 @@ public final class Constants {
         public static final double kPositionToleranceRad = Conversions.degreesToRadians(2);
     }
 
+    public static final class IntakeConstants {
+        public static final String kLogPath = "Subsystems/Intake";
+
+        public static final int kMotorPort = 0;
+
+        public static final boolean kInvertMotor = true;
+
+        public static final double kGearRatio = 5.0;
+
+        public static final double kIntakeVoltage = 6.0;
+        public static final double kReverseVoltage = -12.0;
+
+        public static final double kSupplyCurrentLimit = 30.0;
+    }
+
     public static final class CheckDeploy {
         public static void main(String... args) {
             if (Constants.kCurrentMode != Mode.REAL) {

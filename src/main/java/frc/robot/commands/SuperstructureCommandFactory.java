@@ -9,6 +9,7 @@ import frc.robot.RobotState;
 import frc.robot.subsystems.leds.LEDSubsystem;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
+import frc.robot.subsystems.superstructure.intake.IntakeSubsystem;
 import frc.robot.util.Conversions;
 import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 import org.littletonrobotics.junction.Logger;
@@ -50,10 +51,11 @@ public class SuperstructureCommandFactory {
         );
     }
 
-    public static Command intake(ElevatorSubsystem elevator, EndEffectorSubsystem endEffector) {
+    public static Command intake(ElevatorSubsystem elevator, IntakeSubsystem intake, EndEffectorSubsystem endEffector) {
         return Commands.parallel(
             ElevatorCommandFactory.toHome(elevator),
-            EndEffectorCommandFactory.intake(endEffector)
+            IntakeCommandFactory.intake(intake).asProxy(),
+            EndEffectorCommandFactory.intake(endEffector).andThen(IntakeCommandFactory.stop(intake).asProxy())
         );
     }
 }
