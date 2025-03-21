@@ -52,6 +52,7 @@ public final class Paths {
         // Load paths
         ppPaths = new HashMap<>();
         try {
+            ppPaths.put("B_2-R_I1", PathPlannerPath.fromPathFile("B_2-R_I1"));
             ppPaths.put("B_6-R_G2", PathPlannerPath.fromPathFile("B_6-R_G2"));
             ppPaths.put("B_C-R_H1", PathPlannerPath.fromPathFile("B_C-R_H1"));
 

@@ -27,7 +27,7 @@ import frc.robot.util.Conversions;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 
 public final class Constants {
-    public static final Mode kCurrentMode = Mode.REAL;
+    public static final Mode kCurrentMode = Mode.SIM;
 
     public static final Alliance kDefaultAlliance = Alliance.Blue;
 
@@ -248,6 +248,15 @@ public final class Constants {
                     Conversions.inchesToMeters(-3.059),
                     SwerveModuleConstants.kWheelRadiusMeters + 0.148,
                     new Rotation3d(0.0, Conversions.degreesToRadians(5), 0.0)
+                )
+            ),
+            new PhotonCameraConfiguration(
+                "FrontCameraL",
+                new Transform3d(
+                    0.091,
+                    0.251,
+                    0.529 + Conversions.inchesToMeters(2),
+                    new Rotation3d(0.0, Conversions.degreesToRadians(30), Conversions.degreesToRadians(-20))
                 )
             ),
             // new PhotonCameraConfiguration(

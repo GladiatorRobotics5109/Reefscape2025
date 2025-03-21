@@ -220,6 +220,22 @@ public class AutoBuilder {
     //        );
     //    }
 
+    public static Command auto_PP_B2_L4I1(
+        SwerveSubsystem swerve,
+        ElevatorSubsystem elevator,
+        EndEffectorSubsystem endEffector,
+        LEDSubsystem leds
+    ) {
+        final PathPlannerPath kToReef = Paths.ppPaths.get("B_2-R_I1");
+        final ReefBranch kBranch = ReefBranch.kL4I1;
+
+        return Commands.sequence(
+            prefix(swerve, kToReef),
+            followPathToReef(swerve, kToReef, kBranch),
+            score(kBranch, swerve, elevator, endEffector, leds)
+        );
+    }
+
     public static Command auto_PP_B6_L2G2(
         SwerveSubsystem swerve,
         ElevatorSubsystem elevator,

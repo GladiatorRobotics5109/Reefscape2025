@@ -4,11 +4,16 @@
 
 package frc.robot;
 
+import com.github.gladiatorrobotics5109.gladiatorroboticslib.PeriodicUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.ElevatorCommandFactory;
 import frc.robot.commands.EndEffectorCommandFactory;
 import frc.robot.commands.SuperstructureCommandFactory;
@@ -141,5 +146,21 @@ public class RobotContainer {
         //     m_operatorController
         // );
         return Commands.none();
+    }
+    
+    private void logCameraPosition() {
+        PeriodicUtil.registerPeriodic(() -> {
+            Pose2d pose = RobotState.getSwervePose();
+            Transform3d position = new Transform3d(
+                pose.getX(),
+                pose.getY(),
+                0.0,
+                new Rotation3d(0.0, 0.0, pose.getRotation().getRadians())
+            );
+            Logger.recordOutput(
+                "CameraPose",
+                position.plus(VisionConstants.kCameras[1].robotToCamera())
+            );
+        });
     }
 }
