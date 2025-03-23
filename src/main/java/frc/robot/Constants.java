@@ -27,7 +27,7 @@ import frc.robot.util.Conversions;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 
 public final class Constants {
-    public static final Mode kCurrentMode = Mode.SIM;
+    public static final Mode kCurrentMode = Mode.REAL;
 
     public static final Alliance kDefaultAlliance = Alliance.Blue;
 
@@ -55,7 +55,7 @@ public final class Constants {
             public static final MK4GearRatio kDriveGearRatio = MK4GearRatio.L1;
             public static final double kTurnGearRatio = MK4Constants.kTurnGearRatio;
 
-            public static final double kWheelRadiusMeters = 0.0478881398248718;
+            public static final double kWheelRadiusMeters = Conversions.inchesToMeters(1.9207249617805457);
 
             public static final int kFrontLeftDrivePort = 10;
             public static final int kFrontLeftTurnPort = 20;
@@ -82,7 +82,10 @@ public final class Constants {
                 0
             );
 
-            public static final FeedforwardConstants kDriveFeedforward = new FeedforwardConstants(0.125, 6);
+            public static final FeedforwardConstants kDriveFeedforward = new FeedforwardConstants(
+                0.13053653000000007,
+                6
+            );
 
             public static final PIDConstants kTurnPID = new PIDConstants(
                 12 / Conversions.rotationsToRadians(0.01), // Volts per radian error
@@ -96,7 +99,7 @@ public final class Constants {
                 PIDConstants.kVelocityTolerance
             );
 
-            public static final FeedforwardConstants kTurnFeedforward = new FeedforwardConstants(0, 0);
+            public static final FeedforwardConstants kTurnFeedforward = new FeedforwardConstants(0.12049188, 0);
 
             public static final int kDriveStatorCurrentLimit = 92;
             public static final int kDriveSupplyCurrentLowerLimit = 40;
@@ -147,9 +150,9 @@ public final class Constants {
         public static final double kDriveToPoseRotationToleranceRad = Conversions.degreesToRadians(1);
         public static final double kDriveToPoseTranslationVelocityToleranceMetersPerSec = Conversions.inchesToMeters(1);
         public static final double kDriveToPoseRotationVelocityToleranceRadPerSec = Conversions.degreesToRadians(0.05);
-        public static final PIDConstants kDriveToPoseTranslationPID = new PIDConstants(1, 0.0, 0.0);
+        public static final PIDConstants kDriveToPoseTranslationPID = new PIDConstants(0.2, 0.0, 0.0);
         public static final PIDConstants kDriveToPoseRotationPID = new PIDConstants(
-            1.5,
+            1,
             0,
             0,
             PIDConstants.kIZone,

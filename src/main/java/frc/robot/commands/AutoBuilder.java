@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
+import frc.robot.Constants.SwerveConstants.SwerveModuleConstants;
 import frc.robot.RobotState;
 import frc.robot.subsystems.leds.LEDSubsystem;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
@@ -130,15 +131,27 @@ public class AutoBuilder {
         LEDSubsystem leds
     ) {
         final double kDriveSpeed = 0.4;
-        final double kDriveDistance = Conversions.inchesToMeters(87.947);
 
         return Commands.sequence(
             prefix(
                 swerve,
-                () -> new Pose2d(7.0, 4.0, Util.getAlliance() == Alliance.Blue ? Rotation2d.kPi : Rotation2d.kZero)
+                () -> {
+                    Translation2d branchPosition = ReefBranch.kL4H1.getBranchPosition().toTranslation2d();
+                    Translation2d startingPosition = branchPosition.plus(
+                        new Translation2d(
+                            Conversions.inchesToMeters(88.0) - SwerveModuleConstants.kModulePosBL.getX(),
+                            Util.getAlliance() == Alliance.Blue ? Rotation2d.kZero : Rotation2d.kPi
+                        )
+                    );
+
+                    return new Pose2d(
+                        startingPosition,
+                        Util.getAlliance() == Alliance.Blue ? Rotation2d.kPi : Rotation2d.kZero
+                    );
+                }
             ),
             SwerveCommandFactory.drive(swerve, kDriveSpeed, 0.0, 0.0, false),
-            Commands.waitSeconds((1 / kDriveSpeed) * kDriveDistance - 1),
+            Commands.waitSeconds(1.0),
             SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, false),
             score(ReefBranch.kL4H1, swerve, elevator, endEffector, leds)
         );
@@ -396,14 +409,14 @@ public class AutoBuilder {
 
         return Commands.sequence(
             Commands.parallel(
-                SwerveCommandFactory.driveToPose(swerve, targetPose),
-                ElevatorCommandFactory.toReefBranch(elevator, branch)
-            ),
-            Commands.waitUntil(elevator::atDesiredPosition),
-            EndEffectorCommandFactory.scoreWithTimeout(endEffector, branch),
-            ElevatorCommandFactory.toHome(elevator),
-            LEDCommandFactory.goodThingHappenedCommand(leds),
-            Commands.waitUntil(elevator::isSafeToAccelerate)
+                SwerveCommandFactory.driveToPose(swerve, targetPose)
+                //                ElevatorCommandFactory.toReefBranch(elevator, branch)
+            )
+            //            Commands.waitUntil(elevator::atDesiredPosition),
+            //            EndEffectorCommandFactory.scoreWithTimeout(endEffector, branch),
+            //            ElevatorCommandFactory.toHome(elevator),
+            //            LEDCommandFactory.goodThingHappenedCommand(leds),
+            //            Commands.waitUntil(elevator::isSafeToAccelerate)
         ).withName("Score " + branch);
     }
 

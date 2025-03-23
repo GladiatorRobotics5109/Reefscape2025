@@ -14,7 +14,6 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.RobotState;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
@@ -24,11 +23,9 @@ import java.util.function.DoubleSupplier;
 public class WheelRadiusCharacterizationCommand extends Command {
     private static final LoggedNetworkNumber characterizationSpeed = new LoggedNetworkNumber(
         "Subsystems/Swerve/WheelRadiusCharacterization/SpeedRadsPerSec",
-        0.15
+        0.2
     );
     private static final double driveRadius = SwerveConstants.kDriveBaseRadiusMeters;
-    private static final DoubleSupplier gyroYawRadsSupplier = () -> RobotState.getSwervePose().getRotation()
-        .getRadians();
 
     public enum Direction {
         CLOCKWISE(-1),
@@ -44,6 +41,7 @@ public class WheelRadiusCharacterizationCommand extends Command {
     private final SwerveSubsystem drive;
     private final Direction omegaDirection;
     private final SlewRateLimiter omegaLimiter = new SlewRateLimiter(1.0);
+    private final DoubleSupplier gyroYawRadsSupplier;
 
     private double lastGyroYawRads = 0.0;
     private double accumGyroYawRads = 0.0;
@@ -55,6 +53,7 @@ public class WheelRadiusCharacterizationCommand extends Command {
     public WheelRadiusCharacterizationCommand(SwerveSubsystem drive, Direction omegaDirection) {
         this.drive = drive;
         this.omegaDirection = omegaDirection;
+        this.gyroYawRadsSupplier = () -> drive.getGyroYaw().getRadians();
         addRequirements(drive);
 
         setName("WheelRadiusCharacterization");

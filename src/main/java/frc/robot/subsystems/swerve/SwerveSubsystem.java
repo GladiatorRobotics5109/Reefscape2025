@@ -154,7 +154,6 @@ public class SwerveSubsystem extends SubsystemBase {
         );
 
         m_gyro.resetYaw();
-        m_gyro.setYaw(Rotation2d.fromDegrees(180));
 
         m_poseEstimator = new SwerveDrivePoseEstimator(
             m_kinematics,
@@ -260,6 +259,8 @@ public class SwerveSubsystem extends SubsystemBase {
     public Pose2d getPose() { return m_poseEstimator.getEstimatedPosition(); }
 
     public Rotation2d getHeading() { return getPose().getRotation(); }
+
+    public Rotation2d getGyroYaw() { return m_gyro.getYaw(); }
 
     public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {

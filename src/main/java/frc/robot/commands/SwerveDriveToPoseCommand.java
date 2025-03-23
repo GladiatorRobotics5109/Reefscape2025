@@ -71,13 +71,14 @@ public class SwerveDriveToPoseCommand extends Command {
         m_currentSpeeds = m_swerve.getCurrentChassisSpeeds();
 
         double xVel = m_xPID.calculate(m_currentPose.getX(), m_desiredPose.getX());
-        double yVel = m_yPID.calculate(m_currentPose.getY(), m_desiredPose.getY());
+        double yVel = -m_yPID.calculate(m_currentPose.getY(), m_desiredPose.getY());
+        //        yVel = 0.0;
         double rotVel = m_rotPID.calculate(
             m_currentPose.getRotation().getRadians(),
             m_desiredPose.getRotation().getRadians()
         );
 
-        m_swerve.drive(xVel, yVel, rotVel, true);
+        m_swerve.drive(yVel, xVel, rotVel, true);
 
         m_atTranslation = m_currentPose.getTranslation().getDistance(m_desiredPose.getTranslation())
             <= SwerveConstants.kDriveToPoseTranslationToleranceMeters;

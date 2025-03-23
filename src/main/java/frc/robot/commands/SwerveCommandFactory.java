@@ -159,9 +159,9 @@ public final class SwerveCommandFactory {
         SwerveModule[] modules = swerve.getSwerveModules();
 
         Timer timer = new Timer();
-        final double kRampRateVoltsPerSec = 0.1;
+        final double kRampRateVoltsPerSec = 0.02;
         final String kLogPath = SwerveConstants.kLogPath + "/SysIdTurn";
-        final double kSpeedThresholdRadPerSec = Conversions.degreesToRadians(0.1);
+        final double kSpeedThresholdRadPerSec = Conversions.degreesToRadians(0.25);
 
         return Commands.sequence(
             swerve.runOnce(() -> {
