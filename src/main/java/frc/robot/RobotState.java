@@ -50,6 +50,8 @@ public class RobotState {
 
     public static double getElevatorCurrentPositionMeters() { return s_elevator.getCurrentPositionElevator(); }
 
+    public static double getElevatorCurrentPositionRad() { return s_elevator.getCurrentPositionRad(); }
+
     public static double getElevatorDesiredPositionMeters() { return s_elevator.getDesiredPositionElevator(); }
 
     public static boolean getElevatorAtDesiredPosition() { return s_elevator.atDesiredPosition(); }

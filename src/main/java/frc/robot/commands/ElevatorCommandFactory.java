@@ -58,15 +58,15 @@ public class ElevatorCommandFactory {
             elevator.runOnce(() -> elevator.setDesiredPositionEndEffector(ReefHeight.L4)),
             Commands.waitUntil(
                 () -> MathUtil.isNear(
-                    ElevatorConstants.kForwardSoftLimitRad,
+                    29.2,
                     elevator.getCurrentPositionRad(),
-                    0.5
+                    0.2
                 )
             ),
-            setVoltage(elevator, ElevatorConstants.kFeedForward.ks() + ElevatorConstants.kFeedForward.kg() + 0.25),
-            Commands.waitUntil(() -> elevator.getCurrentPositionRad() >= 30.0).withTimeout(2.0),
-            setVoltage(elevator, ElevatorConstants.kFeedForward.kg())
-        );
+            setVoltage(elevator, ElevatorConstants.kFeedForward.ks() + ElevatorConstants.kFeedForward.kg() + 0.5),
+            Commands.waitUntil(() -> elevator.getCurrentPositionRad() >= 29.4),
+            setVoltage(elevator, ElevatorConstants.kFeedForward.kg() + 0.2)
+        ).withTimeout(4.0);
     }
 
     public static Command autoToReefBranch(ElevatorSubsystem elevator, ReefBranch branch) {

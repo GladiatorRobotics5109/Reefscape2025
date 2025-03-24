@@ -207,17 +207,19 @@ public class SwerveSubsystem extends SubsystemBase {
         Rotation2d headingOffset = Util.getAlliance() == Alliance.Red
             ? Rotation2d.fromDegrees(180)
             : Rotation2d.fromDegrees(0);
-        ChassisSpeeds desiredSpeeds;
-        if (Util.isSim()) {
-            desiredSpeeds = fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, getHeading().plus(headingOffset))
-                : new ChassisSpeeds(vx, vy, vrot);
-        }
-        else {
-            desiredSpeeds = fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, m_gyro.getYaw())
-                : new ChassisSpeeds(vx, vy, vrot);
-        }
+        ChassisSpeeds desiredSpeeds = fieldRelative
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, getHeading().plus(headingOffset))
+            : new ChassisSpeeds(vx, vy, vrot);
+        //        if (Util.isSim()) {
+        //            desiredSpeeds = fieldRelative
+        //                ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, getHeading().plus(headingOffset))
+        //                : new ChassisSpeeds(vx, vy, vrot);
+        //        }
+        //        else {
+        //            desiredSpeeds = fieldRelative
+        //                ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, m_gyro.getYaw())
+        //                : new ChassisSpeeds(vx, vy, vrot);
+        //        }
         desiredSpeeds = ChassisSpeeds.discretize(desiredSpeeds, Constants.kLoopPeriodSecs);
 
         SwerveModuleState[] desiredStates = m_kinematics.toSwerveModuleStates(desiredSpeeds);
@@ -325,6 +327,13 @@ public class SwerveSubsystem extends SubsystemBase {
                 SwerveConstants.kLogPath + "/VisionMeasurements/" + measurement.cameraName(),
                 measurement
             );
+
+            //            if (measurement.estimatedPose().getTranslation().getDistance(ReefConstants.getAllianceReefPos())
+            //                <= ReefConstants.kReefRadiusMeters + Conversions.inchesToMeters(20))
+            //                continue
+
+            //            if (measurement.estimatedPose().getRotation().minus(getHeading()).getDegrees() > 10)
+            //                continue;
 
             m_poseEstimator.addVisionMeasurement(measurement.estimatedPose(), measurement.timestamp());
         }

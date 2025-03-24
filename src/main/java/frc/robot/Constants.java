@@ -55,7 +55,7 @@ public final class Constants {
             public static final MK4GearRatio kDriveGearRatio = MK4GearRatio.L1;
             public static final double kTurnGearRatio = MK4Constants.kTurnGearRatio;
 
-            public static final double kWheelRadiusMeters = Conversions.inchesToMeters(1.9207249617805457);
+            public static final double kWheelRadiusMeters = Conversions.inchesToMeters(2.65);
 
             public static final int kFrontLeftDrivePort = 10;
             public static final int kFrontLeftTurnPort = 20;
@@ -121,7 +121,7 @@ public final class Constants {
             // );
         }
 
-        public static final Matrix<N3, N1> kVisionStdDevs = MatBuilder.fill(Nat.N3(), Nat.N1(), 0.9, 0.9, 0.95);
+        public static final Matrix<N3, N1> kVisionStdDevs = MatBuilder.fill(Nat.N3(), Nat.N1(), 0.95, 0.95, 10.0);
 
         public static final int kPigeonPort = 40;
 
@@ -146,13 +146,27 @@ public final class Constants {
             0
         );
 
-        public static final double kDriveToPoseTranslationToleranceMeters = Conversions.inchesToMeters(1);
+        public static final double kDriveToPoseTranslationToleranceMeters = Conversions.inchesToMeters(1.6);
         public static final double kDriveToPoseRotationToleranceRad = Conversions.degreesToRadians(1);
         public static final double kDriveToPoseTranslationVelocityToleranceMetersPerSec = Conversions.inchesToMeters(1);
         public static final double kDriveToPoseRotationVelocityToleranceRadPerSec = Conversions.degreesToRadians(0.05);
-        public static final PIDConstants kDriveToPoseTranslationPID = new PIDConstants(0.2, 0.0, 0.0);
+        public static final double kDriveToPoseTranslationDebounce = 1.2;
+        public static final double kDriveToPoseRotationDebounce = 1.0;
+        public static final PIDConstants kDriveToPoseTranslationPID = new PIDConstants(
+            0.8,
+            0.12,
+            0.0,
+            Conversions.inchesToMeters(4.5),
+            false,
+            PIDConstants.kMinimumInput,
+            PIDConstants.kMaximumInput,
+            PIDConstants.kPositionTolerance,
+            PIDConstants.kVelocityTolerance,
+            0.25,
+            PIDConstants.kMinimumIntegral
+        );
         public static final PIDConstants kDriveToPoseRotationPID = new PIDConstants(
-            1,
+            1.25,
             0,
             0,
             PIDConstants.kIZone,
@@ -244,22 +258,22 @@ public final class Constants {
         public static record PhotonCameraConfiguration(String cameraName, Transform3d robotToCamera) {}
 
         public static final PhotonCameraConfiguration[] kCameras = new PhotonCameraConfiguration[] {
+            //            new PhotonCameraConfiguration(
+            //                "FrontCamera",
+            //                new Transform3d(
+            //                    Conversions.inchesToMeters(13.825),
+            //                    Conversions.inchesToMeters(-3.059),
+            //                    SwerveModuleConstants.kWheelRadiusMeters + 0.148,
+            //                    new Rotation3d(0.0, Conversions.degreesToRadians(5), 0.0)
+            //                )
+            //            ),
             new PhotonCameraConfiguration(
                 "FrontCamera",
                 new Transform3d(
-                    Conversions.inchesToMeters(13.825),
-                    Conversions.inchesToMeters(-3.059),
-                    SwerveModuleConstants.kWheelRadiusMeters + 0.148,
-                    new Rotation3d(0.0, Conversions.degreesToRadians(5), 0.0)
-                )
-            ),
-            new PhotonCameraConfiguration(
-                "FrontCameraL",
-                new Transform3d(
                     0.091,
-                    0.251,
+                    0.068,
                     0.529 + Conversions.inchesToMeters(2),
-                    new Rotation3d(0.0, Conversions.degreesToRadians(30), Conversions.degreesToRadians(-20))
+                    new Rotation3d(0.0, Conversions.degreesToRadians(37), Conversions.degreesToRadians(-15))
                 )
             ),
             // new PhotonCameraConfiguration(

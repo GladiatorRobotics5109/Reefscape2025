@@ -409,14 +409,13 @@ public class AutoBuilder {
 
         return Commands.sequence(
             Commands.parallel(
-                SwerveCommandFactory.driveToPose(swerve, targetPose)
-                //                ElevatorCommandFactory.toReefBranch(elevator, branch)
-            )
-            //            Commands.waitUntil(elevator::atDesiredPosition),
-            //            EndEffectorCommandFactory.scoreWithTimeout(endEffector, branch),
-            //            ElevatorCommandFactory.toHome(elevator),
-            //            LEDCommandFactory.goodThingHappenedCommand(leds),
-            //            Commands.waitUntil(elevator::isSafeToAccelerate)
+                SwerveCommandFactory.driveToPose(swerve, targetPose),
+                ElevatorCommandFactory.toReefBranch(elevator, branch)
+            ),
+            EndEffectorCommandFactory.score(endEffector, branch),
+            ElevatorCommandFactory.toHome(elevator),
+            LEDCommandFactory.goodThingHappenedCommand(leds),
+            Commands.waitUntil(elevator::isSafeToAccelerate)
         ).withName("Score " + branch);
     }
 

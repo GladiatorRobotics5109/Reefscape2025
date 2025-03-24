@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.math.controller.PIDConstants;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,6 +23,9 @@ public class SwerveDriveToPoseCommand extends Command {
 
     private Pose2d m_currentPose;
     private ChassisSpeeds m_currentSpeeds;
+
+    private final Debouncer m_atTranslationDebounce;
+    private final Debouncer m_atRotationDebounce;
 
     private boolean m_atTranslation;
     private boolean m_atRotation;
@@ -45,6 +49,9 @@ public class SwerveDriveToPoseCommand extends Command {
 
         m_atTranslation = false;
         m_atRotation = false;
+
+        m_atTranslationDebounce = new Debouncer(SwerveConstants.kDriveToPoseTranslationDebounce);
+        m_atRotationDebounce = new Debouncer(SwerveConstants.kDriveToPoseRotationDebounce);
 
         addRequirements(m_swerve);
     }
@@ -71,14 +78,14 @@ public class SwerveDriveToPoseCommand extends Command {
         m_currentSpeeds = m_swerve.getCurrentChassisSpeeds();
 
         double xVel = m_xPID.calculate(m_currentPose.getX(), m_desiredPose.getX());
-        double yVel = -m_yPID.calculate(m_currentPose.getY(), m_desiredPose.getY());
+        double yVel = m_yPID.calculate(m_currentPose.getY(), m_desiredPose.getY());
         //        yVel = 0.0;
         double rotVel = m_rotPID.calculate(
             m_currentPose.getRotation().getRadians(),
             m_desiredPose.getRotation().getRadians()
         );
 
-        m_swerve.drive(yVel, xVel, rotVel, true);
+        m_swerve.drive(xVel, yVel, rotVel, true);
 
         m_atTranslation = m_currentPose.getTranslation().getDistance(m_desiredPose.getTranslation())
             <= SwerveConstants.kDriveToPoseTranslationToleranceMeters;
@@ -104,7 +111,12 @@ public class SwerveDriveToPoseCommand extends Command {
     }
 
     @Override
-    public boolean isFinished() { return m_atTranslation && m_atRotation && m_atTranslationVel && m_atRotationVel; }
+    public boolean isFinished() {
+        return m_atTranslationDebounce.calculate(m_atTranslation)
+            && m_atRotationDebounce.calculate(m_atRotation)
+            && m_atTranslationVel
+            && m_atRotationVel;
+    }
 
     @Override
     public void end(boolean interrupted) {
