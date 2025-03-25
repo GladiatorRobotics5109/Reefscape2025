@@ -452,6 +452,22 @@ public final class Constants {
         public static final double kPositionToleranceRad = Conversions.degreesToRadians(2);
     }
 
+    public static final class AlgaeConstants {
+        public static final String kLogPath = "Subsystems/Algae";
+
+        public static final int kMotorPort = 59;
+
+        public static final boolean kInvertMotor = false;
+        public static final Rotation2d kStartingPosition = Rotation2d.fromDegrees(-90);
+        public static final Rotation2d kStowPosition = kStartingPosition;
+        public static final Rotation2d kRemovePosition = Rotation2d.fromDegrees(-180);
+        public static final Rotation2d kMinPosition = Rotation2d.fromDegrees(-90);
+        public static final Rotation2d kMaxPosition = Rotation2d.fromDegrees(-185);
+
+        public static final PIDConstants kPID = new PIDConstants(1.0, 0.0, 0.0);
+        public static final FeedforwardConstants kFeedforward = new FeedforwardConstants(0.0, 0.0, 0.0, 0.0);
+    }
+
     public static final class CheckDeploy {
         public static void main(String... args) {
             if (Constants.kCurrentMode != Mode.REAL) {

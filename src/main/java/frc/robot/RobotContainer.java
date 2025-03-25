@@ -14,11 +14,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.commands.ElevatorCommandFactory;
-import frc.robot.commands.EndEffectorCommandFactory;
-import frc.robot.commands.SuperstructureCommandFactory;
-import frc.robot.commands.SwerveCommandFactory;
+import frc.robot.commands.*;
 import frc.robot.subsystems.leds.LEDSubsystem;
+import frc.robot.subsystems.superstructure.algae.AlgaeSubsystem;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
@@ -31,6 +29,7 @@ public class RobotContainer {
     private VisionSubsystem m_vision;
     private ElevatorSubsystem m_elevator;
     private EndEffectorSubsystem m_endEffector;
+    private AlgaeSubsystem m_algae;
     //    private ClimbSubsystem m_climb;
     private LEDSubsystem m_leds;
 
@@ -43,6 +42,7 @@ public class RobotContainer {
         m_vision = new VisionSubsystem(m_swerve::addVisionMeasurements);
         m_elevator = new ElevatorSubsystem();
         m_endEffector = new EndEffectorSubsystem();
+        m_algae = new AlgaeSubsystem();
         //        m_climb = new ClimbSubsystem();
         m_leds = new LEDSubsystem();
         RobotState.init(m_swerve, m_vision, m_elevator, m_endEffector);
@@ -113,6 +113,10 @@ public class RobotContainer {
         m_driverController.rightBumper().toggleOnTrue(
             EndEffectorCommandFactory.setVoltage(m_endEffector, 7)
         ).toggleOnFalse((EndEffectorCommandFactory.setVoltage(m_endEffector, 0.0)));
+
+        m_driverController.leftTrigger().onTrue(AlgaeCommandFactory.toRemove(m_algae)).onFalse(
+            AlgaeCommandFactory.toStow(m_algae)
+        );
 
         //        m_driverController.povUp().onTrue(ClimbCommandFactory.prepareClimb(m_climb));
         //        m_driverController.povDown().onTrue(ClimbCommandFactory.climb(m_climb));
