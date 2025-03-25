@@ -51,7 +51,7 @@ public class RobotContainer {
 
         m_driverController = new CommandXboxController(Constants.DriveTeamConstants.kDriveControllerPort);
         m_operatorController = new CommandXboxController(DriveTeamConstants.kOperatorControllerPort);
-//        m_operatorController = null;
+        //        m_operatorController = null;
 
         configureBindings();
 
@@ -116,8 +116,10 @@ public class RobotContainer {
         );
         // m_driverController.rightBumper().onTrue(EndEffectorCommandFactory.score(m_endEffector));
         m_driverController.rightBumper().toggleOnTrue(
-            EndEffectorCommandFactory.setVoltage(m_endEffector, 7)
-        ).toggleOnFalse((EndEffectorCommandFactory.setVoltage(m_endEffector, 0.0)));
+            EndEffectorCommandFactory.setVoltage(m_endEffector, 7).andThen(IntakeCommandFactory.intake(m_intake))
+        ).toggleOnFalse(
+            (EndEffectorCommandFactory.setVoltage(m_endEffector, 0.0).andThen(IntakeCommandFactory.stop(m_intake)))
+        );
 
         if (m_operatorController != null) {
             m_operatorController.y().onTrue(

@@ -27,7 +27,7 @@ import frc.robot.util.Conversions;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 
 public final class Constants {
-    public static final Mode kCurrentMode = Mode.SIM;
+    public static final Mode kCurrentMode = Mode.REAL;
 
     public static final Alliance kDefaultAlliance = Alliance.Blue;
 
@@ -440,13 +440,13 @@ public final class Constants {
     public static final class IntakeConstants {
         public static final String kLogPath = "Subsystems/Intake";
 
-        public static final int kMotorPort = 0;
+        public static final int kMotorPort = 62;
 
-        public static final boolean kInvertMotor = true;
+        public static final boolean kInvertMotor = false;
 
         public static final double kGearRatio = 5.0;
 
-        public static final double kIntakeVoltage = 6.0;
+        public static final double kIntakeVoltage = 8.0;
         public static final double kReverseVoltage = -12.0;
 
         public static final double kSupplyCurrentLimit = 30.0;
