@@ -152,8 +152,10 @@ public final class Constants {
         public static final double kDriveToPoseRotationVelocityToleranceRadPerSec = Conversions.degreesToRadians(0.05);
         public static final double kDriveToPoseTranslationDebounce = 1.2;
         public static final double kDriveToPoseRotationDebounce = 1.0;
+        public static final double kDriveToPoseMaxSpeedMetersPerSec = 1.5;
+        public static final double kDriveToPoseMaxRotationSpeedRadPerSec = Conversions.rotationsToRadians(1.0);
         public static final PIDConstants kDriveToPoseTranslationPID = new PIDConstants(
-            0.8,
+            2.0,
             0.12,
             0.0,
             Conversions.inchesToMeters(4.5),
@@ -270,10 +272,14 @@ public final class Constants {
             new PhotonCameraConfiguration(
                 "FrontCamera",
                 new Transform3d(
-                    0.091,
-                    0.068,
+                    0.031,
+                    0.19,
                     0.529 + Conversions.inchesToMeters(2),
-                    new Rotation3d(0.0, Conversions.degreesToRadians(37), Conversions.degreesToRadians(-15))
+                    new Rotation3d(
+                        Conversions.degreesToRadians(-10),
+                        Conversions.degreesToRadians(33),
+                        Conversions.degreesToRadians(-19)
+                    )
                 )
             ),
             // new PhotonCameraConfiguration(

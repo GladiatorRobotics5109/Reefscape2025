@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.math.controller.PIDConstants;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -77,12 +78,20 @@ public class SwerveDriveToPoseCommand extends Command {
         m_currentPose = m_swerve.getPose();
         m_currentSpeeds = m_swerve.getCurrentChassisSpeeds();
 
-        double xVel = m_xPID.calculate(m_currentPose.getX(), m_desiredPose.getX());
-        double yVel = m_yPID.calculate(m_currentPose.getY(), m_desiredPose.getY());
-        //        yVel = 0.0;
-        double rotVel = m_rotPID.calculate(
-            m_currentPose.getRotation().getRadians(),
-            m_desiredPose.getRotation().getRadians()
+        double xVel = MathUtil.clamp(
+            m_xPID.calculate(m_currentPose.getX(), m_desiredPose.getX()),
+            -SwerveConstants.kDriveToPoseMaxSpeedMetersPerSec,
+            SwerveConstants.kDriveToPoseMaxSpeedMetersPerSec
+        );
+        double yVel = MathUtil.clamp(
+            m_yPID.calculate(m_currentPose.getY(), m_desiredPose.getY()),
+            -SwerveConstants.kDriveToPoseMaxSpeedMetersPerSec,
+            SwerveConstants.kDriveToPoseMaxSpeedMetersPerSec
+        );
+        double rotVel = MathUtil.clamp(
+            m_rotPID.calculate(m_currentPose.getRotation().getRadians(), m_desiredPose.getRotation().getRadians()),
+            -SwerveConstants.kDriveToPoseMaxRotationSpeedRadPerSec,
+            SwerveConstants.kDriveToPoseMaxRotationSpeedRadPerSec
         );
 
         m_swerve.drive(xVel, yVel, rotVel, true);
