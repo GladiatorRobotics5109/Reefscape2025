@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.util.Util;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -91,6 +92,10 @@ public class Robot extends LoggedRobot {
         Paths.log();
 
         m_robotContainer = new RobotContainer();
+
+        if (Util.isSim()) {
+            DriverStation.silenceJoystickConnectionWarning(true);
+        }
     }
 
     @Override

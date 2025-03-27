@@ -40,6 +40,8 @@ public class SwerveSubsystem extends SubsystemBase {
     private final SwerveDriveKinematics m_kinematics;
     private final SwerveDrivePoseEstimator m_poseEstimator;
 
+    private boolean m_usePoseEstimateForHeading;
+
     public SwerveSubsystem() {
         switch (Constants.kCurrentMode) {
             case REAL:
@@ -153,7 +155,7 @@ public class SwerveSubsystem extends SubsystemBase {
             SwerveConstants.SwerveModuleConstants.kModulePosBR
         );
 
-        m_gyro.resetYaw();
+        m_gyro.setYaw(Rotation2d.fromDegrees(0));
 
         m_poseEstimator = new SwerveDrivePoseEstimator(
             m_kinematics,
@@ -163,6 +165,8 @@ public class SwerveSubsystem extends SubsystemBase {
         );
 
         m_poseEstimator.setVisionMeasurementStdDevs(SwerveConstants.kVisionStdDevs);
+
+        m_usePoseEstimateForHeading = SwerveConstants.kUsePoseEstimateForHeadingDefault;
 
         AutoBuilder.configure(
             this::getPose,
@@ -207,19 +211,17 @@ public class SwerveSubsystem extends SubsystemBase {
         Rotation2d headingOffset = Util.getAlliance() == Alliance.Red
             ? Rotation2d.fromDegrees(180)
             : Rotation2d.fromDegrees(0);
-        ChassisSpeeds desiredSpeeds = fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, getHeading().plus(headingOffset))
-            : new ChassisSpeeds(vx, vy, vrot);
-        //        if (Util.isSim()) {
-        //            desiredSpeeds = fieldRelative
-        //                ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, getHeading().plus(headingOffset))
-        //                : new ChassisSpeeds(vx, vy, vrot);
-        //        }
-        //        else {
-        //            desiredSpeeds = fieldRelative
-        //                ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, m_gyro.getYaw())
-        //                : new ChassisSpeeds(vx, vy, vrot);
-        //        }
+        ChassisSpeeds desiredSpeeds;
+        if (Util.isSim() || m_usePoseEstimateForHeading) {
+            desiredSpeeds = fieldRelative
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, getHeading().plus(headingOffset))
+                : new ChassisSpeeds(vx, vy, vrot);
+        }
+        else {
+            desiredSpeeds = fieldRelative
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, m_gyro.getYaw())
+                : new ChassisSpeeds(vx, vy, vrot);
+        }
         desiredSpeeds = ChassisSpeeds.discretize(desiredSpeeds, Constants.kLoopPeriodSecs);
 
         SwerveModuleState[] desiredStates = m_kinematics.toSwerveModuleStates(desiredSpeeds);
@@ -247,13 +249,31 @@ public class SwerveSubsystem extends SubsystemBase {
         m_moduleBR.setDesiredState(flBr, false);
 
         Logger.recordOutput(
-            SwerveConstants.kLogPath
-                + "/desiredModuleStates",
+            SwerveConstants.kLogPath + "/desiredModuleStates",
             new SwerveModuleState[] {
                 flBr,
                 frBL,
                 frBL,
                 flBr
+            }
+        );
+    }
+
+    public void alignModules() {
+        SwerveModuleState state = new SwerveModuleState(0.0, Rotation2d.kZero);
+
+        m_moduleFL.setDesiredState(state);
+        m_moduleFR.setDesiredState(state);
+        m_moduleBL.setDesiredState(state);
+        m_moduleBR.setDesiredState(state);
+
+        Logger.recordOutput(
+            SwerveConstants.kLogPath + "/desiredModuleStates",
+            new SwerveModuleState[] {
+                state,
+                state,
+                state,
+                state
             }
         );
     }
@@ -321,6 +341,12 @@ public class SwerveSubsystem extends SubsystemBase {
         m_poseEstimator.resetPosition(m_gyro.getYaw(), getModulePositions(), pose);
     }
 
+    public void setUsePoseEstimateForHeading(boolean usePoseEstimateForHeading) {
+        m_usePoseEstimateForHeading = usePoseEstimateForHeading;
+    }
+
+    public boolean getUsePoseEstimateForHeading() { return m_usePoseEstimateForHeading; }
+
     public void addVisionMeasurements(VisionMeasurement... measurements) {
         for (VisionMeasurement measurement : measurements) {
             Logger.recordOutput(
@@ -363,5 +389,7 @@ public class SwerveSubsystem extends SubsystemBase {
         }
 
         updatePose();
+
+        Logger.recordOutput(SwerveConstants.kLogPath + "/UseSwervePoseEstimateForHeading", m_usePoseEstimateForHeading);
     }
 }

@@ -10,6 +10,7 @@ import frc.robot.commands.WheelRadiusCharacterizationCommand.Direction;
 import frc.robot.subsystems.leds.LEDSubsystem;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
+import frc.robot.subsystems.superstructure.intake.IntakeSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.util.FieldConstants.CoralStationConstants.CoralStation;
 import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
@@ -30,17 +31,20 @@ public class AutoChooser {
 
     private static SwerveSubsystem s_swerve;
     private static ElevatorSubsystem s_elevator;
+    private static IntakeSubsystem s_intake;
     private static EndEffectorSubsystem s_endEffector;
     private static LEDSubsystem s_leds;
 
     public static void init(
         SwerveSubsystem swerve,
         ElevatorSubsystem elevator,
+        IntakeSubsystem intake,
         EndEffectorSubsystem endEffector,
         LEDSubsystem leds
     ) {
         s_swerve = swerve;
         s_elevator = elevator;
+        s_intake = intake;
         s_endEffector = endEffector;
         s_leds = leds;
 
@@ -93,22 +97,35 @@ public class AutoChooser {
             Commands.runOnce(() -> buildCustomAuto(swerve, elevator, endEffector, leds).schedule())
         );
         //        s_autoChooser.addOption("Comp_PP-B_6_L1G2", AutoBuilder.auto_PP_B6_L1G2(swerve, elevator, endEffector, leds));
-        s_autoChooser.addOption("Comp_PP-B_2-L4I1", AutoBuilder.auto_PP_B2_L4I1(swerve, elevator, endEffector, leds));
+        s_autoChooser.addOption(
+            "Comp_PP-Right-1L4",
+            AutoBuilder.auto_PP_Right_1L4(swerve, elevator, endEffector, leds)
+        );
+        s_autoChooser.addOption(
+            "Comp_PP-Right-2L4",
+            AutoBuilder.auto_PP_Right_2L4(swerve, elevator, endEffector, intake, leds)
+        );
         s_autoChooser.addOption("Comp_PP-B_6_L2G2", AutoBuilder.auto_PP_B6_L2G2(swerve, elevator, endEffector, leds));
         s_autoChooser.addOption("Comp_PP_B_C_L2H1", AutoBuilder.auto_PP_BC_L2H1(swerve, elevator, endEffector, leds));
-        s_autoChooser.addOption("Comp_PP_B_6_3L2", AutoBuilder.auto_PP_B6_3L2(swerve, elevator, endEffector, leds));
-        s_autoChooser.addOption("Comp_PP_B_6_3L4", AutoBuilder.auto_PP_B6_3L4(swerve, elevator, endEffector, leds));
+        s_autoChooser.addOption(
+            "Comp_PP_B_6_3L2",
+            AutoBuilder.auto_PP_B6_3L2(swerve, elevator, intake, endEffector, leds)
+        );
+        s_autoChooser.addOption(
+            "Comp_PP_B_6_3L4",
+            AutoBuilder.auto_PP_B6_3L4(swerve, elevator, intake, endEffector, leds)
+        );
         s_autoChooser.addOption(
             "Comp_PP-B_6-R_L4G2-Leave",
             AutoBuilder.auto_PP_B6_L4G2_Leave(swerve, elevator, endEffector, leds)
         );
         s_autoChooser.addOption(
             "Comp_PP-B_6-R_L2G2-C_F3-R_L2G1",
-            AutoBuilder.auto_PP_B6_L2G2_F3_L2G1(swerve, elevator, endEffector, leds)
+            AutoBuilder.auto_PP_B6_L2G2_F3_L2G1(swerve, elevator, intake, endEffector, leds)
         );
         s_autoChooser.addOption(
             "Comp_PP-B_6-R_L4G2-C_F3-R_L4G1-Leave",
-            AutoBuilder.auto_PP_B6_L4G2_F3_L4G1_Leave(swerve, elevator, endEffector, leds)
+            AutoBuilder.auto_PP_B6_L4G2_F3_L4G1_Leave(swerve, elevator, intake, endEffector, leds)
         );
 
         s_autoChooser.addOption("Test_TestAuto", AutoBuilder.testAuto(swerve, elevator, endEffector, leds));

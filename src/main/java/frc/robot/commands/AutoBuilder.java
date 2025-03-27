@@ -14,6 +14,7 @@ import frc.robot.RobotState;
 import frc.robot.subsystems.leds.LEDSubsystem;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
+import frc.robot.subsystems.superstructure.intake.IntakeSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.util.Conversions;
 import frc.robot.util.FieldConstants.CoralStationConstants.CoralStation;
@@ -234,12 +235,13 @@ public class AutoBuilder {
         PathPlannerPath path,
         SwerveSubsystem swerve,
         ElevatorSubsystem elevator,
+        IntakeSubsystem intake,
         EndEffectorSubsystem endEffector,
         LEDSubsystem leds
     ) {
         return Commands.parallel(
             SwerveCommandFactory.followPath(swerve, path),
-            SuperstructureCommandFactory.intake(elevator, endEffector)
+            SuperstructureCommandFactory.intake(elevator, intake, endEffector)
         );
     }
 
@@ -257,7 +259,7 @@ public class AutoBuilder {
     //        );
     //    }
 
-    public static Command auto_PP_B2_L4I1(
+    public static Command auto_PP_Right_1L4(
         SwerveSubsystem swerve,
         ElevatorSubsystem elevator,
         EndEffectorSubsystem endEffector,
@@ -270,6 +272,29 @@ public class AutoBuilder {
             prefix(swerve, kToReef),
             followPathToReef(swerve, kToReef, kBranch),
             score(kBranch, swerve, elevator, endEffector, leds)
+        );
+    }
+
+    public static Command auto_PP_Right_2L4(
+        SwerveSubsystem swerve,
+        ElevatorSubsystem elevator,
+        EndEffectorSubsystem endEffector,
+        IntakeSubsystem intake,
+        LEDSubsystem leds
+    ) {
+        final PathPlannerPath kToReef1 = Paths.ppPaths.get("B_2-R_I1");
+        final ReefBranch kBranch1 = ReefBranch.kL4I1;
+        final PathPlannerPath kToCoral1 = Paths.ppPaths.get("R_I1-C_C3");
+        final ReefBranch kBranch2 = ReefBranch.kL4J2;
+        final PathPlannerPath kToReef2 = Paths.ppPaths.get("C_C3-R_J2");
+
+        return Commands.sequence(
+            prefix(swerve, kToReef1),
+            followPathToReef(swerve, kToReef1, kBranch1),
+            score(kBranch1, swerve, elevator, endEffector, leds),
+            followCoralPathAndIntake(kToCoral1, swerve, elevator, intake, endEffector, leds),
+            followPathToReef(swerve, kToReef2, kBranch2),
+            score(kBranch2, swerve, elevator, endEffector, leds)
         );
     }
 
@@ -291,6 +316,7 @@ public class AutoBuilder {
     public static Command auto_PP_B6_L2G2_F3_L2G1(
         SwerveSubsystem swerve,
         ElevatorSubsystem elevator,
+        IntakeSubsystem intake,
         EndEffectorSubsystem endEffector,
         LEDSubsystem leds
     ) {
@@ -303,7 +329,7 @@ public class AutoBuilder {
         return Commands.sequence(
             prefix(swerve, kToReef1),
             followReefPathAndScore(kToReef1, kBranch1, swerve, elevator, endEffector, leds),
-            followCoralPathAndIntake(kToCoral, swerve, elevator, endEffector, leds),
+            followCoralPathAndIntake(kToCoral, swerve, elevator, intake, endEffector, leds),
             followReefPathAndScore(kToReef2, kBranch2, swerve, elevator, endEffector, leds)
         );
     }
@@ -331,6 +357,7 @@ public class AutoBuilder {
     public static Command auto_PP_B6_L4G2_F3_L4G1_Leave(
         SwerveSubsystem swerve,
         ElevatorSubsystem elevator,
+        IntakeSubsystem intake,
         EndEffectorSubsystem endEffector,
         LEDSubsystem leds
     ) {
@@ -344,7 +371,7 @@ public class AutoBuilder {
         return Commands.sequence(
             prefix(swerve, kToReef1),
             followReefPathAndScore(kToReef1, kBranch1, swerve, elevator, endEffector, leds),
-            followCoralPathAndIntake(kToCoral, swerve, elevator, endEffector, leds),
+            followCoralPathAndIntake(kToCoral, swerve, elevator, intake, endEffector, leds),
             followReefPathAndScore(kToReef2, kBranch2, swerve, elevator, endEffector, leds),
             Commands.parallel(
                 SwerveCommandFactory.followPath(swerve, kLeave),
@@ -373,6 +400,7 @@ public class AutoBuilder {
     public static Command auto_PP_B6_3L2(
         SwerveSubsystem swerve,
         ElevatorSubsystem elevator,
+        IntakeSubsystem intake,
         EndEffectorSubsystem endEffector,
         LEDSubsystem leds
     ) {
@@ -388,9 +416,9 @@ public class AutoBuilder {
         return Commands.sequence(
             prefix(swerve, kToReef1),
             followReefPathAndScore(kToReef1, kBranch1, swerve, elevator, endEffector, leds),
-            followCoralPathAndIntake(kToCoral1, swerve, elevator, endEffector, leds),
+            followCoralPathAndIntake(kToCoral1, swerve, elevator, intake, endEffector, leds),
             followReefPathAndScore(kToReef2, kBranch2, swerve, elevator, endEffector, leds),
-            followCoralPathAndIntake(kToCoral2, swerve, elevator, endEffector, leds),
+            followCoralPathAndIntake(kToCoral2, swerve, elevator, intake, endEffector, leds),
             followReefPathAndScore(kToReef3, kBranch3, swerve, elevator, endEffector, leds),
             ElevatorCommandFactory.toHome(elevator)
         );
@@ -399,6 +427,7 @@ public class AutoBuilder {
     public static Command auto_PP_B6_3L4(
         SwerveSubsystem swerve,
         ElevatorSubsystem elevator,
+        IntakeSubsystem intake,
         EndEffectorSubsystem endEffector,
         LEDSubsystem leds
     ) {
@@ -414,9 +443,9 @@ public class AutoBuilder {
         return Commands.sequence(
             prefix(swerve, kToReef1),
             followReefPathAndScore(kToReef1, kBranch1, swerve, elevator, endEffector, leds),
-            followCoralPathAndIntake(kToCoral1, swerve, elevator, endEffector, leds),
+            followCoralPathAndIntake(kToCoral1, swerve, elevator, intake, endEffector, leds),
             followReefPathAndScore(kToReef2, kBranch2, swerve, elevator, endEffector, leds),
-            followCoralPathAndIntake(kToCoral2, swerve, elevator, endEffector, leds),
+            followCoralPathAndIntake(kToCoral2, swerve, elevator, intake, endEffector, leds),
             followReefPathAndScore(kToReef3, kBranch3, swerve, elevator, endEffector, leds),
             ElevatorCommandFactory.toHome(elevator)
         );

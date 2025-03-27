@@ -121,6 +121,8 @@ public final class Constants {
             // );
         }
 
+        public static final boolean kUsePoseEstimateForHeadingDefault = true;
+
         public static final Matrix<N3, N1> kVisionStdDevs = MatBuilder.fill(Nat.N3(), Nat.N1(), 0.95, 0.95, 10.0);
 
         public static final int kPigeonPort = 40;
@@ -456,6 +458,21 @@ public final class Constants {
         public static final PIDConstants kPID = new PIDConstants(0.0, 0.0, 0.0);
 
         public static final double kPositionToleranceRad = Conversions.degreesToRadians(2);
+    }
+
+    public static final class IntakeConstants {
+        public static final String kLogPath = "Subsystems/Intake";
+
+        public static final int kMotorPort = 62;
+
+        public static final boolean kInvertMotor = false;
+
+        public static final double kGearRatio = 5.0;
+
+        public static final double kIntakeVoltage = 9.0;
+        public static final double kReverseVoltage = -12.0;
+
+        public static final double kSupplyCurrentLimit = 30.0;
     }
 
     public static final class CheckDeploy {
