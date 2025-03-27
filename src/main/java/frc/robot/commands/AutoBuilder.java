@@ -222,7 +222,7 @@ public class AutoBuilder {
     //        );
     //    }
 
-    public static Command auto_PP_B2_L4I1(
+    public static Command auto_PP_Right_1L4(
         SwerveSubsystem swerve,
         ElevatorSubsystem elevator,
         EndEffectorSubsystem endEffector,
@@ -235,6 +235,29 @@ public class AutoBuilder {
             prefix(swerve, kToReef),
             followPathToReef(swerve, kToReef, kBranch),
             score(kBranch, swerve, elevator, endEffector, leds)
+        );
+    }
+
+    public static Command auto_PP_Right_2L4(
+        SwerveSubsystem swerve,
+        ElevatorSubsystem elevator,
+        EndEffectorSubsystem endEffector,
+        IntakeSubsystem intake,
+        LEDSubsystem leds
+    ) {
+        final PathPlannerPath kToReef1 = Paths.ppPaths.get("B_2-R_I1");
+        final ReefBranch kBranch1 = ReefBranch.kL4I1;
+        final PathPlannerPath kToCoral1 = Paths.ppPaths.get("R_I1-C_C3");
+        final ReefBranch kBranch2 = ReefBranch.kL4J2;
+        final PathPlannerPath kToReef2 = Paths.ppPaths.get("C_C3-R_J2");
+
+        return Commands.sequence(
+            prefix(swerve, kToReef1),
+            followPathToReef(swerve, kToReef1, kBranch1),
+            score(kBranch1, swerve, elevator, endEffector, leds),
+            followCoralPathAndIntake(kToCoral1, swerve, elevator, intake, endEffector, leds),
+            followPathToReef(swerve, kToReef2, kBranch2),
+            score(kBranch2, swerve, elevator, endEffector, leds)
         );
     }
 

@@ -243,22 +243,26 @@ public final class Constants {
         public static record PhotonCameraConfiguration(String cameraName, Transform3d robotToCamera) {}
 
         public static final PhotonCameraConfiguration[] kCameras = new PhotonCameraConfiguration[] {
+            //            new PhotonCameraConfiguration(
+            //                "FrontCamera",
+            //                new Transform3d(
+            //                    Conversions.inchesToMeters(13.825),
+            //                    Conversions.inchesToMeters(-3.059),
+            //                    SwerveModuleConstants.kWheelRadiusMeters + 0.148,
+            //                    new Rotation3d(0.0, Conversions.degreesToRadians(5), 0.0)
+            //                )
+            //            ),
             new PhotonCameraConfiguration(
                 "FrontCamera",
                 new Transform3d(
-                    Conversions.inchesToMeters(13.825),
-                    Conversions.inchesToMeters(-3.059),
-                    SwerveModuleConstants.kWheelRadiusMeters + 0.148,
-                    new Rotation3d(0.0, Conversions.degreesToRadians(5), 0.0)
-                )
-            ),
-            new PhotonCameraConfiguration(
-                "FrontCameraL",
-                new Transform3d(
                     0.091,
-                    0.251,
+                    0.19,
                     0.529 + Conversions.inchesToMeters(2),
-                    new Rotation3d(0.0, Conversions.degreesToRadians(30), Conversions.degreesToRadians(-20))
+                    new Rotation3d(
+                        Conversions.degreesToRadians(-10),
+                        Conversions.degreesToRadians(33),
+                        Conversions.degreesToRadians(-19)
+                    )
                 )
             ),
             // new PhotonCameraConfiguration(
@@ -446,7 +450,7 @@ public final class Constants {
 
         public static final double kGearRatio = 5.0;
 
-        public static final double kIntakeVoltage = 7.0;
+        public static final double kIntakeVoltage = 9.0;
         public static final double kReverseVoltage = -12.0;
 
         public static final double kSupplyCurrentLimit = 30.0;

@@ -94,7 +94,14 @@ public class AutoChooser {
             Commands.runOnce(() -> buildCustomAuto(swerve, elevator, endEffector, leds).schedule())
         );
         //        s_autoChooser.addOption("Comp_PP-B_6_L1G2", AutoBuilder.auto_PP_B6_L1G2(swerve, elevator, endEffector, leds));
-        s_autoChooser.addOption("Comp_PP-B_2-L4I1", AutoBuilder.auto_PP_B2_L4I1(swerve, elevator, endEffector, leds));
+        s_autoChooser.addOption(
+            "Comp_PP-Right-1L4",
+            AutoBuilder.auto_PP_Right_1L4(swerve, elevator, endEffector, leds)
+        );
+        s_autoChooser.addOption(
+            "Comp_PP-Right-2L4",
+            AutoBuilder.auto_PP_Right_2L4(swerve, elevator, endEffector, intake, leds)
+        );
         s_autoChooser.addOption("Comp_PP-B_6_L2G2", AutoBuilder.auto_PP_B6_L2G2(swerve, elevator, endEffector, leds));
         s_autoChooser.addOption("Comp_PP_B_C_L2H1", AutoBuilder.auto_PP_BC_L2H1(swerve, elevator, endEffector, leds));
         s_autoChooser.addOption(
