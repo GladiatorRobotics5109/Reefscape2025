@@ -483,6 +483,11 @@ public class AutoBuilder {
         leaveSpeeds.vyMetersPerSecond = outerPose.getY() - targetPose.getY();
         double leaveSpeed = 0.5;
         leaveSpeeds = leaveSpeeds.times(leaveSpeed);
+        
+        if (Util.getAlliance() == Alliance.Blue) {
+            leaveSpeeds.vxMetersPerSecond = -leaveSpeeds.vxMetersPerSecond;
+            leaveSpeeds.vyMetersPerSecond = -leaveSpeeds.vyMetersPerSecond;
+        }
 
         return Commands.sequence(
             Commands.parallel(

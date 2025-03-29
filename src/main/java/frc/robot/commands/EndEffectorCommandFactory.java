@@ -30,7 +30,7 @@ public class EndEffectorCommandFactory {
         return Commands.sequence(
             endEffector.runOnce(endEffector::setScore),
             Commands.waitUntil(() -> !endEffector.hasCoral()),
-            Commands.waitSeconds(1)
+            Commands.waitSeconds(0.2)
         ).finallyDo(endEffector::stop).withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
