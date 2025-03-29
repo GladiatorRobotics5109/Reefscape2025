@@ -228,7 +228,7 @@ public class AutoBuilder {
     ) {
         return Commands.parallel(
             SwerveCommandFactory.followPath(swerve, path)
-//            SuperstructureCommandFactory.intake(elevator, intake, endEffector)
+            //            SuperstructureCommandFactory.intake(elevator, intake, endEffector)
         );
     }
 
@@ -279,9 +279,9 @@ public class AutoBuilder {
             prefix(swerve, kToReef1),
             SwerveCommandFactory.followPath(swerve, kToReef1),
             score(kBranch1, swerve, elevator, endEffector, leds),
-            followCoralPathAndIntake(kToCoral1, swerve, elevator, intake, endEffector, leds),
-//            SwerveCommandFactory.followPath(swerve, kToReef2),
-//            score(kBranch2, swerve, elevator, endEffector, leds)
+            followCoralPathAndIntake(kToCoral1, swerve, elevator, intake, endEffector, leds)
+            //            SwerveCommandFactory.followPath(swerve, kToReef2),
+            //            score(kBranch2, swerve, elevator, endEffector, leds)
         );
     }
 
