@@ -37,14 +37,16 @@ public class AutoBuilder {
         EndEffectorSubsystem endEffector,
         LEDSubsystem leds
     ) {
-        final PathPlannerPath kToReef = Paths.ppPaths.get("TestPath");
-        final ReefBranch kBranch = ReefBranch.kL4E1;
+//        final PathPlannerPath kToReef = Paths.ppPaths.get("TestPath");
+//        final ReefBranch kBranch = ReefBranch.kL4E1;
+//
+//        return Commands.sequence(
+//            prefix(swerve, kToReef),
+//            SwerveCommandFactory.followPath(swerve, kToReef),
+//            score(kBranch, swerve, elevator, endEffector, leds)
+//        );
         
-        return Commands.sequence(
-            prefix(swerve, kToReef),
-            SwerveCommandFactory.followPath(swerve, kToReef),
-            score(kBranch, swerve, elevator, endEffector, leds)
-        );
+        return Commands.none();
     }
 
     public static Command followTestPath(SwerveSubsystem swerve) {
