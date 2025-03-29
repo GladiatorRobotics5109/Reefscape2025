@@ -95,11 +95,10 @@ public class SwerveDriveToPoseCommand extends Command {
             -SwerveConstants.kDriveToPoseMaxRotationSpeedRadPerSec,
             SwerveConstants.kDriveToPoseMaxRotationSpeedRadPerSec
         );
-        
+
         if (Util.getAlliance() == Alliance.Red) {
             xVel = -xVel;
             yVel = -yVel;
-            rotVel = -rotVel;
         }
 
         m_swerve.drive(xVel, yVel, rotVel, true);
