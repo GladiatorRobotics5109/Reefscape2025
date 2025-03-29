@@ -138,7 +138,7 @@ public final class Constants {
         );
 
         public static final com.pathplanner.lib.config.PIDConstants kPPTranslationPID = new com.pathplanner.lib.config.PIDConstants(
-            7,
+            5,
             0,
             0
         );
