@@ -6,9 +6,11 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.util.Util;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveDriveToPoseCommand extends Command {
@@ -93,6 +95,12 @@ public class SwerveDriveToPoseCommand extends Command {
             -SwerveConstants.kDriveToPoseMaxRotationSpeedRadPerSec,
             SwerveConstants.kDriveToPoseMaxRotationSpeedRadPerSec
         );
+        
+        if (Util.getAlliance() == Alliance.Red) {
+            xVel = -xVel;
+            yVel = -yVel;
+            rotVel = -rotVel;
+        }
 
         m_swerve.drive(xVel, yVel, rotVel, true);
 
