@@ -22,7 +22,6 @@ import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 import frc.robot.util.Paths;
 import frc.robot.util.Util;
-import org.littletonrobotics.junction.Logger;
 
 import java.util.function.Supplier;
 
@@ -477,14 +476,13 @@ public class AutoBuilder {
         Pose2d targetPose = flipIfNecessary(branch.getSwerveTargetPoseInner());
         Pose2d outerPose = flipIfNecessary(branch.getSwerveTargetPoseOuter());
 
-        Logger.recordOutput("TestPose4", targetPose);
         ChassisSpeeds leaveSpeeds = new ChassisSpeeds();
         leaveSpeeds.vxMetersPerSecond = outerPose.getX() - targetPose.getX();
         leaveSpeeds.vyMetersPerSecond = outerPose.getY() - targetPose.getY();
         double leaveSpeed = 0.5;
         leaveSpeeds = leaveSpeeds.times(leaveSpeed);
-        
-        if (Util.getAlliance() == Alliance.Blue) {
+
+        if (Util.getAlliance() == Alliance.Red) {
             leaveSpeeds.vxMetersPerSecond = -leaveSpeeds.vxMetersPerSecond;
             leaveSpeeds.vyMetersPerSecond = -leaveSpeeds.vyMetersPerSecond;
         }
