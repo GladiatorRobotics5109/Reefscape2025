@@ -88,6 +88,10 @@ public final class SwerveCommandFactory {
         return swerve.runOnce(() -> swerve.drive(vx, vy, vrot, fieldRelative));
     }
 
+    public static Command drive(SwerveSubsystem swerve, ChassisSpeeds speeds, boolean fieldRelative) {
+        return swerve.runOnce(() -> swerve.drive(speeds, fieldRelative));
+    }
+
     public static Command stopAndX(SwerveSubsystem swerve) {
         return swerve.runOnce(swerve::stopAndX);
     }

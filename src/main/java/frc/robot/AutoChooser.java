@@ -105,6 +105,10 @@ public class AutoChooser {
             "Comp_PP-Right-2L4",
             AutoBuilder.auto_PP_Right_2L4(swerve, elevator, endEffector, intake, leds)
         );
+        s_autoChooser.addOption(
+            "Comp_PP-Right-3L4",
+            AutoBuilder.auto_PP_Right_3L4(swerve, elevator, endEffector, intake, leds)
+        );
         s_autoChooser.addOption("Comp_PP-B_6_L2G2", AutoBuilder.auto_PP_B6_L2G2(swerve, elevator, endEffector, leds));
         s_autoChooser.addOption("Comp_PP_B_C_L2H1", AutoBuilder.auto_PP_BC_L2H1(swerve, elevator, endEffector, leds));
         s_autoChooser.addOption(
