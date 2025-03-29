@@ -75,9 +75,10 @@ public class AutoBuilder {
     }
 
     public static Command followTestPath(SwerveSubsystem swerve) {
+        PathPlannerPath path = Paths.ppPaths.get("testPath");
         return Commands.sequence(
-            SwerveCommandFactory.setPosition(swerve, () -> new Pose2d(6.0, 3.5, Rotation2d.k180deg)),
-            SwerveCommandFactory.followPath(swerve, Paths.ppPaths.get("testPath"))
+            prefix(swerve, path),
+            SwerveCommandFactory.followPath(swerve, path)
         );
     }
 
