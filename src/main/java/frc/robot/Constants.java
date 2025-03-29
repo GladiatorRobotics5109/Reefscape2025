@@ -55,7 +55,7 @@ public final class Constants {
             public static final MK4GearRatio kDriveGearRatio = MK4GearRatio.L1;
             public static final double kTurnGearRatio = MK4Constants.kTurnGearRatio;
 
-            public static final double kWheelRadiusMeters = Conversions.inchesToMeters(2.65);
+            public static final double kWheelRadiusMeters = 0.06731;
 
             public static final int kFrontLeftDrivePort = 10;
             public static final int kFrontLeftTurnPort = 20;
@@ -191,7 +191,9 @@ public final class Constants {
             // * (Math.pow(SwerveModuleConstants.kModulePosFL.getX(), 2)
             // + Math.pow(SwerveModuleConstants.kModulePosFL.getY(), 2)),
             new ModuleConfig(
-                SwerveModuleConstants.kWheelRadiusMeters,
+                // Not sure why values over ~0.5 m don't work for wheel radius
+                //                SwerveModuleConstants.kWheelRadiusMeters,
+                Conversions.inchesToMeters(1.9207249617805457),
                 SwerveModuleConstants.kDriveMaxFreeSpeed.in(Units.MetersPerSecond),
                 1.0,
                 SwerveModuleConstants.kUseFOC
