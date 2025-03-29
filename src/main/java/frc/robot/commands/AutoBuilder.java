@@ -5,11 +5,11 @@ import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
-import frc.robot.Constants.SwerveConstants.SwerveModuleConstants;
 import frc.robot.RobotState;
 import frc.robot.subsystems.leds.LEDSubsystem;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
@@ -36,45 +36,23 @@ public class AutoBuilder {
         EndEffectorSubsystem endEffector,
         LEDSubsystem leds
     ) {
-        final double kDriveSpeed = 0.4;
+        //        final PathPlannerPath kToReef = Paths.ppPaths.get("TestPath");
+        //        final ReefBranch kBranch = ReefBranch.kL4E1;
+        //
+        //        return Commands.sequence(
+        //            prefix(swerve, kToReef),
+        //            SwerveCommandFactory.followPath(swerve, kToReef),
+        //            score(kBranch, swerve, elevator, endEffector, leds)
+        //        );
 
-        return Commands.sequence(
-            prefix(
-                swerve,
-                () -> {
-                    Translation2d branchPosition = ReefBranch.kL4H1.getBranchPosition().toTranslation2d();
-                    Translation2d startingPosition = branchPosition.plus(
-                        new Translation2d(
-                            Conversions.inchesToMeters(88.0) - SwerveModuleConstants.kModulePosBL.getX(),
-                            Util.getAlliance() == Alliance.Blue ? Rotation2d.kZero : Rotation2d.kPi
-                        )
-                    );
-
-                    return new Pose2d(
-                        startingPosition,
-                        Util.getAlliance() == Alliance.Blue ? Rotation2d.kPi : Rotation2d.kZero
-                    );
-                }
-            ),
-            SwerveCommandFactory.drive(swerve, kDriveSpeed, 0.0, 0.0, false),
-            Commands.waitSeconds(1.0),
-            SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, false),
-            score(ReefBranch.kL4H1, swerve, elevator, endEffector, leds),
-            SwerveCommandFactory.drive(swerve, -kDriveSpeed, 0.05, 0.0, false),
-            Commands.waitSeconds(4),
-            SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, false),
-            SuperstructureCommandFactory.intake(elevator, endEffector),
-            SwerveCommandFactory.drive(swerve, kDriveSpeed, 0.0, 0.0, false),
-            Commands.waitSeconds(1.0),
-            SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, false),
-            score(ReefBranch.kL4H2, swerve, elevator, endEffector, leds)
-        );
+        return Commands.none();
     }
 
     public static Command followTestPath(SwerveSubsystem swerve) {
+        PathPlannerPath path = Paths.ppPaths.get("testPath");
         return Commands.sequence(
-            SwerveCommandFactory.setPosition(swerve, () -> new Pose2d(6.0, 3.5, Rotation2d.k180deg)),
-            SwerveCommandFactory.followPath(swerve, Paths.ppPaths.get("testPath"))
+            prefix(swerve, path),
+            SwerveCommandFactory.followPath(swerve, path)
         );
     }
 
@@ -161,18 +139,26 @@ public class AutoBuilder {
             prefix(
                 swerve,
                 () -> {
-                    Translation2d branchPosition = ReefBranch.kL4H1.getBranchPosition().toTranslation2d();
-                    Translation2d startingPosition = branchPosition.plus(
-                        new Translation2d(
-                            Conversions.inchesToMeters(88.0) - SwerveModuleConstants.kModulePosBL.getX(),
-                            Util.getAlliance() == Alliance.Blue ? Rotation2d.kZero : Rotation2d.kPi
-                        )
-                    );
-
-                    return new Pose2d(
-                        startingPosition,
-                        Util.getAlliance() == Alliance.Blue ? Rotation2d.kPi : Rotation2d.kZero
-                    );
+                    //                    Translation2d branchPosition = flipIfNecessary(
+                    //                        ReefBranch.kL4H1.getBranchPosition().toTranslation2d()
+                    //                    );
+                    //
+                    //                    Logger.recordOutput("TestPose5", new Translation3d(branchPosition));
+                    //                    Translation2d startingPosition = branchPosition.plus(
+                    //                        new Translation2d(
+                    //                            Conversions.inchesToMeters(88.0) - Math.abs(SwerveModuleConstants.kModulePosFL.getX()),
+                    //                            Util.getAlliance() == Alliance.Blue ? Rotation2d.kZero : Rotation2d.kPi
+                    //                        )
+                    //                    );
+                    //                    Logger.recordOutput("TestPose6", new Translation3d(startingPosition));
+                    //
+                    //                    return new Pose2d(
+                    //                        startingPosition,
+                    //                        Util.getAlliance() == Alliance.Blue ? Rotation2d.kPi : Rotation2d.kZero
+                    //                    );
+                    return Util.getAlliance() == Alliance.Blue
+                        ? new Pose2d(7.20, 4.187, Rotation2d.kPi)
+                        : new Pose2d(10.345, 4.187, Rotation2d.kZero);
                 }
             ),
             SwerveCommandFactory.drive(swerve, kDriveSpeed, 0.0, 0.0, false),
@@ -270,7 +256,7 @@ public class AutoBuilder {
 
         return Commands.sequence(
             prefix(swerve, kToReef),
-            followPathToReef(swerve, kToReef, kBranch),
+            SwerveCommandFactory.followPath(swerve, kToReef),
             score(kBranch, swerve, elevator, endEffector, leds)
         );
     }
@@ -290,11 +276,40 @@ public class AutoBuilder {
 
         return Commands.sequence(
             prefix(swerve, kToReef1),
-            followPathToReef(swerve, kToReef1, kBranch1),
+            SwerveCommandFactory.followPath(swerve, kToReef1),
             score(kBranch1, swerve, elevator, endEffector, leds),
             followCoralPathAndIntake(kToCoral1, swerve, elevator, intake, endEffector, leds),
-            followPathToReef(swerve, kToReef2, kBranch2),
+            SwerveCommandFactory.followPath(swerve, kToReef2),
             score(kBranch2, swerve, elevator, endEffector, leds)
+        );
+    }
+
+    public static Command auto_PP_Right_3L4(
+        SwerveSubsystem swerve,
+        ElevatorSubsystem elevator,
+        EndEffectorSubsystem endEffector,
+        IntakeSubsystem intake,
+        LEDSubsystem leds
+    ) {
+        final PathPlannerPath kToReef1 = Paths.ppPaths.get("B_2-R_I1");
+        final ReefBranch kBranch1 = ReefBranch.kL4I1;
+        final PathPlannerPath kToCoral1 = Paths.ppPaths.get("R_I1-C_C3");
+        final PathPlannerPath kToReef2 = Paths.ppPaths.get("C_C3-R_J2");
+        final ReefBranch kBranch2 = ReefBranch.kL4J2;
+        final PathPlannerPath kToCoral2 = Paths.ppPaths.get("R_J2-C_C3");
+        final PathPlannerPath kToReef3 = Paths.ppPaths.get("C_C3-R_J1");
+        final ReefBranch kBranch3 = ReefBranch.kL4J1;
+
+        return Commands.sequence(
+            prefix(swerve, kToReef1),
+            SwerveCommandFactory.followPath(swerve, kToReef1),
+            score(kBranch1, swerve, elevator, endEffector, leds),
+            followCoralPathAndIntake(kToCoral1, swerve, elevator, intake, endEffector, leds),
+            SwerveCommandFactory.followPath(swerve, kToReef2),
+            score(kBranch2, swerve, elevator, endEffector, leds),
+            followCoralPathAndIntake(kToCoral2, swerve, elevator, intake, endEffector, leds),
+            SwerveCommandFactory.followPath(swerve, kToReef3),
+            score(kBranch3, swerve, elevator, endEffector, leds)
         );
     }
 
@@ -458,7 +473,19 @@ public class AutoBuilder {
         EndEffectorSubsystem endEffector,
         LEDSubsystem leds
     ) {
-        Pose2d targetPose = branch.getSwerveTargetPoseInner();
+        Pose2d targetPose = flipIfNecessary(branch.getSwerveTargetPoseInner());
+        Pose2d outerPose = flipIfNecessary(branch.getSwerveTargetPoseOuter());
+
+        ChassisSpeeds leaveSpeeds = new ChassisSpeeds();
+        leaveSpeeds.vxMetersPerSecond = outerPose.getX() - targetPose.getX();
+        leaveSpeeds.vyMetersPerSecond = outerPose.getY() - targetPose.getY();
+        double leaveSpeed = 0.5;
+        leaveSpeeds = leaveSpeeds.times(leaveSpeed);
+
+        if (Util.getAlliance() == Alliance.Red) {
+            leaveSpeeds.vxMetersPerSecond = -leaveSpeeds.vxMetersPerSecond;
+            leaveSpeeds.vyMetersPerSecond = -leaveSpeeds.vyMetersPerSecond;
+        }
 
         return Commands.sequence(
             Commands.parallel(
@@ -468,7 +495,10 @@ public class AutoBuilder {
             EndEffectorCommandFactory.score(endEffector, branch),
             ElevatorCommandFactory.toHome(elevator),
             LEDCommandFactory.goodThingHappenedCommand(leds),
-            Commands.waitUntil(elevator::isSafeToAccelerate)
+            Commands.waitUntil(elevator::isSafeToAccelerate),
+            SwerveCommandFactory.drive(swerve, leaveSpeeds, true),
+            Commands.waitSeconds(0.4 / leaveSpeed),
+            SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, true)
         ).withName("Score " + branch);
     }
 

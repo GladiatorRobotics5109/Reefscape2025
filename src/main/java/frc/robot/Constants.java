@@ -27,7 +27,7 @@ import frc.robot.util.Conversions;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 
 public final class Constants {
-    public static final Mode kCurrentMode = Mode.REAL;
+    public static final Mode kCurrentMode = Mode.SIM;
 
     public static final Alliance kDefaultAlliance = Alliance.Blue;
 
@@ -55,7 +55,7 @@ public final class Constants {
             public static final MK4GearRatio kDriveGearRatio = MK4GearRatio.L1;
             public static final double kTurnGearRatio = MK4Constants.kTurnGearRatio;
 
-            public static final double kWheelRadiusMeters = 0.06731;
+            public static final double kWheelRadiusMeters = 0.0489689858;
 
             public static final int kFrontLeftDrivePort = 10;
             public static final int kFrontLeftTurnPort = 20;
@@ -138,7 +138,7 @@ public final class Constants {
         );
 
         public static final com.pathplanner.lib.config.PIDConstants kPPTranslationPID = new com.pathplanner.lib.config.PIDConstants(
-            7,
+            5,
             0,
             0
         );
@@ -152,8 +152,8 @@ public final class Constants {
         public static final double kDriveToPoseRotationToleranceRad = Conversions.degreesToRadians(1);
         public static final double kDriveToPoseTranslationVelocityToleranceMetersPerSec = Conversions.inchesToMeters(1);
         public static final double kDriveToPoseRotationVelocityToleranceRadPerSec = Conversions.degreesToRadians(0.05);
-        public static final double kDriveToPoseTranslationDebounce = 1.2;
-        public static final double kDriveToPoseRotationDebounce = 1.0;
+        public static final double kDriveToPoseTranslationDebounce = 0.8;
+        public static final double kDriveToPoseRotationDebounce = 0.6;
         public static final double kDriveToPoseMaxSpeedMetersPerSec = 1.5;
         public static final double kDriveToPoseMaxRotationSpeedRadPerSec = Conversions.rotationsToRadians(1.0);
         public static final PIDConstants kDriveToPoseTranslationPID = new PIDConstants(
@@ -192,8 +192,8 @@ public final class Constants {
             // + Math.pow(SwerveModuleConstants.kModulePosFL.getY(), 2)),
             new ModuleConfig(
                 // Not sure why values over ~0.5 m don't work for wheel radius
-                //                SwerveModuleConstants.kWheelRadiusMeters,
-                Conversions.inchesToMeters(1.9207249617805457),
+                SwerveModuleConstants.kWheelRadiusMeters,
+                //                Conversions.inchesToMeters(1.9207249617805457),
                 SwerveModuleConstants.kDriveMaxFreeSpeed.in(Units.MetersPerSecond),
                 1.0,
                 SwerveModuleConstants.kUseFOC
