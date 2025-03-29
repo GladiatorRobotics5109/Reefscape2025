@@ -37,41 +37,14 @@ public class AutoBuilder {
         EndEffectorSubsystem endEffector,
         LEDSubsystem leds
     ) {
-        final double kDriveSpeed = 0.4;
-
-        //        return Commands.sequence(
-        //            prefix(
-        //                swerve,
-        //                () -> {
-        //                    Translation2d branchPosition = ReefBranch.kL4H1.getBranchPosition().toTranslation2d();
-        //                    Translation2d startingPosition = branchPosition.plus(
-        //                        new Translation2d(
-        //                            Conversions.inchesToMeters(88.0) - SwerveModuleConstants.kModulePosBL.getX(),
-        //                            Util.getAlliance() == Alliance.Blue ? Rotation2d.kZero : Rotation2d.kPi
-        //                        )
-        //                    );
-        //
-        //                    return new Pose2d(
-        //                        startingPosition,
-        //                        Util.getAlliance() == Alliance.Blue ? Rotation2d.kPi : Rotation2d.kZero
-        //                    );
-        //                }
-        //            ),
-        //            SwerveCommandFactory.drive(swerve, kDriveSpeed, 0.0, 0.0, false),
-        //            Commands.waitSeconds(1.0),
-        //            SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, false),
-        //            score(ReefBranch.kL4H1, swerve, elevator, endEffector, leds),
-        //            SwerveCommandFactory.drive(swerve, -kDriveSpeed, 0.05, 0.0, false),
-        //            Commands.waitSeconds(4),
-        //            SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, false),
-        //            SuperstructureCommandFactory.intake(elevator, endEffector),
-        //            SwerveCommandFactory.drive(swerve, kDriveSpeed, 0.0, 0.0, false),
-        //            Commands.waitSeconds(1.0),
-        //            SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, false),
-        //            score(ReefBranch.kL4H2, swerve, elevator, endEffector, leds)
-        //        );
-
-        return Commands.none();
+        final PathPlannerPath kToReef = Paths.ppPaths.get("TestPath");
+        final ReefBranch kBranch = ReefBranch.kL4E1;
+        
+        return Commands.sequence(
+            prefix(swerve, kToReef),
+            SwerveCommandFactory.followPath(swerve, kToReef),
+            score(kBranch, swerve, elevator, endEffector, leds)
+        );
     }
 
     public static Command followTestPath(SwerveSubsystem swerve) {
