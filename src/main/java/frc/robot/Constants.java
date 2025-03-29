@@ -152,8 +152,8 @@ public final class Constants {
         public static final double kDriveToPoseRotationToleranceRad = Conversions.degreesToRadians(1);
         public static final double kDriveToPoseTranslationVelocityToleranceMetersPerSec = Conversions.inchesToMeters(1);
         public static final double kDriveToPoseRotationVelocityToleranceRadPerSec = Conversions.degreesToRadians(0.05);
-        public static final double kDriveToPoseTranslationDebounce = 1.2;
-        public static final double kDriveToPoseRotationDebounce = 1.0;
+        public static final double kDriveToPoseTranslationDebounce = 0.8;
+        public static final double kDriveToPoseRotationDebounce = 0.6;
         public static final double kDriveToPoseMaxSpeedMetersPerSec = 1.5;
         public static final double kDriveToPoseMaxRotationSpeedRadPerSec = Conversions.rotationsToRadians(1.0);
         public static final PIDConstants kDriveToPoseTranslationPID = new PIDConstants(
