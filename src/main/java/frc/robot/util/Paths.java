@@ -56,7 +56,9 @@ public final class Paths {
             ppPaths.put("R_I1-C_C3", PathPlannerPath.fromPathFile("R_I1-C_C3"));
             ppPaths.put("C_C3-R_J2", PathPlannerPath.fromPathFile("C_C3-R_J2"));
             ppPaths.put("C_C3-R_J1", PathPlannerPath.fromPathFile("C_C3-R_J1"));
-            ppPaths.put("B_6-R_G2", PathPlannerPath.fromPathFile("B_6-R_G2"));
+            ppPaths.put("C_C3-R_E2", PathPlannerPath.fromPathFile("C_C3-R_E2"));
+            ppPaths.put("R_J1-C_C3", PathPlannerPath.fromPathFile("R_J1-C_C3"));
+            //            ppPaths.put("B_6-R_G2", PathPlannerPath.fromPathFile("B_6-R_G2"));
             ppPaths.put("B_C-R_H1", PathPlannerPath.fromPathFile("B_C-R_H1"));
             ppPaths.put("R_J2-C_C3", PathPlannerPath.fromPathFile("R_J2-C_C3"));
 
@@ -69,7 +71,7 @@ public final class Paths {
             ppPaths.put("C_F3-R_G1", PathPlannerPath.fromPathFile("C_F3-R_G1"));
             ppPaths.put("C_F3-R_F2", PathPlannerPath.fromPathFile("C_F3-R_F2"));
 
-            ppPaths.put("testPath", PathPlannerPath.fromPathFile("TestPath"));
+            ppPaths.put("TestPath", PathPlannerPath.fromPathFile("TestPath"));
         }
         catch (FileNotFoundException e) {
             DriverStation.reportError("Failed to find path file!\n" + e.getCause(), e.getStackTrace());

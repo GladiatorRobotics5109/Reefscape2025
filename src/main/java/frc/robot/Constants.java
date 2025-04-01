@@ -286,27 +286,15 @@ public final class Constants {
                     )
                 )
             ),
-            // new PhotonCameraConfiguration(
-            //     "RearCamera",
-            //     new Transform3d(
-            //         Conversions.inchesToMeters(-14),
-            //         Conversions.inchesToMeters(-6.875),
-            //         SwerveModuleConstants.kWheelRadiusMeters
-            //             + Conversions.inchesToMeters(13)
-            //             + 0.09
-            //             + Conversions.inchesToMeters(4.875),
-            //         new Rotation3d(0.0, Conversions.degreesToRadians(35), Conversions.degreesToRadians(45))
-            //     )
-            // )
-            // new PhotonCameraConfiguration(
-            //     "FrontCameraR",
-            //     new Transform3d(
-            //         0.27,
-            //         -0.15,
-            //         SwerveModuleConstants.kWheelRadiusMeters + (65.0 / 1000.0) + (7.037 / 1000.0),
-            //         new Rotation3d(0.0, Conversions.degreesToRadians(5), Conversions.degreesToRadians(-5))
-            //     )
-            // ),
+            //            new PhotonCameraConfiguration(
+            //                "RearCamera",
+            //                new Transform3d(
+            //                    -0.3302,
+            //                    -0.0889,
+            //                    0.51435,
+            //                    new Rotation3d(0.0, Conversions.degreesToRadians(10), Conversions.degreesToRadians(180))
+            //                )
+            //            )
         };
 
         public static final String kLogPath = "Subsystems/Vision";
