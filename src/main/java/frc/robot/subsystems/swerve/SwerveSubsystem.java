@@ -361,6 +361,10 @@ public class SwerveSubsystem extends SubsystemBase {
             //            if (measurement.estimatedPose().getRotation().minus(getHeading()).getDegrees() > 10)
             //                continue;
 
+            if (measurement.cameraName() == "RearCamera") {
+                continue;
+            }
+
             m_poseEstimator.addVisionMeasurement(measurement.estimatedPose(), measurement.timestamp());
         }
     }
