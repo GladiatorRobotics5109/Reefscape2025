@@ -179,6 +179,14 @@ public final class Paths {
         Translation2d branchPos = facePos.plus(
             new Translation2d(FieldConstants.ReefConstants.kReefBranchDistMeters / 2, faceAngle.plus(toBranch))
         );
+        
+        // Desired dist from reef branch
+        // Old
+        // 29 / 2 + 3.25 - 4.4 = 13.35 in
+        // Current
+        // 29 / 2 + 3.25 - 4 = 13.75 in
+        // True
+        // 13.75 in
 
         // Desired dist from reef branch
         // Old
