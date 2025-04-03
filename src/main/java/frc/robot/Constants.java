@@ -282,8 +282,8 @@ public final class Constants {
             new PhotonCameraConfiguration(
                 "RearCamera",
                 new Transform3d(
-                    -0.3302 - 0.09,
-                    -0.0889 - 0.01,
+                    -0.3302 - 0.11,
+                    -0.0889 - 0.02,
                     0.51435,
                     new Rotation3d(0.0, Conversions.degreesToRadians(10), Conversions.degreesToRadians(180))
                 )
