@@ -465,7 +465,7 @@ public class AutoBuilder {
         ChassisSpeeds leaveSpeeds = new ChassisSpeeds();
         leaveSpeeds.vxMetersPerSecond = outerPose.getX() - targetPose.getX();
         leaveSpeeds.vyMetersPerSecond = outerPose.getY() - targetPose.getY();
-        double leaveSpeed = 0.5;
+        double leaveSpeed = 1.25;
         leaveSpeeds = leaveSpeeds.times(leaveSpeed);
 
         if (Util.getAlliance() == Alliance.Red) {

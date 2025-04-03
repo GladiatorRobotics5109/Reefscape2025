@@ -27,7 +27,7 @@ import frc.robot.util.Conversions;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 
 public final class Constants {
-    public static final Mode kCurrentMode = Mode.SIM;
+    public static final Mode kCurrentMode = Mode.REAL;
 
     public static final Alliance kDefaultAlliance = Alliance.Blue;
 
@@ -149,16 +149,18 @@ public final class Constants {
         );
 
         public static final double kDriveToPoseTranslationToleranceMeters = Conversions.inchesToMeters(1.6);
-        public static final double kDriveToPoseRotationToleranceRad = Conversions.degreesToRadians(1);
+        public static final double kDriveToPoseRotationToleranceRad = Conversions.degreesToRadians(1.0);
         public static final double kDriveToPoseTranslationVelocityToleranceMetersPerSec = Conversions.inchesToMeters(1);
         public static final double kDriveToPoseRotationVelocityToleranceRadPerSec = Conversions.degreesToRadians(0.05);
-        public static final double kDriveToPoseTranslationDebounce = 0.8;
-        public static final double kDriveToPoseRotationDebounce = 0.6;
+        public static final double kDriveToPoseTranslationDebounce = 0.4;
+        public static final double kDriveToPoseRotationDebounce = 0.2;
         public static final double kDriveToPoseMaxSpeedMetersPerSec = 1.5;
         public static final double kDriveToPoseMaxRotationSpeedRadPerSec = Conversions.rotationsToRadians(1.0);
         public static final PIDConstants kDriveToPoseTranslationPID = new PIDConstants(
-            2.0,
-            0.12,
+            //            2.0,
+            //              0.12,
+            2.25,
+            0.14,
             0.0,
             Conversions.inchesToMeters(4.5),
             false,
@@ -264,15 +266,6 @@ public final class Constants {
         public static record PhotonCameraConfiguration(String cameraName, Transform3d robotToCamera) {}
 
         public static final PhotonCameraConfiguration[] kCameras = new PhotonCameraConfiguration[] {
-            //            new PhotonCameraConfiguration(
-            //                "FrontCamera",
-            //                new Transform3d(
-            //                    Conversions.inchesToMeters(13.825),
-            //                    Conversions.inchesToMeters(-3.059),
-            //                    SwerveModuleConstants.kWheelRadiusMeters + 0.148,
-            //                    new Rotation3d(0.0, Conversions.degreesToRadians(5), 0.0)
-            //                )
-            //            ),
             new PhotonCameraConfiguration(
                 "FrontCamera",
                 new Transform3d(
@@ -286,15 +279,15 @@ public final class Constants {
                     )
                 )
             ),
-            //            new PhotonCameraConfiguration(
-            //                "RearCamera",
-            //                new Transform3d(
-            //                    -0.3302,
-            //                    -0.0889,
-            //                    0.51435,
-            //                    new Rotation3d(0.0, Conversions.degreesToRadians(10), Conversions.degreesToRadians(180))
-            //                )
-            //            )
+            new PhotonCameraConfiguration(
+                "RearCamera",
+                new Transform3d(
+                    -0.3302,
+                    -0.0889,
+                    0.51435,
+                    new Rotation3d(0.0, Conversions.degreesToRadians(10), Conversions.degreesToRadians(180))
+                )
+            )
         };
 
         public static final String kLogPath = "Subsystems/Vision";

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5476453018156193,
-        "y": 2.706385958004363
+        "x": 3.47716913421836,
+        "y": 2.642242013105058
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9770814431609622,
-        "y": 2.057895037809652
+        "x": 2.906605275563703,
+        "y": 1.993751092910347
       },
       "isLocked": false,
       "linkedName": "R_J1"
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 3.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -50,5 +50,5 @@
     "velocity": 0,
     "rotation": 59.99999999999999
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
