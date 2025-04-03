@@ -7,6 +7,9 @@ import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.lo
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.PathPlannerLogging;
+
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -164,8 +167,6 @@ public class SwerveSubsystem extends SubsystemBase {
             SwerveConstants.kStartingPose
         );
 
-        m_poseEstimator.setVisionMeasurementStdDevs(SwerveConstants.kVisionStdDevs);
-
         m_usePoseEstimateForHeading = SwerveConstants.kUsePoseEstimateForHeadingDefault;
 
         AutoBuilder.configure(
@@ -182,7 +183,12 @@ public class SwerveSubsystem extends SubsystemBase {
         for (int i = 0; i < VisionConstants.kCameras.length; i++) {
             Logger.recordOutput(
                 SwerveConstants.kLogPath + "/VisionMeasurements/" + VisionConstants.kCameras[i].cameraName(),
-                new VisionMeasurement(VisionConstants.kCameras[i].cameraName(), new Pose2d(), 0.0)
+                new VisionMeasurement(
+                    VisionConstants.kCameras[i].cameraName(),
+                    new Pose2d(),
+                    0.0,
+                    MatBuilder.fill(Nat.N3(), Nat.N1(), 0.0, 0.0, 0.0)
+                )
             );
         }
 
@@ -365,7 +371,11 @@ public class SwerveSubsystem extends SubsystemBase {
             //     continue;
             // }
 
-            m_poseEstimator.addVisionMeasurement(measurement.estimatedPose(), measurement.timestamp());
+            m_poseEstimator.addVisionMeasurement(
+                measurement.estimatedPose(),
+                measurement.timestamp(),
+                measurement.stdDevs()
+            );
         }
     }
 

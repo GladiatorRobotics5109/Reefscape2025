@@ -123,8 +123,6 @@ public final class Constants {
 
         public static final boolean kUsePoseEstimateForHeadingDefault = true;
 
-        public static final Matrix<N3, N1> kVisionStdDevs = MatBuilder.fill(Nat.N3(), Nat.N1(), 0.95, 0.95, 10.0);
-
         public static final int kPigeonPort = 40;
 
         public static final boolean kTeleopFieldRelative = true;
@@ -148,7 +146,7 @@ public final class Constants {
             0
         );
 
-        public static final double kDriveToPoseTranslationToleranceMeters = Conversions.inchesToMeters(1.6);
+        public static final double kDriveToPoseTranslationToleranceMeters = Conversions.inchesToMeters(1.75);
         public static final double kDriveToPoseRotationToleranceRad = Conversions.degreesToRadians(1.0);
         public static final double kDriveToPoseTranslationVelocityToleranceMetersPerSec = Conversions.inchesToMeters(1);
         public static final double kDriveToPoseRotationVelocityToleranceRadPerSec = Conversions.degreesToRadians(0.08);
@@ -263,7 +261,11 @@ public final class Constants {
     }
 
     public static final class VisionConstants {
-        public static record PhotonCameraConfiguration(String cameraName, Transform3d robotToCamera) {}
+        public static record PhotonCameraConfiguration(
+            String cameraName,
+            Transform3d robotToCamera,
+            Matrix<N3, N1> stdDevs
+        ) {}
 
         public static final PhotonCameraConfiguration[] kCameras = new PhotonCameraConfiguration[] {
             new PhotonCameraConfiguration(
@@ -277,7 +279,8 @@ public final class Constants {
                         Conversions.degreesToRadians(33),
                         Conversions.degreesToRadians(-19)
                     )
-                )
+                ),
+                MatBuilder.fill(Nat.N3(), Nat.N1(), 0.95, 0.95, 10.0)
             ),
             new PhotonCameraConfiguration(
                 "RearCamera",
@@ -286,7 +289,8 @@ public final class Constants {
                     -0.0889 - 0.03,
                     0.51435,
                     new Rotation3d(0.0, Conversions.degreesToRadians(10), Conversions.degreesToRadians(180))
-                )
+                ),
+                MatBuilder.fill(Nat.N3(), Nat.N1(), 1.25, 1.25, 15.0)
             )
         };
 
