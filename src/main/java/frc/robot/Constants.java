@@ -27,7 +27,7 @@ import frc.robot.util.Conversions;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 
 public final class Constants {
-    public static final Mode kCurrentMode = Mode.REAL;
+    public static final Mode kCurrentMode = Mode.REPLAY;
 
     public static final Alliance kDefaultAlliance = Alliance.Blue;
 
@@ -56,6 +56,7 @@ public final class Constants {
             public static final double kTurnGearRatio = MK4Constants.kTurnGearRatio;
 
             public static final double kWheelRadiusMeters = 0.0489689858;
+            // public static final double kWheelRadiusMeters = 0.04896788;
 
             public static final int kFrontLeftDrivePort = 10;
             public static final int kFrontLeftTurnPort = 20;
@@ -141,13 +142,13 @@ public final class Constants {
             0
         );
         public static final com.pathplanner.lib.config.PIDConstants kPPRotaitonPID = new com.pathplanner.lib.config.PIDConstants(
-            4.5,
+            4.25,
             0,
             0
         );
 
         public static final double kDriveToPoseTranslationToleranceMeters = Conversions.inchesToMeters(1.75);
-        public static final double kDriveToPoseRotationToleranceRad = Conversions.degreesToRadians(1.0);
+        public static final double kDriveToPoseRotationToleranceRad = Conversions.degreesToRadians(1.75);
         public static final double kDriveToPoseTranslationVelocityToleranceMetersPerSec = Conversions.inchesToMeters(1);
         public static final double kDriveToPoseRotationVelocityToleranceRadPerSec = Conversions.degreesToRadians(0.08);
         public static final double kDriveToPoseTranslationDebounce = 0.25;
