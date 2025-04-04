@@ -482,7 +482,7 @@ public class AutoBuilder {
             LEDCommandFactory.goodThingHappenedCommand(leds),
             Commands.waitUntil(elevator::isSafeToAccelerate),
             SwerveCommandFactory.drive(swerve, leaveSpeeds, false),
-            Commands.waitSeconds(0.4 / SwerveConstants.kAutoScoreLeaveSpeed + 0.1),
+            Commands.waitSeconds(0.4 / SwerveConstants.kAutoScoreLeaveSpeed + 0.15),
             SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, true)
         ).withName("Score " + branch);
     }
