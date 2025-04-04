@@ -288,7 +288,7 @@ public final class Constants {
                     -0.3302 - 0.13,
                     -0.0889 - 0.03,
                     0.51435,
-                    new Rotation3d(0.0, Conversions.degreesToRadians(10), Conversions.degreesToRadians(180))
+                    new Rotation3d(0.0, Conversions.degreesToRadians(10), Conversions.degreesToRadians(178))
                 ),
                 MatBuilder.fill(Nat.N3(), Nat.N1(), 1.25, 1.25, 15.0)
             )
