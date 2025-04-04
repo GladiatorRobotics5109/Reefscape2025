@@ -199,7 +199,7 @@ public final class Paths {
         return generatePathAlongVector(
             branchPos.plus(
                 new Translation2d(
-                    SwerveConstants.kFrameHeight / 2 + Constants.kBumperWidthMeters + Conversions.inchesToMeters(-4.4),
+                    SwerveConstants.kFrameHeight / 2 + Constants.kBumperWidthMeters + Conversions.inchesToMeters(-1),
                     //                    Conversions.inchesToMeters(13.75),
                     faceAngle
                 )
