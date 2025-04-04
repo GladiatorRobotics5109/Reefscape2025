@@ -154,6 +154,7 @@ public final class Constants {
         public static final double kDriveToPoseRotationDebounce = 0.2;
         public static final double kDriveToPoseMaxSpeedMetersPerSec = 1.5;
         public static final double kDriveToPoseMaxRotationSpeedRadPerSec = Conversions.rotationsToRadians(1.0);
+        public static final double kAutoScoreLeaveSpeed = 1.0;
         public static final PIDConstants kDriveToPoseTranslationPID = new PIDConstants(
             2.0,
             0.12,
@@ -280,7 +281,7 @@ public final class Constants {
                         Conversions.degreesToRadians(-19)
                     )
                 ),
-                MatBuilder.fill(Nat.N3(), Nat.N1(), 0.95, 0.95, 10.0)
+                MatBuilder.fill(Nat.N3(), Nat.N1(), 0.95, 0.95, 8.0)
             ),
             new PhotonCameraConfiguration(
                 "RearCamera",
@@ -288,9 +289,9 @@ public final class Constants {
                     -0.3302 - 0.13,
                     -0.0889 - 0.03,
                     0.51435,
-                    new Rotation3d(0.0, Conversions.degreesToRadians(10), Conversions.degreesToRadians(178))
+                    new Rotation3d(0.0, Conversions.degreesToRadians(10), Conversions.degreesToRadians(182))
                 ),
-                MatBuilder.fill(Nat.N3(), Nat.N1(), 1.25, 1.25, 15.0)
+                MatBuilder.fill(Nat.N3(), Nat.N1(), 1.25, 1.25, 18.0)
             )
         };
 
