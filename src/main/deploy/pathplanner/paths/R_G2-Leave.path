@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.238627049180328,
-        "y": 5.0499487704918025
+        "x": 5.430951159946306,
+        "y": 5.370174195610991
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.398611592365309,
-        "y": 5.8890918167784845
+        "x": 5.5909357031312865,
+        "y": 6.209317241897673
       },
       "isLocked": false,
       "linkedName": "R_G2"
@@ -64,7 +64,7 @@
     "rotation": 179.5005475744208
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Lame",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -119.99999999999999

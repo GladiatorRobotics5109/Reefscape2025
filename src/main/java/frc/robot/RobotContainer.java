@@ -4,15 +4,21 @@
 
 package frc.robot;
 
+import com.github.gladiatorrobotics5109.gladiatorroboticslib.PeriodicUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.leds.LEDSubsystem;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
+import frc.robot.subsystems.superstructure.intake.IntakeSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
@@ -22,25 +28,29 @@ public class RobotContainer {
     private SwerveSubsystem m_swerve;
     private VisionSubsystem m_vision;
     private ElevatorSubsystem m_elevator;
+    private IntakeSubsystem m_intake;
     private EndEffectorSubsystem m_endEffector;
     //    private ClimbSubsystem m_climb;
     private LEDSubsystem m_leds;
 
     private final CommandXboxController m_driverController;
 
-    //    private final CommandXboxController m_operatorController;
+    private CommandXboxController m_operatorController;
 
     public RobotContainer() {
         m_swerve = new SwerveSubsystem();
         m_vision = new VisionSubsystem(m_swerve::addVisionMeasurements);
         m_elevator = new ElevatorSubsystem();
+        m_intake = new IntakeSubsystem();
         m_endEffector = new EndEffectorSubsystem();
         //        m_climb = new ClimbSubsystem();
         m_leds = new LEDSubsystem();
         RobotState.init(m_swerve, m_vision, m_elevator, m_endEffector);
-        AutoChooser.init(m_swerve, m_elevator, m_endEffector, m_leds);
+        AutoChooser.init(m_swerve, m_elevator, m_intake, m_endEffector, m_leds);
 
         m_driverController = new CommandXboxController(Constants.DriveTeamConstants.kDriveControllerPort);
+        //        m_operatorController = new CommandXboxController(DriveTeamConstants.kOperatorControllerPort);
+        m_operatorController = null;
 
         configureBindings();
 
@@ -88,8 +98,10 @@ public class RobotContainer {
         );
 
         m_driverController.povRight().onTrue(
-            EndEffectorCommandFactory.setVoltage(m_endEffector, -5.0)
-        ).onFalse(EndEffectorCommandFactory.setVoltage(m_endEffector, 0.0));
+            EndEffectorCommandFactory.setVoltage(m_endEffector, -5.0).andThen(IntakeCommandFactory.reverse(m_intake))
+        ).onFalse(
+            EndEffectorCommandFactory.setVoltage(m_endEffector, 0.0).andThen(IntakeCommandFactory.stop(m_intake))
+        );
 
         //manual elevator bound to right and left trigger
         // m_driverController.rightTrigger().whileTrue(ElevatorCommandFactory.setVoltage(m_elevator, 5)).onFalse(
@@ -100,12 +112,25 @@ public class RobotContainer {
         //     ElevatorCommandFactory.setVoltage(m_elevator, 0.0)
         // );
 
-        m_driverController.leftBumper().onTrue(SuperstructureCommandFactory.intake(m_elevator, m_endEffector));
+        m_driverController.leftBumper().onTrue(
+            SuperstructureCommandFactory.intake(m_elevator, m_intake, m_endEffector)
+        );
         // m_driverController.rightBumper().onTrue(EndEffectorCommandFactory.score(m_endEffector));
         m_driverController.rightBumper().toggleOnTrue(
-            EndEffectorCommandFactory.setVoltage(m_endEffector, 7)
-        ).toggleOnFalse((EndEffectorCommandFactory.setVoltage(m_endEffector, 0.0)));
+            EndEffectorCommandFactory.setVoltage(m_endEffector, 7).andThen(IntakeCommandFactory.intake(m_intake))
+        ).toggleOnFalse(
+            (EndEffectorCommandFactory.setVoltage(m_endEffector, 0.0).andThen(IntakeCommandFactory.stop(m_intake)))
+        );
 
+        if (m_operatorController != null) {
+            m_operatorController.y().onTrue(
+                Commands.runOnce(() -> m_swerve.setUsePoseEstimateForHeading(!m_swerve.getUsePoseEstimateForHeading()))
+            );
+            m_operatorController.x().onTrue(IntakeCommandFactory.reverse(m_intake)).onFalse(
+                IntakeCommandFactory.stop(m_intake)
+            );
+            m_operatorController.a().onTrue(SwerveCommandFactory.alignModules(m_swerve));
+        }
         //        m_driverController.povUp().onTrue(ClimbCommandFactory.prepareClimb(m_climb));
         //        m_driverController.povDown().onTrue(ClimbCommandFactory.climb(m_climb));
 
@@ -123,7 +148,10 @@ public class RobotContainer {
         // );
     }
 
-    public Command getAutonomousCommand() { return AutoChooser.get(); }
+    public Command getAutonomousCommand() {
+        //        return ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4);
+        return AutoChooser.get();
+    }
 
     public Command getTeleopCommand() {
         // return new AutomatedTeleopControllerListenerCommand(
@@ -135,5 +163,21 @@ public class RobotContainer {
         //     m_operatorController
         // );
         return Commands.none();
+    }
+
+    private void logCameraPosition() {
+        PeriodicUtil.registerPeriodic(() -> {
+            Pose2d pose = RobotState.getSwervePose();
+            Transform3d position = new Transform3d(
+                pose.getX(),
+                pose.getY(),
+                0.0,
+                new Rotation3d(0.0, 0.0, pose.getRotation().getRadians())
+            );
+            Logger.recordOutput(
+                "CameraPose",
+                position.plus(VisionConstants.kCameras[1].robotToCamera())
+            );
+        });
     }
 }

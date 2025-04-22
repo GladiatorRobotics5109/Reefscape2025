@@ -1,12 +1,16 @@
 package frc.robot.commands;
 
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.math.controller.PIDConstants;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.util.Util;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveDriveToPoseCommand extends Command {
@@ -22,6 +26,9 @@ public class SwerveDriveToPoseCommand extends Command {
 
     private Pose2d m_currentPose;
     private ChassisSpeeds m_currentSpeeds;
+
+    private final Debouncer m_atTranslationDebounce;
+    private final Debouncer m_atRotationDebounce;
 
     private boolean m_atTranslation;
     private boolean m_atRotation;
@@ -45,6 +52,9 @@ public class SwerveDriveToPoseCommand extends Command {
 
         m_atTranslation = false;
         m_atRotation = false;
+
+        m_atTranslationDebounce = new Debouncer(SwerveConstants.kDriveToPoseTranslationDebounce);
+        m_atRotationDebounce = new Debouncer(SwerveConstants.kDriveToPoseRotationDebounce);
 
         addRequirements(m_swerve);
     }
@@ -70,12 +80,28 @@ public class SwerveDriveToPoseCommand extends Command {
         m_currentPose = m_swerve.getPose();
         m_currentSpeeds = m_swerve.getCurrentChassisSpeeds();
 
-        double xVel = m_xPID.calculate(m_currentPose.getX(), m_desiredPose.getX());
-        double yVel = m_yPID.calculate(m_currentPose.getY(), m_desiredPose.getY());
-        double rotVel = m_rotPID.calculate(
-            m_currentPose.getRotation().getRadians(),
-            m_desiredPose.getRotation().getRadians()
+        double xVel = MathUtil.clamp(
+            m_xPID.calculate(m_currentPose.getX(), m_desiredPose.getX()),
+            -SwerveConstants.kDriveToPoseMaxSpeedMetersPerSec,
+            SwerveConstants.kDriveToPoseMaxSpeedMetersPerSec
         );
+        double yVel = MathUtil.clamp(
+            m_yPID.calculate(m_currentPose.getY(), m_desiredPose.getY()),
+            -SwerveConstants.kDriveToPoseMaxSpeedMetersPerSec,
+            SwerveConstants.kDriveToPoseMaxSpeedMetersPerSec
+        );
+        double rotVel = MathUtil.clamp(
+            m_rotPID.calculate(m_currentPose.getRotation().getRadians(), m_desiredPose.getRotation().getRadians()),
+            -SwerveConstants.kDriveToPoseMaxRotationSpeedRadPerSec,
+            SwerveConstants.kDriveToPoseMaxRotationSpeedRadPerSec
+        );
+
+        if (Util.getAlliance() == Alliance.Red) {
+            xVel = -xVel;
+            yVel = -yVel;
+        }
+
+        m_swerve.drive(xVel, yVel, rotVel, true);
 
         m_atTranslation = m_currentPose.getTranslation().getDistance(m_desiredPose.getTranslation())
             <= SwerveConstants.kDriveToPoseTranslationToleranceMeters;
@@ -98,12 +124,15 @@ public class SwerveDriveToPoseCommand extends Command {
         Logger.recordOutput(kLogPath + "/AtRotation", m_atRotation);
         Logger.recordOutput(kLogPath + "/AtTranslationVel", m_atTranslationVel);
         Logger.recordOutput(kLogPath + "/AtRotationVel", m_atRotationVel);
-
-        m_swerve.drive(xVel, yVel, rotVel, true);
     }
 
     @Override
-    public boolean isFinished() { return m_atTranslation & m_atRotation; }
+    public boolean isFinished() {
+        return m_atTranslationDebounce.calculate(m_atTranslation)
+            && m_atRotationDebounce.calculate(m_atRotation)
+            && m_atTranslationVel
+            && m_atRotationVel;
+    }
 
     @Override
     public void end(boolean interrupted) {

@@ -1,20 +1,20 @@
 package frc.robot.subsystems.superstructure.elevator;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.util.Color8Bit;
-import org.littletonrobotics.junction.Logger;
-
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotState;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.RobotState;
 import frc.robot.util.Conversions;
-import frc.robot.util.FieldConstants;
+import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
+import frc.robot.util.Util;
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
@@ -43,6 +43,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final boolean m_useMotorPID;
 
     private double m_desiredPositionMeters;
+    private double m_desiredPositionRad;
     private boolean m_hasDesiredPosition;
 
     public ElevatorSubsystem() {
@@ -89,6 +90,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         );
 
         m_desiredPositionMeters = 0.0;
+        m_desiredPositionRad = 0.0;
 
         m_pid = new ProfiledPIDController(
             ElevatorConstants.kPID.kp(),
@@ -108,6 +110,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void toHome() {
         m_hasDesiredPosition = true;
         m_desiredPositionMeters = 0.0;
+        m_desiredPositionRad = 0.0;
         if (m_useMotorPID)
             m_io.setPosition(m_desiredPositionMeters);
     }
@@ -124,8 +127,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void setDesiredPositionElevator(double positionMeters) {
         m_hasDesiredPosition = true;
         m_desiredPositionMeters = MathUtil.clamp(positionMeters, 0.0, ElevatorConstants.kElevatorMaxPositionMeters);
+        m_desiredPositionRad = Conversions.elevatorMetersToElevatorRadians(m_desiredPositionMeters);
         if (m_useMotorPID)
-            m_io.setPosition(Conversions.elevatorMetersToElevatorRadians(m_desiredPositionMeters));
+            m_io.setPosition(m_desiredPositionRad);
     }
 
     /**
@@ -153,20 +157,26 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public double getDesiredPositionElevator() { return m_desiredPositionMeters; }
 
+    public double getDesiredPositionRad() { return m_desiredPositionRad; }
+
     public double getCurrentPositionRad() { return m_inputs.positionRad; }
 
     public boolean atDesiredPosition() {
-        return MathUtil.isNear(
-            getDesiredPositionElevator(),
-            getCurrentPositionElevator(),
-            ElevatorConstants.kPositionToleranceMeters
-        );
+        return m_hasDesiredPosition
+            && MathUtil.isNear(
+                getDesiredPositionRad(),
+                getCurrentPositionRad(),
+                Util.isSim() ? 1.5 : ElevatorConstants.kPositionToleranceRad
+            );
     }
 
-    public boolean canAutoExtend() {
-        return RobotState.getSwervePose().getTranslation().getDistance(
-            FieldConstants.ReefConstants.getAllianceReefPos()
-        ) < ElevatorConstants.kAutoElevatorExtendRequiredDistanceMeters;
+    public boolean canAutoExtend(ReefBranch branch) {
+        return RobotState.getSwervePose().getTranslation().getDistance(branch.getBranchPosition().toTranslation2d())
+            <= ElevatorConstants.kAutoElevatorExtendRequiredDistanceMeters;
+    }
+
+    public boolean isSafeToAccelerate() {
+        return getCurrentPositionRad() <= ElevatorConstants.kSafeAccelerationPositionThresholdRad;
     }
 
     @Override
@@ -179,9 +189,10 @@ public class ElevatorSubsystem extends SubsystemBase {
             setVoltage(0);
         }
         else if (m_hasDesiredPosition && !m_useMotorPID) {
+            m_desiredPositionRad = Conversions.elevatorMetersToElevatorRadians(m_desiredPositionMeters);
             double pidOut = m_pid.calculate(
                 m_inputs.positionRad,
-                Conversions.elevatorMetersToElevatorRadians(m_desiredPositionMeters)
+                m_desiredPositionRad
             );
 
             TrapezoidProfile.State desiredState = m_pid.getSetpoint();

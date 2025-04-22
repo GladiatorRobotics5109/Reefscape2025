@@ -49,7 +49,7 @@ public class VisionSubsystem extends SubsystemBase {
         for (int i = 0; i < m_ios.length; i++) {
             m_ios[i].updateInputs(m_inputs[i]);
             Logger.processInputs(VisionConstants.kLogPath + "/" + m_inputs[i].cameraName, m_inputs[i]);
-            m_addVisionMeasurements.accept(VisionMeasurement.fromInputs(m_inputs[i]));
+            m_addVisionMeasurements.accept(VisionMeasurement.fromInputs(m_inputs[i], m_ios[i].getStdDevs()));
         }
     }
 }

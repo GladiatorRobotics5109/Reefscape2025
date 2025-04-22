@@ -52,8 +52,15 @@ public final class Paths {
         // Load paths
         ppPaths = new HashMap<>();
         try {
-            ppPaths.put("B_6-R_G2", PathPlannerPath.fromPathFile("B_6-R_G2"));
+            ppPaths.put("B_2-R_I1", PathPlannerPath.fromPathFile("B_2-R_I1"));
+            ppPaths.put("R_I1-C_C3", PathPlannerPath.fromPathFile("R_I1-C_C3"));
+            ppPaths.put("C_C3-R_J2", PathPlannerPath.fromPathFile("C_C3-R_J2"));
+            ppPaths.put("C_C3-R_J1", PathPlannerPath.fromPathFile("C_C3-R_J1"));
+            ppPaths.put("C_C3-R_E2", PathPlannerPath.fromPathFile("C_C3-R_E2"));
+            ppPaths.put("R_J1-C_C3", PathPlannerPath.fromPathFile("R_J1-C_C3"));
+            //            ppPaths.put("B_6-R_G2", PathPlannerPath.fromPathFile("B_6-R_G2"));
             ppPaths.put("B_C-R_H1", PathPlannerPath.fromPathFile("B_C-R_H1"));
+            ppPaths.put("R_J2-C_C3", PathPlannerPath.fromPathFile("R_J2-C_C3"));
 
             ppPaths.put("R_G2-Leave", PathPlannerPath.fromPathFile("R_G2-Leave"));
             ppPaths.put("R_G2-C_F3", PathPlannerPath.fromPathFile("R_G2-C_F3"));
@@ -64,7 +71,7 @@ public final class Paths {
             ppPaths.put("C_F3-R_G1", PathPlannerPath.fromPathFile("C_F3-R_G1"));
             ppPaths.put("C_F3-R_F2", PathPlannerPath.fromPathFile("C_F3-R_F2"));
 
-            ppPaths.put("testPath", PathPlannerPath.fromPathFile("TestPath"));
+            ppPaths.put("TestPath", PathPlannerPath.fromPathFile("TestPath"));
         }
         catch (FileNotFoundException e) {
             DriverStation.reportError("Failed to find path file!\n" + e.getCause(), e.getStackTrace());
@@ -173,9 +180,29 @@ public final class Paths {
             new Translation2d(FieldConstants.ReefConstants.kReefBranchDistMeters / 2, faceAngle.plus(toBranch))
         );
 
+        // Desired dist from reef branch
+        // Old
+        // 29 / 2 + 3.25 - 4.4 = 13.35 in
+        // Current
+        // 29 / 2 + 3.25 - 4 = 13.75 in
+        // True
+        // 13.75 in
+
+        // Desired dist from reef branch
+        // Old
+        // 29 / 2 + 3.25 - 4.4 = 13.35 in
+        // Current
+        // 29 / 2 + 3.25 - 4 = 13.75 in
+        // True
+        // 13.75 in
+
         return generatePathAlongVector(
             branchPos.plus(
-                new Translation2d(SwerveConstants.kFrameHeight / 2 + Constants.kBumperWidthMeters, faceAngle)
+                new Translation2d(
+                    SwerveConstants.kFrameHeight / 2 + Constants.kBumperWidthMeters + Conversions.inchesToMeters(-1),
+                    //                    Conversions.inchesToMeters(13.75),
+                    faceAngle
+                )
             ),
             new Translation2d(0.4, faceAngle),
             faceAngle.plus(Rotation2d.k180deg),

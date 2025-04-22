@@ -7,6 +7,9 @@ import com.github.gladiatorrobotics5109.gladiatorroboticslib.advantagekitutil.lo
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.PathPlannerLogging;
+
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -39,6 +42,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
     private final SwerveDriveKinematics m_kinematics;
     private final SwerveDrivePoseEstimator m_poseEstimator;
+
+    private boolean m_usePoseEstimateForHeading;
 
     public SwerveSubsystem() {
         switch (Constants.kCurrentMode) {
@@ -153,8 +158,7 @@ public class SwerveSubsystem extends SubsystemBase {
             SwerveConstants.SwerveModuleConstants.kModulePosBR
         );
 
-        m_gyro.resetYaw();
-        m_gyro.setYaw(Rotation2d.fromDegrees(180));
+        m_gyro.setYaw(Rotation2d.fromDegrees(0));
 
         m_poseEstimator = new SwerveDrivePoseEstimator(
             m_kinematics,
@@ -163,7 +167,7 @@ public class SwerveSubsystem extends SubsystemBase {
             SwerveConstants.kStartingPose
         );
 
-        m_poseEstimator.setVisionMeasurementStdDevs(SwerveConstants.kVisionStdDevs);
+        m_usePoseEstimateForHeading = SwerveConstants.kUsePoseEstimateForHeadingDefault;
 
         AutoBuilder.configure(
             this::getPose,
@@ -179,7 +183,12 @@ public class SwerveSubsystem extends SubsystemBase {
         for (int i = 0; i < VisionConstants.kCameras.length; i++) {
             Logger.recordOutput(
                 SwerveConstants.kLogPath + "/VisionMeasurements/" + VisionConstants.kCameras[i].cameraName(),
-                new VisionMeasurement(VisionConstants.kCameras[i].cameraName(), new Pose2d(), 0.0)
+                new VisionMeasurement(
+                    VisionConstants.kCameras[i].cameraName(),
+                    new Pose2d(),
+                    0.0,
+                    MatBuilder.fill(Nat.N3(), Nat.N1(), 0.0, 0.0, 0.0)
+                )
             );
         }
 
@@ -208,12 +217,17 @@ public class SwerveSubsystem extends SubsystemBase {
         Rotation2d headingOffset = Util.getAlliance() == Alliance.Red
             ? Rotation2d.fromDegrees(180)
             : Rotation2d.fromDegrees(0);
-        // ChassisSpeeds desiredSpeeds = fieldRelative
-        //     ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, getHeading().plus(headingOffset))
-        //     : new ChassisSpeeds(vx, vy, vrot);
-        ChassisSpeeds desiredSpeeds = fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, m_gyro.getYaw())
-            : new ChassisSpeeds(vx, vy, vrot);
+        ChassisSpeeds desiredSpeeds;
+        if (Util.isSim() || m_usePoseEstimateForHeading) {
+            desiredSpeeds = fieldRelative
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, getHeading().plus(headingOffset))
+                : new ChassisSpeeds(vx, vy, vrot);
+        }
+        else {
+            desiredSpeeds = fieldRelative
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vrot, m_gyro.getYaw())
+                : new ChassisSpeeds(vx, vy, vrot);
+        }
         desiredSpeeds = ChassisSpeeds.discretize(desiredSpeeds, Constants.kLoopPeriodSecs);
 
         SwerveModuleState[] desiredStates = m_kinematics.toSwerveModuleStates(desiredSpeeds);
@@ -241,8 +255,7 @@ public class SwerveSubsystem extends SubsystemBase {
         m_moduleBR.setDesiredState(flBr, false);
 
         Logger.recordOutput(
-            SwerveConstants.kLogPath
-                + "/desiredModuleStates",
+            SwerveConstants.kLogPath + "/desiredModuleStates",
             new SwerveModuleState[] {
                 flBr,
                 frBL,
@@ -252,9 +265,30 @@ public class SwerveSubsystem extends SubsystemBase {
         );
     }
 
+    public void alignModules() {
+        SwerveModuleState state = new SwerveModuleState(0.0, Rotation2d.kZero);
+
+        m_moduleFL.setDesiredState(state);
+        m_moduleFR.setDesiredState(state);
+        m_moduleBL.setDesiredState(state);
+        m_moduleBR.setDesiredState(state);
+
+        Logger.recordOutput(
+            SwerveConstants.kLogPath + "/desiredModuleStates",
+            new SwerveModuleState[] {
+                state,
+                state,
+                state,
+                state
+            }
+        );
+    }
+
     public Pose2d getPose() { return m_poseEstimator.getEstimatedPosition(); }
 
     public Rotation2d getHeading() { return getPose().getRotation(); }
+
+    public Rotation2d getGyroYaw() { return m_gyro.getYaw(); }
 
     public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {
@@ -313,6 +347,12 @@ public class SwerveSubsystem extends SubsystemBase {
         m_poseEstimator.resetPosition(m_gyro.getYaw(), getModulePositions(), pose);
     }
 
+    public void setUsePoseEstimateForHeading(boolean usePoseEstimateForHeading) {
+        m_usePoseEstimateForHeading = usePoseEstimateForHeading;
+    }
+
+    public boolean getUsePoseEstimateForHeading() { return m_usePoseEstimateForHeading; }
+
     public void addVisionMeasurements(VisionMeasurement... measurements) {
         for (VisionMeasurement measurement : measurements) {
             Logger.recordOutput(
@@ -320,7 +360,22 @@ public class SwerveSubsystem extends SubsystemBase {
                 measurement
             );
 
-            m_poseEstimator.addVisionMeasurement(measurement.estimatedPose(), measurement.timestamp());
+            //            if (measurement.estimatedPose().getTranslation().getDistance(ReefConstants.getAllianceReefPos())
+            //                <= ReefConstants.kReefRadiusMeters + Conversions.inchesToMeters(20))
+            //                continue
+
+            //            if (measurement.estimatedPose().getRotation().minus(getHeading()).getDegrees() > 10)
+            //                continue;
+
+            // if (measurement.cameraName() == "RearCamera") {
+            //     continue;
+            // }
+
+            m_poseEstimator.addVisionMeasurement(
+                measurement.estimatedPose(),
+                measurement.timestamp(),
+                measurement.stdDevs()
+            );
         }
     }
 
@@ -348,5 +403,7 @@ public class SwerveSubsystem extends SubsystemBase {
         }
 
         updatePose();
+
+        Logger.recordOutput(SwerveConstants.kLogPath + "/UseSwervePoseEstimateForHeading", m_usePoseEstimateForHeading);
     }
 }

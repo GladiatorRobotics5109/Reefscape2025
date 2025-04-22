@@ -55,7 +55,8 @@ public final class Constants {
             public static final MK4GearRatio kDriveGearRatio = MK4GearRatio.L1;
             public static final double kTurnGearRatio = MK4Constants.kTurnGearRatio;
 
-            public static final double kWheelRadiusMeters = 0.0478881398248718;
+            public static final double kWheelRadiusMeters = 0.0489689858;
+            // public static final double kWheelRadiusMeters = 0.04896788;
 
             public static final int kFrontLeftDrivePort = 10;
             public static final int kFrontLeftTurnPort = 20;
@@ -82,7 +83,10 @@ public final class Constants {
                 0
             );
 
-            public static final FeedforwardConstants kDriveFeedforward = new FeedforwardConstants(0.125, 6);
+            public static final FeedforwardConstants kDriveFeedforward = new FeedforwardConstants(
+                0.13053653000000007,
+                6
+            );
 
             public static final PIDConstants kTurnPID = new PIDConstants(
                 12 / Conversions.rotationsToRadians(0.01), // Volts per radian error
@@ -96,7 +100,7 @@ public final class Constants {
                 PIDConstants.kVelocityTolerance
             );
 
-            public static final FeedforwardConstants kTurnFeedforward = new FeedforwardConstants(0, 0);
+            public static final FeedforwardConstants kTurnFeedforward = new FeedforwardConstants(0.12049188, 0);
 
             public static final int kDriveStatorCurrentLimit = 92;
             public static final int kDriveSupplyCurrentLowerLimit = 40;
@@ -118,7 +122,7 @@ public final class Constants {
             // );
         }
 
-        public static final Matrix<N3, N1> kVisionStdDevs = MatBuilder.fill(Nat.N3(), Nat.N1(), 0.9, 0.9, 0.95);
+        public static final boolean kUsePoseEstimateForHeadingDefault = true;
 
         public static final int kPigeonPort = 40;
 
@@ -133,23 +137,42 @@ public final class Constants {
         );
 
         public static final com.pathplanner.lib.config.PIDConstants kPPTranslationPID = new com.pathplanner.lib.config.PIDConstants(
-            7,
+            5,
             0,
             0
         );
         public static final com.pathplanner.lib.config.PIDConstants kPPRotaitonPID = new com.pathplanner.lib.config.PIDConstants(
-            4.5,
+            4.25,
             0,
             0
         );
 
-        public static final double kDriveToPoseTranslationToleranceMeters = Conversions.inchesToMeters(1);
-        public static final double kDriveToPoseRotationToleranceRad = Conversions.degreesToRadians(1);
+        public static final double kDriveToPoseTranslationToleranceMeters = Conversions.inchesToMeters(1.75);
+        public static final double kDriveToPoseRotationToleranceRad = Conversions.degreesToRadians(1.75);
         public static final double kDriveToPoseTranslationVelocityToleranceMetersPerSec = Conversions.inchesToMeters(1);
-        public static final double kDriveToPoseRotationVelocityToleranceRadPerSec = Conversions.degreesToRadians(0.05);
-        public static final PIDConstants kDriveToPoseTranslationPID = new PIDConstants(1, 0.0, 0.0);
+        public static final double kDriveToPoseRotationVelocityToleranceRadPerSec = Conversions.degreesToRadians(0.08);
+        public static final double kDriveToPoseTranslationDebounce = 0.25;
+        public static final double kDriveToPoseRotationDebounce = 0.2;
+        public static final double kDriveToPoseMaxSpeedMetersPerSec = 1.5;
+        public static final double kDriveToPoseMaxRotationSpeedRadPerSec = Conversions.rotationsToRadians(1.0);
+        public static final double kAutoScoreLeaveSpeed = 1.0;
+        public static final PIDConstants kDriveToPoseTranslationPID = new PIDConstants(
+            2.3,
+            0.12,
+            // 2.25,
+            // 0.14,
+            0.0,
+            Conversions.inchesToMeters(4.5),
+            false,
+            PIDConstants.kMinimumInput,
+            PIDConstants.kMaximumInput,
+            PIDConstants.kPositionTolerance,
+            PIDConstants.kVelocityTolerance,
+            0.25,
+            PIDConstants.kMinimumIntegral
+        );
         public static final PIDConstants kDriveToPoseRotationPID = new PIDConstants(
-            1.5,
+            1.25,
             0,
             0,
             PIDConstants.kIZone,
@@ -170,7 +193,9 @@ public final class Constants {
             // * (Math.pow(SwerveModuleConstants.kModulePosFL.getX(), 2)
             // + Math.pow(SwerveModuleConstants.kModulePosFL.getY(), 2)),
             new ModuleConfig(
+                // Not sure why values over ~0.5 m don't work for wheel radius
                 SwerveModuleConstants.kWheelRadiusMeters,
+                //                Conversions.inchesToMeters(1.9207249617805457),
                 SwerveModuleConstants.kDriveMaxFreeSpeed.in(Units.MetersPerSecond),
                 1.0,
                 SwerveModuleConstants.kUseFOC
@@ -238,39 +263,37 @@ public final class Constants {
     }
 
     public static final class VisionConstants {
-        public static record PhotonCameraConfiguration(String cameraName, Transform3d robotToCamera) {}
+        public static record PhotonCameraConfiguration(
+            String cameraName,
+            Transform3d robotToCamera,
+            Matrix<N3, N1> stdDevs
+        ) {}
 
         public static final PhotonCameraConfiguration[] kCameras = new PhotonCameraConfiguration[] {
             new PhotonCameraConfiguration(
                 "FrontCamera",
                 new Transform3d(
-                    Conversions.inchesToMeters(13.825),
-                    Conversions.inchesToMeters(-3.059),
-                    SwerveModuleConstants.kWheelRadiusMeters + 0.148,
-                    new Rotation3d(0.0, Conversions.degreesToRadians(5), 0.0)
-                )
+                    0.031 + Conversions.inchesToMeters(2.78),
+                    0.19,
+                    0.529 + Conversions.inchesToMeters(2),
+                    new Rotation3d(
+                        Conversions.degreesToRadians(-10),
+                        Conversions.degreesToRadians(33),
+                        Conversions.degreesToRadians(-19)
+                    )
+                ),
+                MatBuilder.fill(Nat.N3(), Nat.N1(), 0.95, 0.95, 8.0)
             ),
-            // new PhotonCameraConfiguration(
-            //     "RearCamera",
-            //     new Transform3d(
-            //         Conversions.inchesToMeters(-14),
-            //         Conversions.inchesToMeters(-6.875),
-            //         SwerveModuleConstants.kWheelRadiusMeters
-            //             + Conversions.inchesToMeters(13)
-            //             + 0.09
-            //             + Conversions.inchesToMeters(4.875),
-            //         new Rotation3d(0.0, Conversions.degreesToRadians(35), Conversions.degreesToRadians(45))
-            //     )
-            // )
-            // new PhotonCameraConfiguration(
-            //     "FrontCameraR",
-            //     new Transform3d(
-            //         0.27,
-            //         -0.15,
-            //         SwerveModuleConstants.kWheelRadiusMeters + (65.0 / 1000.0) + (7.037 / 1000.0),
-            //         new Rotation3d(0.0, Conversions.degreesToRadians(5), Conversions.degreesToRadians(-5))
-            //     )
-            // ),
+            new PhotonCameraConfiguration(
+                "RearCamera",
+                new Transform3d(
+                    -0.3302 - 0.13,
+                    -0.0889 - 0.03,
+                    0.51435,
+                    new Rotation3d(0.0, Conversions.degreesToRadians(10), Conversions.degreesToRadians(182))
+                ),
+                MatBuilder.fill(Nat.N3(), Nat.N1(), 1.25, 1.25, 18.0)
+            )
         };
 
         public static final String kLogPath = "Subsystems/Vision";
@@ -299,7 +322,7 @@ public final class Constants {
 
         public static final double kElevatorMaxPositionMeters = Conversions.inchesToMeters(69.736220);
 
-        public static final double kForwardSoftLimitRad = 29.95;
+        public static final double kForwardSoftLimitRad = 30.05;
         public static final double kReverseSoftLimitRad = -0.03;
 
         public static final PIDConstants kPID = new PIDConstants(
@@ -338,10 +361,12 @@ public final class Constants {
          */
         public static final double kEndEffectorHeightMeters = Conversions.inchesToMeters(21.5);
 
-        public static final double kPositionToleranceMeters = Conversions.inchesToMeters(0.5);
+        public static final double kPositionToleranceRad = 0.2;
 
         // The distance from the center of the reef that the elevator will be allowed to autonomously extend
-        public static final double kAutoElevatorExtendRequiredDistanceMeters = 4.5;
+        public static final double kAutoElevatorExtendRequiredDistanceMeters = Conversions.inchesToMeters(40);
+
+        public static final double kSafeAccelerationPositionThresholdRad = 15.0;
 
         public static final double kL1HeightMeters = Conversions.inchesToMeters(10);
         public static final double kL2HeightMeters = ReefHeight.L2.getHeight() - Conversions.inchesToMeters(14);
@@ -380,7 +405,7 @@ public final class Constants {
         // Angle of coral measured from the horizontal
         public static final Rotation2d kAngle = Rotation2d.fromDegrees(35);
 
-        public static final double kScoreTimeoutSeconds = 2;
+        public static final double kScoreTimeoutSeconds = 5;
 
         public static final double kScoreVoltage = 5;
         public static final double kIntakeVoltage = 6;
@@ -422,5 +447,31 @@ public final class Constants {
         public static final PIDConstants kPID = new PIDConstants(0.0, 0.0, 0.0);
 
         public static final double kPositionToleranceRad = Conversions.degreesToRadians(2);
+    }
+
+    public static final class IntakeConstants {
+        public static final String kLogPath = "Subsystems/Intake";
+
+        public static final int kMotorPort = 62;
+
+        public static final boolean kInvertMotor = false;
+
+        public static final double kGearRatio = 5.0;
+
+        public static final double kIntakeVoltage = 9.0;
+        public static final double kReverseVoltage = -12.0;
+
+        public static final double kSupplyCurrentLimit = 30.0;
+    }
+
+    public static final class CheckDeploy {
+        public static void main(String... args) {
+            if (Constants.kCurrentMode != Mode.REAL) {
+                System.err.println(
+                    "\nWrong mode, Constants.kCurrentMode is " + Constants.kCurrentMode + ", must be REAL."
+                );
+                System.exit(1);
+            }
+        }
     }
 }

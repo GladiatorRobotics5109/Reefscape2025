@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.238627049180328,
-        "y": 5.0499487704918025
+        "x": 5.430951159946306,
+        "y": 5.370174195610991
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.589508248063591,
-        "y": 5.915093297517284
+        "x": 4.707017985633984,
+        "y": 6.200836410814252
       },
       "isLocked": false,
       "linkedName": "R_G2"
@@ -20,8 +20,8 @@
         "y": 7.407830653402915
       },
       "prevControl": {
-        "x": 2.738547158072323,
-        "y": 6.651240889139618
+        "x": 2.6603461920185514,
+        "y": 6.860907991590327
       },
       "nextControl": null,
       "isLocked": false,
@@ -59,7 +59,7 @@
     "rotation": -54.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Lame",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -119.99999999999999

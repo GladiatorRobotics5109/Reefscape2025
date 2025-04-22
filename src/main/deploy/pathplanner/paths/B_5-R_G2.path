@@ -3,52 +3,33 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.044161882812523,
-        "y": 7.561908957737682
+        "x": 7.197480508841782,
+        "y": 6.153552302926338
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.848242239339941,
-        "y": 6.825132429117097
+        "x": 6.082272919063851,
+        "y": 6.127361586686691
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.238627049180328,
-        "y": 5.0499487704918025
+        "x": 5.430951159946306,
+        "y": 5.370174195610991
       },
       "prevControl": {
-        "x": 5.694159836065573,
-        "y": 5.649334016393442
+        "x": 5.886483946831551,
+        "y": 5.96955944151263
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "R_G2"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.8016153541226215,
-      "rotationDegrees": -119.99999999999999
-    }
-  ],
-  "constraintZones": [
-    {
-      "name": "NearReef",
-      "minWaypointRelativePos": 0.7994598244429388,
-      "maxWaypointRelativePos": 1.0,
-      "constraints": {
-        "maxVelocity": 0.25,
-        "maxAcceleration": 2.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "rotationTargets": [],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -64,7 +45,7 @@
     "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Lame",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.165051319548736,
-        "y": 6.631770250853964
+        "x": 2.2236182677602745,
+        "y": 6.767225966769172
       },
       "isLocked": false,
       "linkedName": "C_F3"
     },
     {
       "anchor": {
-        "x": 3.9793273479610693,
-        "y": 5.2256440432778595
+        "x": 3.763961718418252,
+        "y": 5.548685897096638
       },
       "prevControl": {
-        "x": 3.9058851513006014,
-        "y": 5.464613170467304
+        "x": 3.180085753839177,
+        "y": 5.9353218908255405
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,21 +29,7 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8,
-      "maxWaypointRelativePos": 1.0,
-      "constraints": {
-        "maxVelocity": 0.25,
-        "maxAcceleration": 2.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -59,7 +45,7 @@
     "rotation": -59.99999999999999
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Lame",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -54.0

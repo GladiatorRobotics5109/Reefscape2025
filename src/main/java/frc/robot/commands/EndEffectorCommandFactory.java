@@ -6,11 +6,20 @@ import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
+import frc.robot.util.FieldConstants.ReefConstants.ReefBranch;
+import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 import frc.robot.util.Util;
 
 public class EndEffectorCommandFactory {
     public static Command setVoltage(EndEffectorSubsystem endEffector, double volts) {
         return endEffector.runOnce(() -> endEffector.setVoltage(volts));
+    }
+
+    public static Command score(EndEffectorSubsystem endEffector, ReefBranch branch) {
+        if (branch.getHeight() == ReefHeight.L1)
+            return scoreL1(endEffector);
+
+        return score(endEffector);
     }
 
     public static Command score(EndEffectorSubsystem endEffector) {
@@ -21,12 +30,16 @@ public class EndEffectorCommandFactory {
         return Commands.sequence(
             endEffector.runOnce(endEffector::setScore),
             Commands.waitUntil(() -> !endEffector.hasCoral()),
-            Commands.waitSeconds(1)
+            Commands.waitSeconds(0.2)
         ).finallyDo(endEffector::stop).withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
     public static Command scoreWithTimeout(EndEffectorSubsystem endEffector) {
         return score(endEffector).withTimeout(EndEffectorConstants.kScoreTimeoutSeconds);
+    }
+
+    public static Command scoreWithTimeout(EndEffectorSubsystem endEffector, ReefBranch branch) {
+        return score(endEffector, branch).withTimeout(EndEffectorConstants.kScoreTimeoutSeconds);
     }
 
     public static Command scoreL1(EndEffectorSubsystem endEffector) {

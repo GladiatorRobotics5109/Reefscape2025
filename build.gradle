@@ -186,6 +186,13 @@ task(eventDeploy) {
 }
 createVersionFile.dependsOn(eventDeploy)
 
+task(checkDeploy, dependsOn: "classes", type: JavaExec) {
+    main = "frc.robot.Constants\$CheckDeploy"
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+deployroborio.dependsOn(checkDeploy)
+
 // Spotless formatting
 project.compileJava.dependsOn(spotlessApply)
 spotless {
