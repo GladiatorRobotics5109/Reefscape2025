@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.47716913421836,
-        "y": 2.642242013105058
+        "x": 3.1407786885245907,
+        "y": 2.1249487704918035
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.906605275563703,
-        "y": 1.993751092910347
+        "x": 2.5702148298699337,
+        "y": 1.4764578502970926
       },
       "isLocked": false,
       "linkedName": "R_J1"
     },
     {
       "anchor": {
-        "x": 1.6058666057914233,
-        "y": 0.6625061309170098
+        "x": 1.3306352459016395,
+        "y": 0.5425717213114762
       },
       "prevControl": {
-        "x": 2.108441980324174,
-        "y": 1.2544206759543761
+        "x": 1.83321062043439,
+        "y": 1.1344862663488424
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,7 +47,7 @@
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 0.0,
     "rotation": 59.99999999999999
   },
   "useDefaultConstraints": false

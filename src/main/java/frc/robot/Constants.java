@@ -56,6 +56,7 @@ public final class Constants {
             public static final double kTurnGearRatio = MK4Constants.kTurnGearRatio;
 
             public static final double kWheelRadiusMeters = 0.0489689858;
+            // public static final double kWheelRadiusMeters = 0.04896788;
 
             public static final int kFrontLeftDrivePort = 10;
             public static final int kFrontLeftTurnPort = 20;
@@ -123,8 +124,6 @@ public final class Constants {
 
         public static final boolean kUsePoseEstimateForHeadingDefault = true;
 
-        public static final Matrix<N3, N1> kVisionStdDevs = MatBuilder.fill(Nat.N3(), Nat.N1(), 0.95, 0.95, 10.0);
-
         public static final int kPigeonPort = 40;
 
         public static final boolean kTeleopFieldRelative = true;
@@ -143,24 +142,25 @@ public final class Constants {
             0
         );
         public static final com.pathplanner.lib.config.PIDConstants kPPRotaitonPID = new com.pathplanner.lib.config.PIDConstants(
-            4.5,
+            4.25,
             0,
             0
         );
 
-        public static final double kDriveToPoseTranslationToleranceMeters = Conversions.inchesToMeters(1.6);
-        public static final double kDriveToPoseRotationToleranceRad = Conversions.degreesToRadians(1.0);
+        public static final double kDriveToPoseTranslationToleranceMeters = Conversions.inchesToMeters(1.75);
+        public static final double kDriveToPoseRotationToleranceRad = Conversions.degreesToRadians(1.75);
         public static final double kDriveToPoseTranslationVelocityToleranceMetersPerSec = Conversions.inchesToMeters(1);
-        public static final double kDriveToPoseRotationVelocityToleranceRadPerSec = Conversions.degreesToRadians(0.05);
-        public static final double kDriveToPoseTranslationDebounce = 0.4;
+        public static final double kDriveToPoseRotationVelocityToleranceRadPerSec = Conversions.degreesToRadians(0.08);
+        public static final double kDriveToPoseTranslationDebounce = 0.25;
         public static final double kDriveToPoseRotationDebounce = 0.2;
         public static final double kDriveToPoseMaxSpeedMetersPerSec = 1.5;
         public static final double kDriveToPoseMaxRotationSpeedRadPerSec = Conversions.rotationsToRadians(1.0);
+        public static final double kAutoScoreLeaveSpeed = 1.0;
         public static final PIDConstants kDriveToPoseTranslationPID = new PIDConstants(
-            //            2.0,
-            //              0.12,
-            2.25,
-            0.14,
+            2.3,
+            0.12,
+            // 2.25,
+            // 0.14,
             0.0,
             Conversions.inchesToMeters(4.5),
             false,
@@ -263,13 +263,17 @@ public final class Constants {
     }
 
     public static final class VisionConstants {
-        public static record PhotonCameraConfiguration(String cameraName, Transform3d robotToCamera) {}
+        public static record PhotonCameraConfiguration(
+            String cameraName,
+            Transform3d robotToCamera,
+            Matrix<N3, N1> stdDevs
+        ) {}
 
         public static final PhotonCameraConfiguration[] kCameras = new PhotonCameraConfiguration[] {
             new PhotonCameraConfiguration(
                 "FrontCamera",
                 new Transform3d(
-                    0.031,
+                    0.031 + Conversions.inchesToMeters(2.78),
                     0.19,
                     0.529 + Conversions.inchesToMeters(2),
                     new Rotation3d(
@@ -277,16 +281,18 @@ public final class Constants {
                         Conversions.degreesToRadians(33),
                         Conversions.degreesToRadians(-19)
                     )
-                )
+                ),
+                MatBuilder.fill(Nat.N3(), Nat.N1(), 0.95, 0.95, 8.0)
             ),
             new PhotonCameraConfiguration(
                 "RearCamera",
                 new Transform3d(
-                    -0.3302,
-                    -0.0889,
+                    -0.3302 - 0.13,
+                    -0.0889 - 0.03,
                     0.51435,
-                    new Rotation3d(0.0, Conversions.degreesToRadians(10), Conversions.degreesToRadians(180))
-                )
+                    new Rotation3d(0.0, Conversions.degreesToRadians(10), Conversions.degreesToRadians(182))
+                ),
+                MatBuilder.fill(Nat.N3(), Nat.N1(), 1.25, 1.25, 18.0)
             )
         };
 
@@ -316,7 +322,7 @@ public final class Constants {
 
         public static final double kElevatorMaxPositionMeters = Conversions.inchesToMeters(69.736220);
 
-        public static final double kForwardSoftLimitRad = 29.95;
+        public static final double kForwardSoftLimitRad = 30.05;
         public static final double kReverseSoftLimitRad = -0.03;
 
         public static final PIDConstants kPID = new PIDConstants(

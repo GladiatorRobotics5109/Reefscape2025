@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.RobotState;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.leds.LEDSubsystem;
 import frc.robot.subsystems.superstructure.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
@@ -37,16 +38,14 @@ public class AutoBuilder {
         EndEffectorSubsystem endEffector,
         LEDSubsystem leds
     ) {
-        //        final PathPlannerPath kToReef = Paths.ppPaths.get("TestPath");
-        //        final ReefBranch kBranch = ReefBranch.kL4E1;
-        //
-        //        return Commands.sequence(
-        //            prefix(swerve, kToReef),
-        //            SwerveCommandFactory.followPath(swerve, kToReef),
-        //            score(kBranch, swerve, elevator, endEffector, leds)
-        //        );
+        final PathPlannerPath kToReef = Paths.ppPaths.get("TestPath");
+        final ReefBranch kBranch = ReefBranch.kL4F2;
 
-        return Commands.none();
+        return Commands.sequence(
+            prefix(swerve, kToReef),
+            SwerveCommandFactory.followPath(swerve, kToReef),
+            score(kBranch, swerve, elevator, endEffector, leds)
+        );
     }
 
     public static Command followTestPath(SwerveSubsystem swerve) {
@@ -462,16 +461,16 @@ public class AutoBuilder {
         Pose2d targetPose = flipIfNecessary(branch.getSwerveTargetPoseInner());
         Pose2d outerPose = flipIfNecessary(branch.getSwerveTargetPoseOuter());
 
-        ChassisSpeeds leaveSpeeds = new ChassisSpeeds();
-        leaveSpeeds.vxMetersPerSecond = outerPose.getX() - targetPose.getX();
-        leaveSpeeds.vyMetersPerSecond = outerPose.getY() - targetPose.getY();
-        double leaveSpeed = 1.25;
-        leaveSpeeds = leaveSpeeds.times(leaveSpeed);
+        ChassisSpeeds leaveSpeeds = new ChassisSpeeds(
+            -SwerveConstants.kAutoScoreLeaveSpeed,
+            0.0,
+            0.0
+        );
 
-        if (Util.getAlliance() == Alliance.Red) {
-            leaveSpeeds.vxMetersPerSecond = -leaveSpeeds.vxMetersPerSecond;
-            leaveSpeeds.vyMetersPerSecond = -leaveSpeeds.vyMetersPerSecond;
-        }
+        // if (Util.getAlliance() == Alliance.Red) {
+        //     leaveSpeeds.vxMetersPerSecond = -leaveSpeeds.vxMetersPerSecond;
+        //     leaveSpeeds.vyMetersPerSecond = -leaveSpeeds.vyMetersPerSecond;
+        // }
 
         return Commands.sequence(
             Commands.parallel(
@@ -482,8 +481,8 @@ public class AutoBuilder {
             ElevatorCommandFactory.toHome(elevator),
             LEDCommandFactory.goodThingHappenedCommand(leds),
             Commands.waitUntil(elevator::isSafeToAccelerate),
-            SwerveCommandFactory.drive(swerve, leaveSpeeds, true),
-            Commands.waitSeconds(0.4 / leaveSpeed),
+            SwerveCommandFactory.drive(swerve, leaveSpeeds, false),
+            Commands.waitSeconds(0.4 / SwerveConstants.kAutoScoreLeaveSpeed + 0.15),
             SwerveCommandFactory.drive(swerve, 0.0, 0.0, 0.0, true)
         ).withName("Score " + branch);
     }

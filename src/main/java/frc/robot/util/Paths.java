@@ -179,7 +179,7 @@ public final class Paths {
         Translation2d branchPos = facePos.plus(
             new Translation2d(FieldConstants.ReefConstants.kReefBranchDistMeters / 2, faceAngle.plus(toBranch))
         );
-        
+
         // Desired dist from reef branch
         // Old
         // 29 / 2 + 3.25 - 4.4 = 13.35 in
@@ -199,7 +199,7 @@ public final class Paths {
         return generatePathAlongVector(
             branchPos.plus(
                 new Translation2d(
-                    SwerveConstants.kFrameHeight / 2 + Constants.kBumperWidthMeters + Conversions.inchesToMeters(-4.4),
+                    SwerveConstants.kFrameHeight / 2 + Constants.kBumperWidthMeters + Conversions.inchesToMeters(-1),
                     //                    Conversions.inchesToMeters(13.75),
                     faceAngle
                 )

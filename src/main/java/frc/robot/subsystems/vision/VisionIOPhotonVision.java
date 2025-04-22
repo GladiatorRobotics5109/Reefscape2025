@@ -27,6 +27,8 @@ public class VisionIOPhotonVision implements VisionIO {
 
     private final Queue<EstimatedRobotPose> m_scratchBuff;
 
+    private final Matrix<N3, N1> m_stdDevs;
+
     private final String m_cameraName;
 
     public VisionIOPhotonVision(PhotonCameraConfiguration cameraConfigs) {
@@ -40,9 +42,13 @@ public class VisionIOPhotonVision implements VisionIO {
 
         m_cameraMatrix = m_camera.getCameraMatrix();
         m_distCoeffs = m_camera.getDistCoeffs();
+        m_stdDevs = cameraConfigs.stdDevs();
 
         m_scratchBuff = new LinkedList<>();
     }
+
+    @Override
+    public Matrix<N3, N1> getStdDevs() { return m_stdDevs; }
 
     @Override
     public void updateInputs(VisionIOInputs inputs) {
