@@ -111,6 +111,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_hasDesiredPosition = true;
         m_desiredPositionMeters = 0.0;
         m_desiredPositionRad = 0.0;
+        m_pid.reset(m_inputs.positionRad, m_inputs.velocityRadPerSec);
+        
         if (m_useMotorPID)
             m_io.setPosition(m_desiredPositionMeters);
     }
@@ -128,6 +130,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_hasDesiredPosition = true;
         m_desiredPositionMeters = MathUtil.clamp(positionMeters, 0.0, ElevatorConstants.kElevatorMaxPositionMeters);
         m_desiredPositionRad = Conversions.elevatorMetersToElevatorRadians(m_desiredPositionMeters);
+        m_pid.reset(m_inputs.positionRad, m_inputs.velocityRadPerSec);
+        
         if (m_useMotorPID)
             m_io.setPosition(m_desiredPositionRad);
     }
