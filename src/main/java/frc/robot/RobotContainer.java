@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.github.gladiatorrobotics5109.gladiatorroboticslib.PeriodicUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -63,6 +64,9 @@ public class RobotContainer {
         CommandScheduler.getInstance().onCommandInterrupt((Command command) -> {
             Logger.recordOutput("CommandLog", "Interrupted: " + command.getName() + "\n");
         });
+
+        TalonFX talon = new TalonFX(39);
+        talon.set(0.25);
     }
 
     private void configureBindings() {
