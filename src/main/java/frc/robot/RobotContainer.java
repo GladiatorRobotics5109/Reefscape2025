@@ -156,7 +156,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         //        return ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4);
         // return AutoChooser.get();
-        return Commands.runOnce(() -> m_talon.set(0.5));
+        return Commands.run(() -> { m_talon.set(1); System.out.println("hi"); });
     }
 
     public Command getTeleopCommand() {
