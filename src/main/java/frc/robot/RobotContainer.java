@@ -38,8 +38,6 @@ public class RobotContainer {
 
     private CommandXboxController m_operatorController;
 
-    private TalonFX m_talon;
-
     public RobotContainer() {
         m_swerve = new SwerveSubsystem();
         m_vision = new VisionSubsystem(m_swerve::addVisionMeasurements);
@@ -66,8 +64,6 @@ public class RobotContainer {
         CommandScheduler.getInstance().onCommandInterrupt((Command command) -> {
             Logger.recordOutput("CommandLog", "Interrupted: " + command.getName() + "\n");
         });
-
-        m_talon = new TalonFX(39);
     }
 
     private void configureBindings() {
@@ -155,8 +151,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         //        return ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4);
-        // return AutoChooser.get();
-        return Commands.run(() -> { m_talon.set(1); System.out.println("hi"); });
+        return AutoChooser.get();
     }
 
     public Command getTeleopCommand() {
