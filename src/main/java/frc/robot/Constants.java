@@ -335,7 +335,7 @@ public final class Constants {
             0.1,
             0.247,
             0.0,
-            0.40
+            0.42
             // 0.0860202312 // V
         );
         //        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(0.75);
@@ -458,7 +458,7 @@ public final class Constants {
 
         public static final double kGearRatio = 5.0;
 
-        public static final double kIntakeVoltage = 9.0;
+        public static final double kIntakeVoltage = 10.0;
         public static final double kReverseVoltage = -12.0;
 
         public static final double kSupplyCurrentLimit = 30.0;
