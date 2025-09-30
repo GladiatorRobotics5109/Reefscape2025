@@ -330,7 +330,7 @@ public final class Constants {
             // // 0.13, // V / rad
             // 0.0,
             // 0.0
-            0.05,
+            0.1,
             0.0,
             0.0
         );
@@ -342,7 +342,7 @@ public final class Constants {
             // 0.0860202312 // V
             0.0,
             0.255,
-            0.05,
+            0.0,
             0.78
         // kS + kG = 1.18
         // kS - kG = 0.88
