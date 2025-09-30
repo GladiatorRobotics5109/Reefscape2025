@@ -86,10 +86,10 @@ public class RobotContainer {
         // m_driverController.triangle().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3));
         // m_driverController.square().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4));
 
-        m_driverController.a().onTrue(ElevatorCommandFactory.toHome(m_elevator));
-        m_driverController.b().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L2));
-        m_driverController.y().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3));
-        m_driverController.x().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4));
+        // m_driverController.a().onTrue(ElevatorCommandFactory.toHome(m_elevator));
+        // m_driverController.b().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L2));
+        // m_driverController.y().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3));
+        // m_driverController.x().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4));
 
         // m_driverController.povUp().whileTrue(ElevatorCommandFactory.setVoltage(m_elevator, 2)).onFalse(
         //     ElevatorCommandFactory.setVoltage(m_elevator, 0.0)
@@ -123,10 +123,10 @@ public class RobotContainer {
         //     (EndEffectorCommandFactory.setVoltage(m_endEffector, 0.0).andThen(IntakeCommandFactory.stop(m_intake)))
         // );
 
-        // m_elevator.setDefaultCommand(m_elevator.run(() -> {
-        //     double val = m_driverController.getRightTriggerAxis();
-        //     m_elevator.setVoltage(val * val * 2);
-        // }));
+        m_elevator.setDefaultCommand(m_elevator.run(() -> {
+            double val = m_driverController.getRightTriggerAxis();
+            m_elevator.setVoltage(val * val * 2);
+        }));
 
         if (m_operatorController != null) {
             m_operatorController.y().onTrue(
