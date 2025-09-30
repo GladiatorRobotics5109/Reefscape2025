@@ -44,7 +44,7 @@ public class ElevatorCommandFactory {
             Commands.waitUntil(() -> elevator.getCurrentPositionRad() <= 0.225),
             Commands.waitSeconds(0.25),
             setVoltage(elevator, -0.2),
-            Commands.waitSeconds(0.2),
+            Commands.waitSeconds(0.25),
             elevator.runOnce(elevator::stop)
         );
     }
