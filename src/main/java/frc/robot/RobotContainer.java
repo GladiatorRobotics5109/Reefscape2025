@@ -123,7 +123,7 @@ public class RobotContainer {
 
         m_elevator.setDefaultCommand(m_elevator.run(() -> {
             double val = m_driverController.getRightTriggerAxis();
-            m_elevator.setVoltage(val * val * 1);
+            m_elevator.setVoltage(val * val * 2);
         }));
 
         if (m_operatorController != null) {
