@@ -330,7 +330,7 @@ public final class Constants {
             // // 0.13, // V / rad
             // 0.0,
             // 0.0
-            0.01,
+            0.05,
             0.0,
             0.0
         );
