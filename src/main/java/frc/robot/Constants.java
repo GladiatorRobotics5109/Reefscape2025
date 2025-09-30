@@ -344,10 +344,10 @@ public final class Constants {
             0.0,
             0.0,
             0.88
-            // kS + kG = 1.18
-            // kS - kG = 0.88
-            // kG = 0.15
-            // kS = 1.03
+        // kS + kG = 1.18
+        // kS - kG = 0.88
+        // kG = 0.15
+        // kS = 1.03
         //
         );
         //        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(0.75);
