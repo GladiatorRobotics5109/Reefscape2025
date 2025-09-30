@@ -332,11 +332,17 @@ public final class Constants {
             0.0
         );
         public static final FeedforwardConstants kFeedForward = new FeedforwardConstants(
-            0.1,
-            0.247,
-            0.0,
-            0.42
+            // 0.1,
+            // 0.247,
+            // 0.0,
+            // 0.42
             // 0.0860202312 // V
+            0.0,
+            0.0,
+            0.0,
+            1.18
+            // kS + kG = 1.18
+            // 
         );
         //        public static final double kElevatorCruiseVelocityRadPerSec = Conversions.elevatorMetersToElevatorRadians(0.75);
         //        public static final double kElevatorAccelerationRadPerSecPerSec = Conversions.elevatorMetersToElevatorRadians(

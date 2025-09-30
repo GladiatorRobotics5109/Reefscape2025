@@ -20,6 +20,8 @@ import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
 import frc.robot.subsystems.superstructure.intake.IntakeSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
+import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
+
 import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
@@ -84,10 +86,10 @@ public class RobotContainer {
         // m_driverController.triangle().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3));
         // m_driverController.square().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4));
 
-        // m_driverController.a().onTrue(ElevatorCommandFactory.toHome(m_elevator));
-        // m_driverController.b().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L2));
-        // m_driverController.y().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3));
-        // m_driverController.x().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4));
+        m_driverController.a().onTrue(ElevatorCommandFactory.toHome(m_elevator));
+        m_driverController.b().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L2));
+        m_driverController.y().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3));
+        m_driverController.x().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4));
 
         // m_driverController.povUp().whileTrue(ElevatorCommandFactory.setVoltage(m_elevator, 2)).onFalse(
         //     ElevatorCommandFactory.setVoltage(m_elevator, 0.0)
