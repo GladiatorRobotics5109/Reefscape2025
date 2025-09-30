@@ -383,7 +383,7 @@ public final class Constants {
         public static final double kL1HeightMeters = Conversions.inchesToMeters(10);
         public static final double kL2HeightMeters = ReefHeight.L2.getHeight() - Conversions.inchesToMeters(14);
         public static final double kL3HeightMeters = ReefHeight.L3.getHeight() - Conversions.inchesToMeters(22);
-        public static final double kL4HeightMeters = ReefHeight.L4.getHeight() - Conversions.inchesToMeters(33.25);
+        public static final double kL4HeightMeters = ReefHeight.L4.getHeight() - Conversions.inchesToMeters(33.5);
     }
 
     public static final class EndEffectorConstants {
