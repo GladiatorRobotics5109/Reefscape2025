@@ -91,12 +91,12 @@ public class RobotContainer {
         m_driverController.y().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3));
         m_driverController.x().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4));
 
-        // m_driverController.povUp().whileTrue(ElevatorCommandFactory.setVoltage(m_elevator, 2)).onFalse(
-        //     ElevatorCommandFactory.setVoltage(m_elevator, 0.0)
-        // );
-        // m_driverController.povDown().whileTrue(ElevatorCommandFactory.setVoltage(m_elevator, -2)).onFalse(
-        //     ElevatorCommandFactory.setVoltage(m_elevator, 0.0)
-        // );
+        m_driverController.povUp().whileTrue(ElevatorCommandFactory.setVoltage(m_elevator, 2)).onFalse(
+            ElevatorCommandFactory.setVoltage(m_elevator, 0.0)
+        );
+        m_driverController.povDown().whileTrue(ElevatorCommandFactory.setVoltage(m_elevator, -2)).onFalse(
+            ElevatorCommandFactory.setVoltage(m_elevator, 0.0)
+        );
 
         // m_driverController.povRight().onTrue(
         //     EndEffectorCommandFactory.setVoltage(m_endEffector, -5.0).andThen(IntakeCommandFactory.reverse(m_intake))
