@@ -123,10 +123,10 @@ public class RobotContainer {
         //     (EndEffectorCommandFactory.setVoltage(m_endEffector, 0.0).andThen(IntakeCommandFactory.stop(m_intake)))
         // );
 
-        m_elevator.setDefaultCommand(m_elevator.run(() -> {
-            double val = m_driverController.getRightTriggerAxis();
-            m_elevator.setVoltage(val * val * 2);
-        }));
+        // m_elevator.setDefaultCommand(m_elevator.run(() -> {
+        //     double val = m_driverController.getRightTriggerAxis();
+        //     m_elevator.setVoltage(val * val * 2);
+        // }));
 
         if (m_operatorController != null) {
             m_operatorController.y().onTrue(
