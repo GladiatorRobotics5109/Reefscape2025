@@ -8,6 +8,7 @@ import com.github.gladiatorrobotics5109.gladiatorroboticslib.PeriodicUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -66,11 +67,11 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        // m_swerve.setDefaultCommand(
-        //     SwerveCommandFactory.makeTeleop(m_swerve, m_driverController).onlyWhile(
-        //         () -> DriverStation.isTeleop() || DriverStation.isTest()
-        //     )
-        // );
+        m_swerve.setDefaultCommand(
+            SwerveCommandFactory.makeTeleop(m_swerve, m_driverController).onlyWhile(
+                () -> DriverStation.isTeleop() || DriverStation.isTest()
+            )
+        );
 
         // m_elevator.setDefaultCommand(
         //     ElevatorCommandFactory.debugControllerAxis(
@@ -113,15 +114,15 @@ public class RobotContainer {
         //     ElevatorCommandFactory.setVoltage(m_elevator, 0.0)
         // );
 
-        // m_driverController.leftBumper().onTrue(
-        //     SuperstructureCommandFactory.intake(m_elevator, m_intake, m_endEffector)
-        // );
-        // // m_driverController.rightBumper().onTrue(EndEffectorCommandFactory.score(m_endEffector));
-        // m_driverController.rightBumper().toggleOnTrue(
-        //     EndEffectorCommandFactory.setVoltage(m_endEffector, 7).andThen(IntakeCommandFactory.intake(m_intake))
-        // ).toggleOnFalse(
-        //     (EndEffectorCommandFactory.setVoltage(m_endEffector, 0.0).andThen(IntakeCommandFactory.stop(m_intake)))
-        // );
+        m_driverController.leftBumper().onTrue(
+            SuperstructureCommandFactory.intake(m_elevator, m_intake, m_endEffector)
+        );
+        // m_driverController.rightBumper().onTrue(EndEffectorCommandFactory.score(m_endEffector));
+        m_driverController.rightBumper().toggleOnTrue(
+            EndEffectorCommandFactory.setVoltage(m_endEffector, 7).andThen(IntakeCommandFactory.intake(m_intake))
+        ).toggleOnFalse(
+            (EndEffectorCommandFactory.setVoltage(m_endEffector, 0.0).andThen(IntakeCommandFactory.stop(m_intake)))
+        );
 
         // m_elevator.setDefaultCommand(m_elevator.run(() -> {
         //     double val = m_driverController.getRightTriggerAxis();
