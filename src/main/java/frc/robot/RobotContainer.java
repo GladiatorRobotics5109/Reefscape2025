@@ -66,11 +66,11 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        m_swerve.setDefaultCommand(
-            SwerveCommandFactory.makeTeleop(m_swerve, m_driverController).onlyWhile(
-                () -> DriverStation.isTeleop() || DriverStation.isTest()
-            )
-        );
+        // m_swerve.setDefaultCommand(
+        //     SwerveCommandFactory.makeTeleop(m_swerve, m_driverController).onlyWhile(
+        //         () -> DriverStation.isTeleop() || DriverStation.isTest()
+        //     )
+        // );
 
         // m_elevator.setDefaultCommand(
         //     ElevatorCommandFactory.debugControllerAxis(
@@ -85,23 +85,24 @@ public class RobotContainer {
         // m_driverController.circle().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L2));
         // m_driverController.triangle().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3));
         // m_driverController.square().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4));
-        m_driverController.a().onTrue(ElevatorCommandFactory.toHome(m_elevator));
-        m_driverController.b().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L2));
-        m_driverController.y().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3));
-        m_driverController.x().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4));
 
-        m_driverController.povUp().whileTrue(ElevatorCommandFactory.setVoltage(m_elevator, 2)).onFalse(
-            ElevatorCommandFactory.setVoltage(m_elevator, 0.0)
-        );
-        m_driverController.povDown().whileTrue(ElevatorCommandFactory.setVoltage(m_elevator, -2)).onFalse(
-            ElevatorCommandFactory.setVoltage(m_elevator, 0.0)
-        );
+        // m_driverController.a().onTrue(ElevatorCommandFactory.toHome(m_elevator));
+        // m_driverController.b().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L2));
+        // m_driverController.y().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L3));
+        // m_driverController.x().onTrue(ElevatorCommandFactory.toReefHeight(m_elevator, ReefHeight.L4));
 
-        m_driverController.povRight().onTrue(
-            EndEffectorCommandFactory.setVoltage(m_endEffector, -5.0).andThen(IntakeCommandFactory.reverse(m_intake))
-        ).onFalse(
-            EndEffectorCommandFactory.setVoltage(m_endEffector, 0.0).andThen(IntakeCommandFactory.stop(m_intake))
-        );
+        // m_driverController.povUp().whileTrue(ElevatorCommandFactory.setVoltage(m_elevator, 2)).onFalse(
+        //     ElevatorCommandFactory.setVoltage(m_elevator, 0.0)
+        // );
+        // m_driverController.povDown().whileTrue(ElevatorCommandFactory.setVoltage(m_elevator, -2)).onFalse(
+        //     ElevatorCommandFactory.setVoltage(m_elevator, 0.0)
+        // );
+
+        // m_driverController.povRight().onTrue(
+        //     EndEffectorCommandFactory.setVoltage(m_endEffector, -5.0).andThen(IntakeCommandFactory.reverse(m_intake))
+        // ).onFalse(
+        //     EndEffectorCommandFactory.setVoltage(m_endEffector, 0.0).andThen(IntakeCommandFactory.stop(m_intake))
+        // );
 
         //manual elevator bound to right and left trigger
         // m_driverController.rightTrigger().whileTrue(ElevatorCommandFactory.setVoltage(m_elevator, 5)).onFalse(
@@ -112,15 +113,20 @@ public class RobotContainer {
         //     ElevatorCommandFactory.setVoltage(m_elevator, 0.0)
         // );
 
-        m_driverController.leftBumper().onTrue(
-            SuperstructureCommandFactory.intake(m_elevator, m_intake, m_endEffector)
-        );
-        // m_driverController.rightBumper().onTrue(EndEffectorCommandFactory.score(m_endEffector));
-        m_driverController.rightBumper().toggleOnTrue(
-            EndEffectorCommandFactory.setVoltage(m_endEffector, 7).andThen(IntakeCommandFactory.intake(m_intake))
-        ).toggleOnFalse(
-            (EndEffectorCommandFactory.setVoltage(m_endEffector, 0.0).andThen(IntakeCommandFactory.stop(m_intake)))
-        );
+        // m_driverController.leftBumper().onTrue(
+        //     SuperstructureCommandFactory.intake(m_elevator, m_intake, m_endEffector)
+        // );
+        // // m_driverController.rightBumper().onTrue(EndEffectorCommandFactory.score(m_endEffector));
+        // m_driverController.rightBumper().toggleOnTrue(
+        //     EndEffectorCommandFactory.setVoltage(m_endEffector, 7).andThen(IntakeCommandFactory.intake(m_intake))
+        // ).toggleOnFalse(
+        //     (EndEffectorCommandFactory.setVoltage(m_endEffector, 0.0).andThen(IntakeCommandFactory.stop(m_intake)))
+        // );
+
+        m_driverController.rightTrigger().onTrue(Commands.run(() -> {
+            double val = m_driverController.getRightTriggerAxis();
+            m_elevator.setVoltage(val * val * 2);
+        }));
 
         if (m_operatorController != null) {
             m_operatorController.y().onTrue(
