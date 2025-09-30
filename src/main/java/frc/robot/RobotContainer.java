@@ -8,7 +8,6 @@ import com.github.gladiatorrobotics5109.gladiatorroboticslib.PeriodicUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -21,7 +20,6 @@ import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
 import frc.robot.subsystems.superstructure.intake.IntakeSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
-import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
@@ -126,7 +124,7 @@ public class RobotContainer {
         m_driverController.rightTrigger().onTrue(Commands.run(() -> {
             double val = m_driverController.getRightTriggerAxis();
             m_elevator.setVoltage(val * val * 2);
-        }));
+        })).onFalse(ElevatorCommandFactory.setVoltage(m_elevator, 0));
 
         if (m_operatorController != null) {
             m_operatorController.y().onTrue(
