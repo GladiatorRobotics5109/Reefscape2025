@@ -343,7 +343,7 @@ public final class Constants {
             0.0,
             0.255,
             0.0,
-            0.80
+            0.78
         // kS + kG = 1.18
         // kS - kG = 0.88
         // kG = 0.15
