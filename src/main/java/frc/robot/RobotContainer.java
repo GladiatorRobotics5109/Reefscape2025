@@ -20,7 +20,6 @@ import frc.robot.subsystems.superstructure.endeffector.EndEffectorSubsystem;
 import frc.robot.subsystems.superstructure.intake.IntakeSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
-import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 
 import org.littletonrobotics.junction.Logger;
 
