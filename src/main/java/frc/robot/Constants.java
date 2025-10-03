@@ -148,6 +148,7 @@ public final class Constants {
             0
         );
 
+        public static final double kDriveToPoseYScale = 1.5;
         public static final double kDriveToPoseTranslationToleranceMeters = Conversions.inchesToMeters(1.75);
         public static final double kDriveToPoseRotationToleranceRad = Conversions.degreesToRadians(1.75);
         public static final double kDriveToPoseTranslationVelocityToleranceMetersPerSec = Conversions.inchesToMeters(1);

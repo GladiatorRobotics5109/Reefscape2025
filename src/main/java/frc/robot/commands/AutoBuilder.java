@@ -39,11 +39,12 @@ public class AutoBuilder {
         LEDSubsystem leds
     ) {
         final PathPlannerPath kToReef = Paths.ppPaths.get("TestPath");
-        final ReefBranch kBranch = ReefBranch.kL4F2;
+        final ReefBranch kBranch = ReefBranch.kL4J1;
 
         return Commands.sequence(
-            prefix(swerve, kToReef),
-            SwerveCommandFactory.followPath(swerve, kToReef),
+            // prefix(swerve, kToReef),
+            // SwerveCommandFactory.followPath(swerve, kToReef),
+            prefix(swerve, () -> new Pose2d()),
             score(kBranch, swerve, elevator, endEffector, leds)
         );
     }

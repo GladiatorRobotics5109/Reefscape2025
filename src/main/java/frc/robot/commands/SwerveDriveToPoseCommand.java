@@ -5,6 +5,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -100,6 +101,19 @@ public class SwerveDriveToPoseCommand extends Command {
             xVel = -xVel;
             yVel = -yVel;
         }
+
+        Rotation2d headingOffset = Util.getAlliance() == Alliance.Red
+            ? Rotation2d.fromDegrees(180)
+            : Rotation2d.fromDegrees(0);
+
+        ChassisSpeeds robotRelative = ChassisSpeeds.fromFieldRelativeSpeeds(
+            xVel,
+            yVel,
+            rotVel,
+            m_swerve.getHeading().plus(headingOffset)
+        );
+        robotRelative.vyMetersPerSecond *= SwerveConstants.kDriveToPoseYScale;
+        m_swerve.drive(robotRelative, false);
 
         m_swerve.drive(xVel, yVel, rotVel, true);
 
