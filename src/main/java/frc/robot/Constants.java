@@ -27,7 +27,7 @@ import frc.robot.util.Conversions;
 import frc.robot.util.FieldConstants.ReefConstants.ReefHeight;
 
 public final class Constants {
-    public static final Mode kCurrentMode = Mode.SIM;
+    public static final Mode kCurrentMode = Mode.REAL;
 
     public static final Alliance kDefaultAlliance = Alliance.Blue;
 
