@@ -53,7 +53,7 @@ public class SuperstructureCommandFactory {
 
     public static Command intake(ElevatorSubsystem elevator, IntakeSubsystem intake, EndEffectorSubsystem endEffector) {
         return Commands.parallel(
-            ElevatorCommandFactory.toHome(elevator),
+            //ElevatorCommandFactory.toHome(elevator),
             IntakeCommandFactory.intake(intake).asProxy(),
             EndEffectorCommandFactory.intake(endEffector).andThen(IntakeCommandFactory.stop(intake).asProxy())
         );
