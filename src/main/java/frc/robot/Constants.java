@@ -472,7 +472,7 @@ public final class Constants {
 
         public static final double kGearRatio = 5.0;
 
-        public static final double kIntakeVoltage = 10.0;
+        public static final double kIntakeVoltage = 7.0;
         public static final double kReverseVoltage = -12.0;
 
         public static final double kSupplyCurrentLimit = 30.0;
